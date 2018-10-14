@@ -88,8 +88,11 @@ public class AuthenticationManager : MonoBehaviour {
         if (!bool.Parse(data["success"])) {
             ShowError(data["error"]);
         } else {
-            // We need to construct an Account class from this data
-            print(data["user"]);
+            // Construct an Account class from this data
+            JSONNode user = data["user"];
+            Account account = new Account(user["username"], user["email"], user["created_at"]);
+
+            // To be sent to & used in a network manager script ...
         }
     }
 }
