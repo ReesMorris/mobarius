@@ -6520,6 +6520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6011b0ff0af40468d91e5aa53211ba34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loginUrl: http://localhost:5001/login
   loginUsername: {fileID: 1136701809}
   loginPassword: {fileID: 1070609167}
   loginButton: {fileID: 1228452017}

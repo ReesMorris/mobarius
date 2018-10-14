@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using SimpleJSON;
 using TMPro;
+using UnityEngine.Networking;
 
-public class AuthenticationManager : MonoBehaviour
-{
+public class AuthenticationManager : MonoBehaviour {
+
+    [Header("Server")]
+    public string loginUrl;
 
     [Header("Login")]
     public TMP_InputField loginUsername;
@@ -41,7 +44,15 @@ public class AuthenticationManager : MonoBehaviour
     }
 
     void ShowError(string message) {
+        authenticating = false;
         errorContainer.SetActive(true);
+
+        // Error codes (will be moved in future)
+        message.Replace("login_error_unknown", "An unknown error occured. Please try again.");
+        message.Replace("login_error_user_not_found", "A user could not be found with that username. If you have not yet created an account, please register first.");
+        message.Replace("login_error_invalid_password", "The password entered is incorrect. Please try again.");
+        message.Replace("invalid_params", "Please complete both fields before continuing.");
+
         errorText.text = message;
     }
 
@@ -51,24 +62,34 @@ public class AuthenticationManager : MonoBehaviour
         authenticating = true;
 
         // This is where we will authenticate a user login
-        JSONNode user = ValidateLogin(loginUsername.text, loginPassword.text);
-        if (user["error"] == null) {
-            // We have validation!
+        StartCoroutine(LoginRequest(loginUsername.text, loginPassword.text));
+    }
+
+    // Will send a login request to the server string specified
+    IEnumerator LoginRequest(string username, string password) {
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("password", password);
+
+        UnityWebRequest www = UnityWebRequest.Post(loginUrl, form);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError) {
+            ShowError(www.error);
         }
         else {
-            // Something went wrong
-            authenticating = false;
-            ShowError(user["error"]);
+            ValidateLogin(www.downloadHandler.text);
         }
     }
 
-    // Will return a JSON array of either a failure code, or a user which can be converted to an Account class
-    JSONNode ValidateLogin(string username, string password) {
-        print("Validating login for " + username + " with password" + password);
-
-        // WWW request to web server to check to see if user exists
-
-        JSONNode parsed = JSON.Parse("{\"error\":\"user_not_found\"}");
-        return parsed;
+    // Validates whether a user is logged in or not
+    void ValidateLogin(string response) {
+        JSONNode data = JSON.Parse(response);
+        if (!bool.Parse(data["success"])) {
+            ShowError(data["error"]);
+        } else {
+            // We need to construct an Account class from this data
+            print(data["user"]);
+        }
     }
 }
