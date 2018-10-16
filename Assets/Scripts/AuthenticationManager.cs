@@ -79,24 +79,6 @@ public class AuthenticationManager : MonoBehaviour {
     void ShowError(string message) {
         authenticating = false;
         errorContainer.SetActive(true);
-
-        // Error codes (will be moved in future)
-        message = message.Replace("error_unknown", "An unknown error occured.");
-
-        message = message.Replace("login_error_user_not_found", "A user could not be found with that username.");
-        message = message.Replace("login_error_invalid_password", "The password entered is incorrect.");
-        message = message.Replace("login_error_invalid_params", "Please complete both fields before continuing.");
-
-        message = message.Replace("register_error_username_invalid", "Usernames must only contain characters A-Z and 0-9.");
-        message = message.Replace("register_error_username_too_short", "Usernames must be at least 3 characters in length.");
-        message = message.Replace("register_error_username_too_long", "Usernames must not exceed 15 characters in length.");
-        message = message.Replace("register_error_username_taken", "Username is already in use.");
-        message = message.Replace("register_error_email_invalid", "The email entered is invalid.");
-        message = message.Replace("register_error_email_taken", "Email address is already in use.");
-        message = message.Replace("register_error_password_mismatch", "The two passwords entered do not match.");
-        message = message.Replace("register_error_password_too_short", "The password entered is too short. Please use at least 4 characters.");
-        message = message.Replace("register_error_invalid_params", "Please complete all fields before continuing.");
-
         errorText.text = message;
     }
 
@@ -159,7 +141,19 @@ public class AuthenticationManager : MonoBehaviour {
     void ValidateAuthentication(string response) {
         JSONNode data = JSON.Parse(response);
         if (!bool.Parse(data["success"])) {
-            ShowError(data["error"]);
+            print(LocalisationManager.instance);
+
+            // Some errors are returned with additional information to be parsed:  error_code|3,4,5
+            string tmp = data["error"].ToString().Remove(0, 1).Remove(data["error"].ToString().Length - 2, 1);
+            string[] error = tmp.Split('|');
+            string[] parameters = {};
+            string message = error[0];
+            if (error.Length > 1) {
+                parameters = error[1].Split(',');
+            }
+
+            ShowError(LocalisationManager.instance.GetValue(message, parameters));
+
         } else {
             LoginUser(data["user"]);
         }
