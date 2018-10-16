@@ -141,7 +141,6 @@ public class AuthenticationManager : MonoBehaviour {
     void ValidateAuthentication(string response) {
         JSONNode data = JSON.Parse(response);
         if (!bool.Parse(data["success"])) {
-            print(LocalisationManager.instance);
 
             // Some errors are returned with additional information to be parsed:  error_code|3,4,5
             string tmp = data["error"].ToString().Remove(0, 1).Remove(data["error"].ToString().Length - 2, 1);

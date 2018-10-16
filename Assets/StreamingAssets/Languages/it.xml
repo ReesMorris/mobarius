@@ -1,1 +1,32 @@
-﻿
+﻿<?xml version="1.0"?>
+<Language>
+    
+    <!-- Error Codes -->
+    <translation key="error_unknown">Si è verificato un errore sconosciuto</translation>
+    
+    <translation key="login_error_user_not_found">A user could not be found with that username</translation>
+    <translation key="login_error_invalid_password">The password entered is incorrect</translation>
+    <translation key="login_error_invalid_params">Please complete both fields before continuing</translation>
+    
+    <translation key="register_error_username_invalid">Usernames must only contain characters A-Z and 0-9</translation>
+    <translation key="register_error_username_too_short">Usernames must be at least {0} characters in length</translation>
+    <translation key="register_error_username_too_long">Usernames must not exceed {0} characters in length</translation>
+    <translation key="register_error_username_taken">Username is already in use</translation>
+    <translation key="register_error_email_invalid">The email address entered is invalid</translation>
+    <translation key="register_error_email_taken">Email address is already in use</translation>
+    <translation key="register_error_password_mismatch">The two passwords entered do not match</translation>
+    <translation key="register_error_password_too_short">The password entered is too short. Please use at least {0} characters</translation>
+    <translation key="register_error_invalid_params">Please complete all fields before continuing</translation>
+    
+    <!-- Authentication Menu -->
+    <translation key="auth_login_title">Registrati</translation>
+    <translation key="auth_register_title">Registrare</translation>
+    <translation key="auth_username">Nome utente</translation>
+    <translation key="auth_email">Indirizzo email</translation>
+    <translation key="auth_password">Parola d'ordine</translation>
+    <translation key="auth_password_repeat">Parola d'ordine (ripeti)</translation>
+    <translation key="auth_login">Hai già un account?</translation>
+    <translation key="auth_register">Non hai un account?</translation>
+    <translation key="auth_forgot_username">Hai dimenticato il tuo nome utente?</translation>
+    <translation key="auth_forgot_password">Hai dimenticato la tua password?</translation>
+</Language>

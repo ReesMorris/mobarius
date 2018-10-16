@@ -2,14 +2,17 @@
 using System.Xml;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 
 public class LocalisationManager : MonoBehaviour {
 
-    public string defaultIso = "en-gb";
+    public string currentLanguage = "en-gb";
     public static LocalisationManager instance;
 
     private Dictionary<string, string> localisations;
+    private string defaultIso;
+    private bool isReady;
 
     // Allows us to create instances
     void Awake() {
@@ -21,6 +24,7 @@ public class LocalisationManager : MonoBehaviour {
     }
 
     void Start () {
+        defaultIso = currentLanguage;
         localisations = new Dictionary<string, string>();
         SetLanguage(defaultIso);
     }
@@ -43,6 +47,7 @@ public class LocalisationManager : MonoBehaviour {
                 string val = node.InnerText;
                 localisations.Add(key, val);
             }
+            isReady = true;
         } else {
             SetLanguage(defaultIso);
         }

@@ -17,4 +17,16 @@
     <translation key="register_error_password_mismatch">The two passwords entered do not match</translation>
     <translation key="register_error_password_too_short">The password entered is too short. Please use at least {0} characters</translation>
     <translation key="register_error_invalid_params">Please complete all fields before continuing</translation>
+    
+    <!-- Authentication Menu -->
+    <translation key="auth_login_title">Sign In</translation>
+    <translation key="auth_register_title">Register</translation>
+    <translation key="auth_username">Username</translation>
+    <translation key="auth_email">Email Address</translation>
+    <translation key="auth_password">Password</translation>
+    <translation key="auth_password_repeat">Password (again)</translation>
+    <translation key="auth_login">Already have an account?</translation>
+    <translation key="auth_register">Don't have an account?</translation>
+    <translation key="auth_forgot_username">Forgotten your username?</translation>
+    <translation key="auth_forgot_password">Forgotten your password?</translation>
 </Language>
