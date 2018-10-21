@@ -32,14 +32,15 @@ public class AuthenticationManager : MonoBehaviour {
     public GameObject registerButtonLoading;
     public Button loginLabel;
 
-    [Header("Error")]
-    public GameObject errorContainer;
-    public TMP_Text errorText;
-    public Button errorButton;
-
     private bool authenticating;
+    private UIHandler UIHandler;
+    private VersionManager VersionManager;
 
     private void Start() {
+        // References
+        UIHandler = GetComponent<UIHandler>();
+        VersionManager = GetComponent<VersionManager>();
+
         // Labels
         registerLabel.onClick.AddListener(OnRegisterLabelClick);
         loginLabel.onClick.AddListener(OnLoginLabelClick);
@@ -47,21 +48,21 @@ public class AuthenticationManager : MonoBehaviour {
         // Buttons
         registerButton.onClick.AddListener(OnRegisterButtonClick);
         loginButton.onClick.AddListener(OnLoginButtonClick);
-        errorButton.onClick.AddListener(HideErrorContainer);
     }
 
     void Update() {
         // Login mechanics | will enable/disable inputs depending on what the user is doing
-        loginButton.interactable = (!authenticating && loginUsername.text != "" && loginPassword.text != "");
-        loginUsername.interactable = loginPassword.interactable = !authenticating;
+        loginButton.interactable = (!authenticating && loginUsername.text != "" && loginPassword.text != "" && !VersionManager.outdated);
+        loginUsername.interactable = loginPassword.interactable = (!authenticating && !VersionManager.outdated);
         loginButtonText.SetActive(!authenticating);
-        loginButtonLoading.SetActive(authenticating);
+        loginButtonLoading.SetActive(authenticating && !VersionManager.outdated);
 
         // Register mechanics | will enable/disable inputs depending on what the user is doing
-        registerButton.interactable = (!authenticating && registerUsername.text != "" && registerEmail.text != "" && registerPassword.text != "" && registerPassword2.text != "");
-        registerUsername.interactable = registerEmail.interactable = registerPassword.interactable = registerPassword2.interactable = !authenticating;
+        registerLabel.interactable = (!VersionManager.outdated);
+        registerButton.interactable = (!authenticating && registerUsername.text != "" && registerEmail.text != "" && registerPassword.text != "" && registerPassword2.text != "" && !VersionManager.outdated);
+        registerUsername.interactable = registerEmail.interactable = registerPassword.interactable = registerPassword2.interactable = !authenticating && !VersionManager.outdated;
         registerButtonText.SetActive(!authenticating);
-        registerButtonLoading.SetActive(authenticating);
+        registerButtonLoading.SetActive(authenticating && !VersionManager.outdated);
     }
 
     void OnRegisterLabelClick() {
@@ -72,14 +73,10 @@ public class AuthenticationManager : MonoBehaviour {
         loginModal.SetActive(true);
         registerModal.SetActive(false);
     }
-    void HideErrorContainer() {
-        errorContainer.SetActive(false);
-    }
 
-    void ShowError(string message) {
+    public void ShowError(string message) {
         authenticating = false;
-        errorContainer.SetActive(true);
-        errorText.text = message;
+        UIHandler.ShowError(message);
     }
 
     // Called when the user presses the log in button
@@ -88,7 +85,7 @@ public class AuthenticationManager : MonoBehaviour {
         authenticating = true;
 
         // This is where we will authenticate a user login
-        HideErrorContainer();
+        UIHandler.HideError();
         StartCoroutine(LoginRequest(loginUsername.text, loginPassword.text));
     }
 
@@ -97,7 +94,7 @@ public class AuthenticationManager : MonoBehaviour {
         authenticating = true;
 
         // This is where we will authenticate a user login
-        HideErrorContainer();
+        UIHandler.HideError();
         StartCoroutine(RegisterRequest(registerUsername.text, registerEmail.text, registerPassword.text, registerPassword2.text));
     }
 
