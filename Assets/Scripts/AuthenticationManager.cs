@@ -53,16 +53,16 @@ public class AuthenticationManager : MonoBehaviour {
     void Update() {
         // Login mechanics | will enable/disable inputs depending on what the user is doing
         loginButton.interactable = (!authenticating && loginUsername.text != "" && loginPassword.text != "" && !VersionManager.outdated);
-        loginUsername.interactable = loginPassword.interactable = (!authenticating && !VersionManager.outdated);
+        loginUsername.interactable = loginPassword.interactable = (!authenticating);
         loginButtonText.SetActive(!authenticating);
-        loginButtonLoading.SetActive(authenticating && !VersionManager.outdated);
+        loginButtonLoading.SetActive(authenticating);
 
         // Register mechanics | will enable/disable inputs depending on what the user is doing
         registerLabel.interactable = (!VersionManager.outdated);
         registerButton.interactable = (!authenticating && registerUsername.text != "" && registerEmail.text != "" && registerPassword.text != "" && registerPassword2.text != "" && !VersionManager.outdated);
-        registerUsername.interactable = registerEmail.interactable = registerPassword.interactable = registerPassword2.interactable = !authenticating && !VersionManager.outdated;
+        registerUsername.interactable = registerEmail.interactable = registerPassword.interactable = registerPassword2.interactable = !authenticating;
         registerButtonText.SetActive(!authenticating);
-        registerButtonLoading.SetActive(authenticating && !VersionManager.outdated);
+        registerButtonLoading.SetActive(authenticating);
     }
 
     void OnRegisterLabelClick() {
