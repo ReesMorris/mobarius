@@ -30,6 +30,7 @@ public class MainMenuManager : MonoBehaviour {
     private UserManager userManager;
 
     void Start() {
+        Account.onXPChanged += SetUserXP;
         userManager = GetComponent<UserManager>();
         socialButton.onClick.AddListener(OnSocialButtonClick);
     }
@@ -90,9 +91,13 @@ public class MainMenuManager : MonoBehaviour {
     void SetupUser(Account user) {
         Preparing();
         username.text = user.username;
-        level.text = XPToLevel(user.xp).ToString();
-        xp.fillAmount = ProgressToLevel(user.xp) - 0.07f; // to factor in that a 0.93 is the filled amount
+        SetUserXP(user.xp);
         Ready();
+    }
+
+    void SetUserXP(int newXP) {
+        level.text = XPToLevel(newXP).ToString();
+        xp.fillAmount = ProgressToLevel(newXP) - 0.07f; // to factor in that a 0.93 is the filled amount
     }
 
     int Equate(float xp) {
