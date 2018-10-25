@@ -30,7 +30,7 @@ public class MainMenuManager : MonoBehaviour {
     private UserManager userManager;
 
     void Start() {
-        Account.onXPChanged += SetUserXP;
+        UserManager.onXPChanged += SetUserXP;
         userManager = GetComponent<UserManager>();
         socialButton.onClick.AddListener(OnSocialButtonClick);
     }
