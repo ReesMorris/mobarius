@@ -31,10 +31,7 @@ public class MainMenuManager : MonoBehaviour {
 
     void Start() {
         userManager = GetComponent<UserManager>();
-
         socialButton.onClick.AddListener(OnSocialButtonClick);
-
-        ProgressToLevel(648);
     }
 
     void OnSocialButtonClick() {
@@ -117,6 +114,8 @@ public class MainMenuManager : MonoBehaviour {
     }
 
     float ProgressToLevel(float xp) {
+        if (xp == 0)
+            return 0;
         int level = 1;
         while (LevelToXP(level) < xp)
             level++;
