@@ -31,5 +31,14 @@
     <translation key="auth_forgot_username">Forgotten your username?</translation>
     <translation key="auth_forgot_password">Forgotten your password?</translation>
     <translation key="auth_verifying_version">Validating game version</translation> 
-    <translation key="auth_version">Version {0}</translation> 
+    <translation key="auth_version">Version {0}</translation>
+    
+    <!-- Quit Menu -->
+    <translation key="quit_title">Quit</translation>
+    <translation key="quit_message">Are you sure you would like to quit?</translation>
+    <translation key="quit_cancel">Return</translation>
+    <translation key="quit_confirm">Quit</translation>
+    
+    <!-- News --> 
+    <translation key="news_loading">Fetching latest news</translation>
 </Language>

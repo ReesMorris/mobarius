@@ -1,12 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class UIHandler : MonoBehaviour {
 
     public static UIHandler instance;
+
+    [Header("Menu Options")]
+    public Button closeButton;
+    public Button settingsButton;
+    public Button minimizeButton;
+    public Button maximizeButton;
 
     [Header("Infobox")]
     public GameObject infoboxContainer;
@@ -19,6 +23,11 @@ public class UIHandler : MonoBehaviour {
     public Button errorButton;
     private string buttonClickUrl;
 
+    [Header("Quit")]
+    public GameObject quitContainer;
+    public Button quitConfirm;
+    public Button quitCancel;
+
     // Allows us to create instances
     void Awake() {
         if (instance == null) {
@@ -30,6 +39,10 @@ public class UIHandler : MonoBehaviour {
 
     private void Start() {
         errorButton.onClick.AddListener(ErrorButtonClick);
+
+        closeButton.onClick.AddListener(ShowQuitContainer);
+        quitCancel.onClick.AddListener(HideQuitContainer);
+        quitConfirm.onClick.AddListener(QuitGame);
     }
 
 
@@ -64,6 +77,21 @@ public class UIHandler : MonoBehaviour {
     }
     public void HideInfobox() {
         infoboxContainer.SetActive(false);
+    }
+
+    /* Quit */
+
+    public void ShowQuitContainer() {
+        quitContainer.SetActive(true);
+    }
+    public void HideQuitContainer() {
+        quitContainer.SetActive(false);
+    }
+    void QuitGame() {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+        Application.Quit();
     }
 
 }

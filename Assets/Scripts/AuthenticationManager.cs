@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SimpleJSON;
@@ -35,11 +34,15 @@ public class AuthenticationManager : MonoBehaviour {
     private bool authenticating;
     private UIHandler UIHandler;
     private VersionManager VersionManager;
+    private MainMenuManager mainMenuManager;
+    private UserManager userManager;
 
     private void Start() {
         // References
         UIHandler = GetComponent<UIHandler>();
         VersionManager = GetComponent<VersionManager>();
+        mainMenuManager = GetComponent<MainMenuManager>();
+        userManager = GetComponent<UserManager>();
 
         // Labels
         registerLabel.onClick.AddListener(OnRegisterLabelClick);
@@ -156,9 +159,7 @@ public class AuthenticationManager : MonoBehaviour {
     }
 
     void LoginUser(JSONNode user) {
-        Account account = new Account(user["username"], user["email"], user["created_at"]);
-        ShowError("(debug) Successfully logged in as, " + account.username);
-
-        // To be sent to & used in a network manager script ...
+        userManager.account = new Account(user["username"], user["email"], user["created_at"], int.Parse(user["xp"]));
+        mainMenuManager.Prepare();
     }
 }
