@@ -19,6 +19,10 @@ public class ScaleOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
 
     public void OnPointerExit(PointerEventData eventData) {
+        ResetScale();
+    }
+
+    public void ResetScale() {
         rectTransform.localScale = initialSize;
     }
 }

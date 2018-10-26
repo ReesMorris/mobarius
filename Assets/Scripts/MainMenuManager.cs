@@ -28,10 +28,12 @@ public class MainMenuManager : MonoBehaviour {
     private int imagesLeftToLoad;
     private int thingsBeforeReady;
     private UserManager userManager;
+    private LobbyNetwork lobbyNetwork;
 
     void Start() {
         UserManager.onXPChanged += SetUserXP;
         userManager = GetComponent<UserManager>();
+        lobbyNetwork = GetComponent<LobbyNetwork>();
         socialButton.onClick.AddListener(OnSocialButtonClick);
     }
 
@@ -43,14 +45,15 @@ public class MainMenuManager : MonoBehaviour {
     // Called once a user has authenticated logging in
     public void Prepare() {
         StartCoroutine("FetchNews");
+        lobbyNetwork.ConnectToNetwork();
         SetupUser(userManager.account);
     }
 
-    void Preparing() {
+    public void Preparing() {
         thingsBeforeReady++;
     }
 
-    void Ready() {
+    public void Ready() {
         thingsBeforeReady--;
         if (thingsBeforeReady == 0) {
             mainMenuUI.SetActive(true);
@@ -94,6 +97,8 @@ public class MainMenuManager : MonoBehaviour {
         SetUserXP(user.xp);
         Ready();
     }
+
+    /* XP and Level Systems */
 
     void SetUserXP(int newXP) {
         level.text = XPToLevel(newXP).ToString();

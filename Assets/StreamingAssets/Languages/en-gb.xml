@@ -39,6 +39,7 @@
     <translation key="quit_cancel">Return</translation>
     <translation key="quit_confirm">Quit</translation>
     
-    <!-- News --> 
-    <translation key="news_loading">Fetching latest news</translation>
+    <!-- Lobby --> 
+    <translation key="lobby_play">Play</translation>
+    <translation key="lobby_searching">Searching</translation>
 </Language>
