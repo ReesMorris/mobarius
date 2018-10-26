@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ChampionSelect : MonoBehaviour {
 
+    [Header("General UI")]
     public GameObject champSelectUI;
     public Transform leftColumn;
     public GameObject playerPrefabLeft;
@@ -12,8 +14,54 @@ public class ChampionSelect : MonoBehaviour {
     public GameObject playerPrefabRight;
     public TMP_Text countdownTimer;
 
+    [Header("ScrollView")]
+    public Transform scrollViewContainer;
+    public GameObject champRowPrefab;
+    public GameObject champButtonPrefab;
+    public int championsPerRow;
+
     int timeRemaining;
     bool waitingForTeams;
+    ChampionRoster championRoster;
+
+    void Start() {
+        championRoster = GetComponent<ChampionRoster>();
+
+        SetupChampions();
+    }
+
+    void Update() {
+        if(waitingForTeams) {
+            if(PhotonNetwork.playerList[PhotonNetwork.playerList.Length - 1].GetTeam() != PunTeams.Team.none) {
+                waitingForTeams = false;
+                DisplayPlayers();
+            }
+        }
+    }
+
+    void SetupChampions() {
+        int i = 0;
+        GameObject panel = new GameObject();
+        foreach(Champion champion in championRoster.GetChampions()) {
+            print(champion.championName);
+            if(i % championsPerRow == 0)
+                panel = Instantiate(champRowPrefab, scrollViewContainer);
+
+            GameObject champ = Instantiate(champButtonPrefab, panel.transform);
+            champ.name = champion.championName;
+
+            Image image = champ.GetComponent<Image>();
+            Button button = champ.GetComponent<Button>();
+            button.interactable = champion.IsOwned;
+            image.sprite = champion.icon;
+
+            if(!champion.IsOwned) {
+                image.color = new Color(1, 1, 1, 0.5f);
+            }
+
+            i++;
+        }
+    }
 
     void AssignTeams() {
         for (int i = 0; i < PhotonNetwork.playerList.Length; i++) {
@@ -24,15 +72,6 @@ public class ChampionSelect : MonoBehaviour {
             }
         }
         StartCoroutine("Countdown");
-    }
-
-    void Update() {
-        if(waitingForTeams) {
-            if(PhotonNetwork.playerList[PhotonNetwork.playerList.Length - 1].GetTeam() != PunTeams.Team.none) {
-                waitingForTeams = false;
-                DisplayPlayers();
-            }
-        }
     }
 
     public void OnStart() {
