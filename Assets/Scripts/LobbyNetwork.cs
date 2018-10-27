@@ -9,7 +9,7 @@ public class LobbyNetwork : MonoBehaviour {
     public Button cancelButton;
 
     private ChampionSelect championSelect;
-    private enum LobbyStates { none, searching, championSelect, inGame };
+    public enum LobbyStates { none, searching, championSelect, inGame };
     private LobbyStates lobbyState;
     private MainMenuManager mainMenuManager;
     private UserManager userManager;
@@ -47,16 +47,17 @@ public class LobbyNetwork : MonoBehaviour {
         }
     }
 
-    void StopPlay() {
+    public void StopPlay() {
         if (PhotonNetwork.connected && PhotonNetwork.room != null) {
             lobbyState = LobbyStates.none;
             PhotonNetwork.LeaveRoom();
             playButton.OnSearchingStop();
+            championSelect.OnStop();
         }
     }
 
     void OnPhotonRandomJoinFailed() {
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 2 }, null);
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 1 }, null);
     }
 
     void OnJoinedRoom() {
@@ -86,5 +87,9 @@ public class LobbyNetwork : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void SetLobbyState(LobbyStates lobbyStates) {
+        lobbyState = lobbyStates;
     }
 }

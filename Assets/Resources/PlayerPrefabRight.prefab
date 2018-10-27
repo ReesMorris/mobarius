@@ -55,6 +55,8 @@ GameObject:
   - component: {fileID: 224872415298876218}
   - component: {fileID: 222331250950466692}
   - component: {fileID: 114946681634507638}
+  - component: {fileID: 114626695089183402}
+  - component: {fileID: 114209210151252940}
   m_Layer: 5
   m_Name: PlayerPrefabRight
   m_TagString: Untagged
@@ -79,6 +81,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114209210151252940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1213919245774336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00089d1fd51d04aeba798aba3d7ce482, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114369604417091700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -219,6 +232,32 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114626695089183402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1213919245774336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &114800443776801754
 MonoBehaviour:
   m_ObjectHideFlags: 1

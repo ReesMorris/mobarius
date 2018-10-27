@@ -42,4 +42,10 @@
     <!-- Lobby --> 
     <translation key="lobby_play">Play</translation>
     <translation key="lobby_searching">Searching</translation>
+    
+    <!-- Champion Select -->
+    <translation key="champ_select_title">Select Your Champion</translation>
+    <translation key="champ_select_title_waiting">Waiting For Players</translation>
+    <translation key="champ_select_title_starting">Starting In</translation>
+    <translation key="champ_select_confirm">Lock In</translation>
 </Language>

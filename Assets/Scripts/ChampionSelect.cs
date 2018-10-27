@@ -6,6 +6,9 @@ using TMPro;
 
 public class ChampionSelect : MonoBehaviour {
 
+    public int timeToPick;
+    public int timeBeforeStart;
+
     [Header("General UI")]
     public GameObject champSelectUI;
     public Transform leftColumn;
@@ -13,6 +16,8 @@ public class ChampionSelect : MonoBehaviour {
     public Transform rightColumn;
     public GameObject playerPrefabRight;
     public TMP_Text countdownTimer;
+    public Button lockinButton;
+    public TMP_Text titleText;
 
     [Header("ScrollView")]
     public Transform scrollViewContainer;
@@ -23,9 +28,18 @@ public class ChampionSelect : MonoBehaviour {
     int timeRemaining;
     bool waitingForTeams;
     ChampionRoster championRoster;
+    Champion selectedChampion;
+    LobbyNetwork lobbyNetwork;
+    bool lockedIn;
+    int playersReady;
+
+    enum PlayerStates { picking, lockedIn, starting };
+    PlayerStates playerState;
 
     void Start() {
         championRoster = GetComponent<ChampionRoster>();
+        lobbyNetwork = GetComponent<LobbyNetwork>();
+        lockinButton.onClick.AddListener(LockChampion);
 
         SetupChampions();
     }
@@ -34,7 +48,21 @@ public class ChampionSelect : MonoBehaviour {
         if(waitingForTeams) {
             if(PhotonNetwork.playerList[PhotonNetwork.playerList.Length - 1].GetTeam() != PunTeams.Team.none) {
                 waitingForTeams = false;
-                DisplayPlayers();
+            }
+        }
+    }
+
+    public void OnPlayerLock() {
+        playersReady++;
+        titleText.text = LocalisationManager.instance.GetValue(playersReady.ToString());
+
+        if(playersReady == PhotonNetwork.room.MaxPlayers) {
+            playerState = PlayerStates.starting;
+            titleText.text = LocalisationManager.instance.GetValue("champ_select_title_starting");
+            if(PhotonNetwork.isMasterClient) {
+                SetTimeRemaining(timeBeforeStart);
+                StopCoroutine("Countdown");
+                StartCoroutine("Countdown");
             }
         }
     }
@@ -43,7 +71,6 @@ public class ChampionSelect : MonoBehaviour {
         int i = 0;
         GameObject panel = new GameObject();
         foreach(Champion champion in championRoster.GetChampions()) {
-            print(champion.championName);
             if(i % championsPerRow == 0)
                 panel = Instantiate(champRowPrefab, scrollViewContainer);
 
@@ -53,6 +80,7 @@ public class ChampionSelect : MonoBehaviour {
             Image image = champ.GetComponent<Image>();
             Button button = champ.GetComponent<Button>();
             button.interactable = champion.IsOwned;
+            button.onClick.AddListener(delegate{SelectChampion(champion);});
             image.sprite = champion.icon;
 
             if(!champion.IsOwned) {
@@ -75,23 +103,27 @@ public class ChampionSelect : MonoBehaviour {
     }
 
     public void OnStart() {
+        playerState = PlayerStates.picking;
+        playersReady = 0;
         waitingForTeams = true;
         if(PhotonNetwork.isMasterClient) {
             AssignTeams();
+            DisplayPlayers();
         }
         champSelectUI.SetActive(true);
-        timeRemaining = 60;
+        SetTimeRemaining(timeToPick);
     }
 
     void DisplayPlayers() {
         foreach(PhotonPlayer player in PhotonNetwork.playerList) {
             GameObject container;
             if (player.GetTeam() == PunTeams.Team.blue) {
-                container = Instantiate(playerPrefabLeft, leftColumn);
+                container = PhotonNetwork.Instantiate(playerPrefabLeft.name, Vector3.zero, Quaternion.identity, 0) as GameObject;
+                container.GetComponent<ChampionLock>().SetPosition(true, player.NickName);
             } else {
-                container = Instantiate(playerPrefabRight, rightColumn);
+                container = PhotonNetwork.Instantiate(playerPrefabLeft.name, Vector3.zero, Quaternion.identity, 0) as GameObject;
+                container.GetComponent<ChampionLock>().SetPosition(false, player.NickName);
             }
-            container.transform.Find("Username").GetComponent<TMP_Text>().text = player.NickName;
         }
     }
 
@@ -100,18 +132,70 @@ public class ChampionSelect : MonoBehaviour {
         StopCoroutine("Countdown");
 
         // Remove old UIs
-        foreach(GameObject panel in leftColumn) {
-            Destroy(panel);
+        foreach(Transform panel in leftColumn.transform) {
+            Destroy(panel.gameObject);
         }
-        foreach (GameObject panel in rightColumn) {
-            Destroy(panel);
+        foreach (Transform panel in rightColumn.transform) {
+            Destroy(panel.gameObject);
         }
     }
 
     IEnumerator Countdown() {
         while(true) {
             yield return new WaitForSeconds(1f);
-            countdownTimer.GetComponent<SetText>().Set((timeRemaining--).ToString());
+            countdownTimer.GetComponent<SetText>().Set((--timeRemaining).ToString());
+            if (timeRemaining == -1) {
+                countdownTimer.GetComponent<SetText>().Set("0");
+
+                // Game is beginning
+                if(playerState == PlayerStates.starting) {
+                    print("Begin!");
+                }
+
+                // At least one player has not picked and everyone needs to go back to the lobby
+                else {
+                    if (playerState == PlayerStates.picking) {
+                        // Player did not pick; do not put them back into searching queue
+                        lobbyNetwork.StopPlay();
+                    }
+                    else {
+                        // Player picked; put them back into searching queue
+                        lobbyNetwork.SetLobbyState(LobbyNetwork.LobbyStates.searching);
+                    }
+                }
+                break;
+            } else {
+
+            }
         }
+    }
+
+    void SelectChampion(Champion champion) {
+        if(!lockedIn) {
+            Transform container = GetLocalPlayerContainer();
+            container.Find("Image").GetComponent<Image>().sprite = champion.icon;
+            lockinButton.interactable = true;
+            selectedChampion = champion;
+        }
+    }
+
+    void LockChampion() {
+        playerState = PlayerStates.lockedIn;
+        titleText.text = LocalisationManager.instance.GetValue("champ_select_title_waiting");
+        lockinButton.interactable = false;
+        lockedIn = true;
+        Transform container = GetLocalPlayerContainer();
+        container.GetComponent<ChampionLock>().LockIn(selectedChampion);
+    }
+
+    Transform GetLocalPlayerContainer() {
+        if(PhotonNetwork.player.GetTeam() == PunTeams.Team.blue)
+            return leftColumn.Find(PhotonNetwork.playerName);
+        return rightColumn.Find(PhotonNetwork.playerName);
+    }
+
+    void SetTimeRemaining(int amount) {
+        timeRemaining = amount;
+        countdownTimer.text = timeRemaining.ToString();
     }
 }
