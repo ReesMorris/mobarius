@@ -57,7 +57,7 @@ public class LobbyNetwork : MonoBehaviour {
     }
 
     void OnPhotonRandomJoinFailed() {
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 1 }, null);
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 2 }, null);
     }
 
     void OnJoinedRoom() {

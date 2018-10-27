@@ -54,7 +54,6 @@ public class ChampionSelect : MonoBehaviour {
 
     public void OnPlayerLock() {
         playersReady++;
-        titleText.text = LocalisationManager.instance.GetValue(playersReady.ToString());
 
         if(playersReady == PhotonNetwork.room.MaxPlayers) {
             playerState = PlayerStates.starting;
