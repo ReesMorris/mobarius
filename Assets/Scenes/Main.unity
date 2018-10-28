@@ -17044,8 +17044,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6011b0ff0af40468d91e5aa53211ba34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginUrl: http://localhost:5002/login
-  registerUrl: http://localhost:5002/register
+  loginUrl: https://reesmorris.co.uk/app/moba/login
+  registerUrl: https://reesmorris.co.uk/app/moba/register
   loginModal: {fileID: 1409419982}
   loginUsername: {fileID: 1136701809}
   loginPassword: {fileID: 1070609167}
@@ -17099,8 +17099,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentVersion: 0.0.0.3
-  versionCheckerUrl: http://localhost:5002/i/version
-  downloadUrl: http://google.com
+  versionCheckerUrl: https://reesmorris.co.uk/app/moba/i/version
+  downloadUrl: https://reesmorris.co.uk
   versionText: {fileID: 940210175}
   outdated: 0
 --- !u!114 &1730177475
