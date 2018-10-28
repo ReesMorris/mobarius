@@ -17098,7 +17098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.0.3
+  currentVersion: 0.0.0.4
   versionCheckerUrl: https://reesmorris.co.uk/app/moba/i/version
   downloadUrl: https://reesmorris.co.uk
   versionText: {fileID: 940210175}
@@ -17145,7 +17145,7 @@ MonoBehaviour:
   status: {fileID: 2057053032}
   socialButton: {fileID: 16638249}
   socialFeed: {fileID: 942227570}
-  newsUrl: http://localhost:5002/i/news?limit=5
+  newsUrl: https://reesmorris.co.uk/app/moba/i/news?limit=5
   articles:
   - title: {fileID: 411410799}
     image: {fileID: 1687673334}
