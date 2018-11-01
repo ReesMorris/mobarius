@@ -13,11 +13,15 @@ public class LobbyNetwork : MonoBehaviour {
     private LobbyStates lobbyState;
     private MainMenuManager mainMenuManager;
     private UserManager userManager;
+    private MapManager mapManager;
+    private GameHandler gameHandler;
 
     void Start() {
         mainMenuManager = GetComponent<MainMenuManager>();
         championSelect = GetComponent<ChampionSelect>();
         userManager = GetComponent<UserManager>();
+        mapManager = GetComponent<MapManager>();
+        gameHandler = GetComponent<GameHandler>();
         playButton.GetComponent<Button>().onClick.AddListener(Play);
         cancelButton.onClick.AddListener(StopPlay);
     }
@@ -41,6 +45,9 @@ public class LobbyNetwork : MonoBehaviour {
     }
 
     void Play() {
+        // Set the current map (testing for now)
+        gameHandler.currentMap = mapManager.GetMap("Testing");
+
         if (PhotonNetwork.connected && PhotonNetwork.room == null) {
             lobbyState = LobbyStates.searching;
             PhotonNetwork.JoinRandomRoom();
@@ -57,7 +64,7 @@ public class LobbyNetwork : MonoBehaviour {
     }
 
     void OnPhotonRandomJoinFailed() {
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 2 }, null);
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = gameHandler.currentMap.maxPlayers }, null);
     }
 
     void OnJoinedRoom() {

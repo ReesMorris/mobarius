@@ -51,4 +51,6 @@ MonoBehaviour:
   - Lock
   - InstantiatePlayerContainer
   - Position
+  - SpawnPlayer
+  - OnGameStart
   DisableAutoOpenWizard: 1

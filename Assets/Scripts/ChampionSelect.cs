@@ -30,6 +30,9 @@ public class ChampionSelect : MonoBehaviour {
     ChampionRoster championRoster;
     Champion selectedChampion;
     LobbyNetwork lobbyNetwork;
+    PhotonView photonView;
+    GameHandler gameHandler;
+    UIHandler uiHandler;
     bool lockedIn;
     int playersReady;
 
@@ -37,8 +40,11 @@ public class ChampionSelect : MonoBehaviour {
     PlayerStates playerState;
 
     void Start() {
+        gameHandler = GetComponent<GameHandler>();
         championRoster = GetComponent<ChampionRoster>();
         lobbyNetwork = GetComponent<LobbyNetwork>();
+        uiHandler = GetComponent<UIHandler>();
+        photonView = GetComponent<PhotonView>();
         lockinButton.onClick.AddListener(LockChampion);
 
         SetupChampions();
@@ -139,6 +145,8 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    
+
     IEnumerator Countdown() {
         while(true) {
             yield return new WaitForSeconds(1f);
@@ -148,7 +156,8 @@ public class ChampionSelect : MonoBehaviour {
 
                 // Game is beginning
                 if(playerState == PlayerStates.starting) {
-                    print("Begin!");
+                    gameHandler.SpawnPlayers();
+                    photonView.RPC("OnGameStart", PhotonTargets.All);
                 }
 
                 // At least one player has not picked and everyone needs to go back to the lobby
@@ -173,6 +182,11 @@ public class ChampionSelect : MonoBehaviour {
         if(!lockedIn) {
             Transform container = GetLocalPlayerContainer();
             container.Find("Image").GetComponent<Image>().sprite = champion.icon;
+
+            ExitGames.Client.Photon.Hashtable props = new ExitGames.Client.Photon.Hashtable();
+            props.Add("championName", champion.championName);
+            PhotonNetwork.player.SetCustomProperties(props);
+
             lockinButton.interactable = true;
             selectedChampion = champion;
         }
@@ -196,5 +210,10 @@ public class ChampionSelect : MonoBehaviour {
     void SetTimeRemaining(int amount) {
         timeRemaining = amount;
         countdownTimer.text = timeRemaining.ToString();
+    }
+
+    [PunRPC]
+    void OnGameStart() {
+        uiHandler.HideLobbyUI();
     }
 }

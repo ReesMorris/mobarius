@@ -9,20 +9,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b8dda4a9ff1648249ea0e5a16a43ba9, type: 3}
-  m_Name: Morgana
+  m_Name: Garen
   m_EditorClassIdentifier: 
-  isOwned: 0
-  isFree: 0
+  isOwned: 1
+  isFree: 1
   isAvailable: 1
-  championName: Morgana
-  icon: {fileID: 21300000, guid: 12cb612c0666d44749b11c760ce243c6, type: 3}
-  health: 559.5
-  healthRegen: 5.5
-  mana: 340.8
-  manaRegen: 11
-  range: 450
-  attackDamage: 55.5
+  championName: Garen
+  icon: {fileID: 21300000, guid: 20b350630132148e98ee67a47ef63c07, type: 3}
+  health: 616.3
+  healthRegen: 8
+  mana: 0
+  manaRegen: 0
+  range: 175
+  attackDamage: 66
   attackSpeed: 0.625
-  armour: 25.4
-  magicResist: 30
-  movementSpeed: 335
+  armour: 36
+  magicResist: 32.1
+  movementSpeed: 340

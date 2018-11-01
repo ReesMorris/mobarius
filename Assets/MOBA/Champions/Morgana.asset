@@ -9,20 +9,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b8dda4a9ff1648249ea0e5a16a43ba9, type: 3}
-  m_Name: Lux
+  m_Name: Morgana
   m_EditorClassIdentifier: 
-  isOwned: 1
+  isOwned: 0
   isFree: 0
-  isAvailable: 1
-  championName: Lux
-  icon: {fileID: 21300000, guid: abd423843bc1a497c9178157c931cddf, type: 3}
-  health: 490
+  isAvailable: 0
+  championName: Morgana
+  icon: {fileID: 21300000, guid: 12cb612c0666d44749b11c760ce243c6, type: 3}
+  health: 559.5
   healthRegen: 5.5
-  mana: 480
-  manaRegen: 8
-  range: 550
-  attackDamage: 53.5
-  attackSpeed: 18.7
-  armour: 30
-  magicResist: 0.625
-  movementSpeed: 330
+  mana: 340.8
+  manaRegen: 11
+  range: 450
+  attackDamage: 55.5
+  attackSpeed: 0.625
+  armour: 25.4
+  magicResist: 30
+  movementSpeed: 335

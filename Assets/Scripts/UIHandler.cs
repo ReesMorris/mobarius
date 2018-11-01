@@ -6,6 +6,9 @@ public class UIHandler : MonoBehaviour {
 
     public static UIHandler instance;
 
+    public GameObject lobbyUI;
+    public GameObject gameUI;
+
     [Header("Menu Options")]
     public Button closeButton;
     public Button settingsButton;
@@ -92,6 +95,12 @@ public class UIHandler : MonoBehaviour {
                 UnityEditor.EditorApplication.isPlaying = false;
         #endif
         Application.Quit();
+    }
+
+    /* Lobby UI */
+
+    public void HideLobbyUI() {
+        lobbyUI.SetActive(false);
     }
 
 }
