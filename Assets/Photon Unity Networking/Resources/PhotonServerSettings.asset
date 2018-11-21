@@ -55,4 +55,5 @@ MonoBehaviour:
   - OnGameStart
   - Rename
   - UpdatePlayerHealth
+  - SetUsername
   DisableAutoOpenWizard: 1
