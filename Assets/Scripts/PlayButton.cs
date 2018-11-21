@@ -6,12 +6,21 @@ using UnityEngine.UI;
 
 public class PlayButton : MonoBehaviour {
 
+    public string mapName;
     public TMP_Text titleText;
     public TMP_Text timer;
     public Button cancelButton;
 
     int timeElapsed;
     string searching;
+
+    void Start() {
+        GetComponent<Button>().onClick.AddListener(OnClick);
+    }
+
+    void OnClick() {
+        LobbyNetwork.Instance.Play(mapName);
+    }
 
     public void OnSearchingStart() {
         timer.gameObject.SetActive(true);

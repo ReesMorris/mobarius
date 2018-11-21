@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LobbyNetwork : MonoBehaviour {
 
+    public static LobbyNetwork Instance;
+
     public PlayButton playButton;
     public Button cancelButton;
 
@@ -17,12 +19,12 @@ public class LobbyNetwork : MonoBehaviour {
     private GameHandler gameHandler;
 
     void Start() {
+        Instance = this;
         mainMenuManager = GetComponent<MainMenuManager>();
         championSelect = GetComponent<ChampionSelect>();
         userManager = GetComponent<UserManager>();
         mapManager = GetComponent<MapManager>();
         gameHandler = GetComponent<GameHandler>();
-        playButton.GetComponent<Button>().onClick.AddListener(Play);
         cancelButton.onClick.AddListener(StopPlay);
     }
 
@@ -44,9 +46,8 @@ public class LobbyNetwork : MonoBehaviour {
         print("Joined Lobby");
     }
 
-    void Play() {
-        // Set the current map (testing for now)
-        gameHandler.currentMap = mapManager.GetMap("Testing");
+    public void Play(string mapName) {
+        gameHandler.currentMap = mapManager.GetMap(mapName);
 
         if (PhotonNetwork.connected && PhotonNetwork.room == null) {
             lobbyState = LobbyStates.searching;

@@ -36,7 +36,7 @@ public class ChampionSelect : MonoBehaviour {
     bool lockedIn;
     int playersReady;
 
-    enum PlayerStates { picking, lockedIn, starting };
+    enum PlayerStates { picking, lockedIn, starting, started };
     PlayerStates playerState;
 
     void Start() {
@@ -64,8 +64,8 @@ public class ChampionSelect : MonoBehaviour {
         if(playersReady == PhotonNetwork.room.MaxPlayers) {
             playerState = PlayerStates.starting;
             titleText.text = LocalisationManager.instance.GetValue("champ_select_title_starting");
-            if(PhotonNetwork.isMasterClient) {
-                SetTimeRemaining(timeBeforeStart);
+            SetTimeRemaining(timeBeforeStart);
+            if (PhotonNetwork.isMasterClient) {
                 StopCoroutine("Countdown");
                 StartCoroutine("Countdown");
             }
@@ -215,5 +215,6 @@ public class ChampionSelect : MonoBehaviour {
     [PunRPC]
     void OnGameStart() {
         uiHandler.HideLobbyUI();
+        playerState = PlayerStates.started;
     }
 }

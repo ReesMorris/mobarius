@@ -10,9 +10,9 @@ public class Champion : ScriptableObject {
     [Header("Stats")]
     public string championName;
     public Sprite icon;
-    public float health;
+    public float maxHealth;
     public float healthRegen;
-    public float mana;
+    public float maxMana;
     public float manaRegen;
     public float range;
     public float attackDamage;
@@ -20,6 +20,9 @@ public class Champion : ScriptableObject {
     public float armour;
     public float magicResist;
     public float movementSpeed;
+
+    [HideInInspector] public float health;
+    [HideInInspector] public float mana;
 
     public bool IsOwned {
         get { return isOwned || isFree; }

@@ -23,11 +23,14 @@ public class GameHandler : MonoBehaviour {
         if(PhotonNetwork.player.GetTeam() == PunTeams.Team.red) {
             position = currentMap.redSpawns[0].transform.position;
         }
+        position += (Vector3.up * 3f);
         GameObject player = PhotonNetwork.Instantiate(PhotonNetwork.player.CustomProperties["championName"].ToString(), position, Quaternion.identity, 0);
+        player.name = PhotonNetwork.player.CustomProperties["championName"].ToString();
         PlayerCamera playerCamera = Camera.main.GetComponent<PlayerCamera>();
         playerCamera.target = player.transform;
         playerCamera.enabled = true;
         player.GetComponent<NavMeshAgent>().enabled = true;
         player.GetComponent<PlayerMovement>().enabled = true;
     }
+
 }

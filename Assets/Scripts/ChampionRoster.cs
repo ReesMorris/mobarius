@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class ChampionRoster : MonoBehaviour {
 
+    static public ChampionRoster Instance;
     public Champion[] champions;
+
+    void Start() {
+        Instance = this;
+    }
 
     public Champion[] GetChampions() {
         List<Champion> availableChampions = new List<Champion>();
@@ -26,5 +31,13 @@ public class ChampionRoster : MonoBehaviour {
         }
 
         return availableChampions.ToArray();
+    }
+
+    public Champion GetChampion(string name) {
+        foreach(Champion champion in champions) {
+            if (champion.championName == name)
+                return champion;
+        }
+        return null;
     }
 }
