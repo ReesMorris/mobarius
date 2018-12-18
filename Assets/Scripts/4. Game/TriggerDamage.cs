@@ -9,7 +9,10 @@ public class TriggerDamage : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         PlayerChampion playerChampion = other.GetComponent<PlayerChampion>();
         if(playerChampion != null) {
-            playerChampion.TakeDamage(damage);
+            PhotonView photonView = playerChampion.GetComponent<PhotonView>();
+            if (photonView.isMine) {
+                photonView.RPC("Damage", PhotonTargets.All, damage);
+            }
         }
     }
 }

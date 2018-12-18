@@ -4,49 +4,53 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class PlayButton : MonoBehaviour {
+public class SearchingLabel : MonoBehaviour {
 
-    public string mapName;
+    public static SearchingLabel Instance;
+
     public TMP_Text titleText;
     public TMP_Text timer;
     public Button cancelButton;
 
     int timeElapsed;
     string searching;
+    bool isSearching;
 
     void Start() {
-        GetComponent<Button>().onClick.AddListener(OnClick);
+        Instance = this;
     }
 
-    void OnClick() {
-        LobbyNetwork.Instance.Play(mapName);
-    }
-
+    // Called when a player begins searching for a game
     public void OnSearchingStart() {
+        isSearching = true;
         timer.gameObject.SetActive(true);
         cancelButton.gameObject.SetActive(true);
-        GetComponent<ScaleOnHover>().ResetScale();
-        GetComponent<ScaleOnHover>().enabled = false;
         searching = LocalisationManager.instance.GetValue("lobby_searching");
         StartCoroutine("RunTimer");
         StartCoroutine("SearchingText");
     }
 
+    // Called when a player stops searching for a game (searching cancelled)
     public void OnSearchingStop() {
+        isSearching = false;
+        timeElapsed = 0;
+        timer.text = "00:00";
         titleText.text = LocalisationManager.instance.GetValue("lobby_play");
         timer.gameObject.SetActive(false);
         cancelButton.gameObject.SetActive(false);
         StopCoroutine("RunTimer");
         StopCoroutine("SearchingText");
         GetComponent<ScaleOnHover>().enabled = true;
-        timeElapsed = 0;
     }
 
+    // Called to pause searching for a game; does not reset timer
     public void OnSearchingPause() {
+        isSearching = false;
         StopCoroutine("RunTimer");
         StopCoroutine("SearchingText");
     }
 
+    // Displays searching text with flashing ellipses
     IEnumerator SearchingText() {
         int i = 0;
         while(true) {
@@ -60,10 +64,12 @@ public class PlayButton : MonoBehaviour {
         }
     }
 
+    // Displays the amount of time elapsed since searching started
     IEnumerator RunTimer() {
         while(true) {
             yield return new WaitForSeconds(1f);
-            timeElapsed++;
+            if(isSearching)
+                timeElapsed++;
 
             TimeSpan time = TimeSpan.FromSeconds(timeElapsed);
             timer.text = time.Minutes.ToString("00") + ":" + time.Seconds.ToString("00");

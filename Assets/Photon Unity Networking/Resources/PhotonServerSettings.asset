@@ -56,4 +56,6 @@ MonoBehaviour:
   - Rename
   - UpdatePlayerHealth
   - SetUsername
+  - Damage
+  - Heal
   DisableAutoOpenWizard: 1

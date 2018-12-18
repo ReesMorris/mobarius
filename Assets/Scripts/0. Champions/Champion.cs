@@ -23,6 +23,25 @@ public class Champion : ScriptableObject {
 
     [HideInInspector] public float health;
     [HideInInspector] public float mana;
+    [HideInInspector] public string owner;
+
+    public void Init(Champion c, string o) {
+        owner = o;
+        isOwned = c.isOwned;
+        isFree = c.isFree;
+        isAvailable = c.isAvailable;
+        championName = c.championName;
+        icon = c.icon;
+        maxHealth = c.maxHealth;
+        maxMana = c.maxMana;
+        manaRegen = c.manaRegen;
+        range = c.range;
+        attackDamage = c.attackDamage;
+        attackSpeed = c.attackSpeed;
+        armour = c.armour;
+        magicResist = c.magicResist;
+        movementSpeed = c.movementSpeed;
+    }
 
     public bool IsOwned {
         get { return isOwned || isFree; }

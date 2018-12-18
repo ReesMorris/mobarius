@@ -9,7 +9,10 @@ public class TriggerHealth : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         PlayerChampion playerChampion = other.GetComponent<PlayerChampion>();
         if(playerChampion != null) {
-            playerChampion.Heal(healing);
+        PhotonView photonView = playerChampion.GetComponent<PhotonView>();
+            if (photonView.isMine) {
+                photonView.RPC("Heal", PhotonTargets.All, healing);
+            }
         }
     }
 }

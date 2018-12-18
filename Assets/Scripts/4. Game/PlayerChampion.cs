@@ -17,20 +17,22 @@ public class PlayerChampion : MonoBehaviour {
     Champion champion;
     PhotonView photonView;
     float oldHealth;
+    GameUIHandler gameUIHandler;
 
     /*  General Code  */
 
 	void Start () {
         photonView = GetComponent<PhotonView>();
-        if(PhotonNetwork.player.IsLocal) {
+        if (PhotonNetwork.player.IsLocal) {
+            gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();
             photonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());
             usernameText.text = photonView.owner.NickName;
+            champion = ScriptableObject.CreateInstance<Champion>();
+            champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);
+            champion.health = oldHealth = champion.maxHealth;
+            champion.mana = champion.maxMana;
+            photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { champion.health, champion.maxHealth });
         }
-
-        champion = ChampionRoster.Instance.GetChampion(gameObject.name);
-        champion.health = oldHealth = champion.maxHealth;
-        champion.mana = champion.maxMana;
-        TakeDamage(0f);
     }
 
     [PunRPC]
@@ -38,15 +40,23 @@ public class PlayerChampion : MonoBehaviour {
         gameObject.name = newName;
     }
 
-    /*  General Health Handling  */
-
-    void OnHealthChange() {
-        champion.health = Mathf.Clamp(champion.health, 0, champion.maxHealth);
-        if(champion.health == 0f) {
-            Die();
-        }
+    [PunRPC]
+    void Damage(float amount) {
+        print(PhotonNetwork.playerName + " is taking damage");
+        champion.health = Mathf.Max(champion.health - amount, 0f);
+        if (champion.health <= 0f)
+            print("I am dead");
+        gameUIHandler.UpdateStats(champion);
         photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { champion.health, champion.maxHealth });
     }
+
+    [PunRPC]
+    void Heal(float amount) {
+        champion.health = Mathf.Min(champion.health + amount, champion.maxHealth);
+        gameUIHandler.UpdateStats(champion);
+        photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { champion.health, champion.maxHealth });
+    }
+
 
     [PunRPC]
     void UpdatePlayerHealth(float health, float maxHealth) {
@@ -59,11 +69,6 @@ public class PlayerChampion : MonoBehaviour {
             damageIndicator.fillAmount = oldFillAmount;
         }
 
-        // Healing done
-        else {
-
-        }
-
         // Health bars
         while(hundredsContainer.childCount < (Mathf.Floor(maxHealth / 100))) {
             Instantiate(healthBarLine, hundredsContainer);
@@ -74,27 +79,5 @@ public class PlayerChampion : MonoBehaviour {
             healthBarFill.color = enemyHealthColour;
 
         oldHealth = health;
-    }
-
-    /*  Healing Handling  */
-
-    public void Heal(float amount) {
-        if(PhotonNetwork.isMasterClient) {
-            champion.health += amount;
-            OnHealthChange();
-        }
-    }
-
-    /*  Damage & Death Handling  */
-
-    public void TakeDamage(float amount) {
-        if(PhotonNetwork.isMasterClient) {
-            champion.health -= amount;
-            OnHealthChange();
-        }
-    }
-
-    void Die() {
-        print("i am dead");
     }
 }

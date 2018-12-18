@@ -36,6 +36,7 @@ public class AuthenticationManager : MonoBehaviour {
     private VersionManager VersionManager;
     private MainMenuManager mainMenuManager;
     private UserManager userManager;
+    public bool LoggedIn { get; private set; }
 
     private void Start() {
         // References
@@ -71,10 +72,12 @@ public class AuthenticationManager : MonoBehaviour {
     void OnRegisterLabelClick() {
         loginModal.SetActive(false);
         registerModal.SetActive(true);
+        registerUsername.Select();
     }
     void OnLoginLabelClick() {
         loginModal.SetActive(true);
         registerModal.SetActive(false);
+        loginUsername.Select();
     }
 
     public void ShowError(string message) {
@@ -83,22 +86,27 @@ public class AuthenticationManager : MonoBehaviour {
     }
 
     // Called when the user presses the log in button
-    void OnLoginButtonClick() {
-        // Set the user to authenticating, and prevent further clicks from being made
-        authenticating = true;
+    public void OnLoginButtonClick() {
+        if(loginButton.interactable) {
+            // Set the user to authenticating, and prevent further clicks from being made
+            authenticating = true;
 
-        // This is where we will authenticate a user login
-        UIHandler.HideError();
-        StartCoroutine(LoginRequest(loginUsername.text, loginPassword.text));
+            // This is where we will authenticate a user login
+            UIHandler.HideError();
+            StartCoroutine(LoginRequest(loginUsername.text, loginPassword.text));
+            StartCoroutine("LoggingInTimer");
+        }
     }
 
-    void OnRegisterButtonClick() {
-        // Set the user to authenticating, and prevent further clicks from being made
-        authenticating = true;
+    public void OnRegisterButtonClick() {
+        if(registerButton.interactable) {
+            // Set the user to authenticating, and prevent further clicks from being made
+            authenticating = true;
 
-        // This is where we will authenticate a user login
-        UIHandler.HideError();
-        StartCoroutine(RegisterRequest(registerUsername.text, registerEmail.text, registerPassword.text, registerPassword2.text));
+            // This is where we will authenticate a user login
+            UIHandler.HideError();
+            StartCoroutine(RegisterRequest(registerUsername.text, registerEmail.text, registerPassword.text, registerPassword2.text));
+        }
     }
 
     // Will send a login request to the server string specified
@@ -112,6 +120,7 @@ public class AuthenticationManager : MonoBehaviour {
 
         if (www.isNetworkError || www.isHttpError) {
             ShowError(www.error);
+            StopCoroutine("LoggingInTimer");
         }
         else {
             ValidateAuthentication(www.downloadHandler.text);
@@ -152,6 +161,7 @@ public class AuthenticationManager : MonoBehaviour {
             }
 
             ShowError(LocalisationManager.instance.GetValue(message, parameters));
+            StopCoroutine("LoggingInTimer");
 
         } else {
             LoginUser(data["user"]);
@@ -159,7 +169,14 @@ public class AuthenticationManager : MonoBehaviour {
     }
 
     void LoginUser(JSONNode user) {
+        StopCoroutine("LoggingInTimer");
         userManager.account = new Account(user["username"], user["email"], user["created_at"], int.Parse(user["xp"]));
+        LoggedIn = true;
         mainMenuManager.Prepare();
+    }
+
+    IEnumerator LoggingInTimer() {
+        yield return new WaitForSeconds(7f);
+        ShowError(LocalisationManager.instance.GetValue("login_error_timeout"));
     }
 }

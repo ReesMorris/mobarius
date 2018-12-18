@@ -11,6 +11,4 @@
         created_at = _created_at;
         xp = _xp;
     }
-
-    // TBC ...
 }

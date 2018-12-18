@@ -24,6 +24,7 @@ public class LocalisationManager : MonoBehaviour {
     }
 
     void Start () {
+        isReady = false;
         defaultIso = currentLanguage;
         localisations = new Dictionary<string, string>();
         SetLanguage(defaultIso);

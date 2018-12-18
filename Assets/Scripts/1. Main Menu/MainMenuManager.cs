@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using SimpleJSON;
 using UnityEngine.Networking;
 using TMPro;
@@ -29,14 +30,55 @@ public class MainMenuManager : MonoBehaviour {
     private int thingsBeforeReady;
     private UserManager userManager;
     private LobbyNetwork lobbyNetwork;
+    private AuthenticationManager authenticationManager;
+    private EventSystem system;
+    private UIHandler UIHandler;
 
     void Start() {
         UserManager.onXPChanged += SetUserXP;
+        system = EventSystem.current;
         userManager = GetComponent<UserManager>();
         lobbyNetwork = GetComponent<LobbyNetwork>();
+        authenticationManager = GetComponent<AuthenticationManager>();
         socialButton.onClick.AddListener(OnSocialButtonClick);
+        UIHandler = GetComponent<UIHandler>();
+        authenticationManager.loginUsername.Select();
     }
 
+    void Update() {
+        // Allow tab cycling between fields (src: https://forum.unity.com/threads/tab-between-input-fields.263779/#post-2234066)
+        if (Input.GetKeyDown(KeyCode.Tab)) {
+            Selectable next = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ?
+            system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp() :
+            system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
+            if (next != null) {
+                InputField inputfield = next.GetComponent<InputField>();
+                if (inputfield != null)
+                    inputfield.OnPointerClick(new PointerEventData(system));
+                system.SetSelectedGameObject(next.gameObject);
+            } else {
+                next = Selectable.allSelectables[0];
+                system.SetSelectedGameObject(next.gameObject);
+            }
+        }
+
+        // Allow ENTER key to submit the form (enter for Win; return for Mac)
+        if(Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return)) {
+            if(!authenticationManager.LoggedIn) {
+                if(UIHandler.ErrorShowing) {
+                    UIHandler.ErrorButtonClick();
+                } else {
+                    if (authenticationManager.loginModal.activeSelf)
+                        authenticationManager.OnLoginButtonClick();
+                    else
+                        authenticationManager.OnRegisterButtonClick();
+                }
+            }
+        }
+    }
+
+
+    // Called when the social section is clicked
     void OnSocialButtonClick() {
         socialFeed.gameObject.SetActive(!socialFeed.gameObject.activeSelf);
         newsSection2.SetActive(!newsSection2.activeSelf);
@@ -49,10 +91,12 @@ public class MainMenuManager : MonoBehaviour {
         SetupUser(userManager.account);
     }
 
+    // Called by all processes that need to do something before the user can move to the lobby
     public void Preparing() {
         thingsBeforeReady++;
     }
 
+    // Called when a process is ready; preparation will be complete when all processes are ready
     public void Ready() {
         thingsBeforeReady--;
         if (thingsBeforeReady == 0) {
@@ -60,9 +104,9 @@ public class MainMenuManager : MonoBehaviour {
         }
     }
 
+    // Called to fetch the news articles for the main menu
     IEnumerator FetchNews() {
         Preparing();
-        WWWForm form = new WWWForm();
         UnityWebRequest www = UnityWebRequest.Get(newsUrl);
         yield return www.SendWebRequest();
 
@@ -79,6 +123,7 @@ public class MainMenuManager : MonoBehaviour {
         }
     }
 
+    // Called to grab the news icon from the specified URL; will call ready() once all are loaded
     IEnumerator SetIcon(int index, string url) {
         WWW www = new WWW(url);
         yield return www;
@@ -91,6 +136,7 @@ public class MainMenuManager : MonoBehaviour {
         }
     }
 
+    // Called to set the user information up; will call ready() once all complete
     void SetupUser(Account user) {
         Preparing();
         username.text = user.username;
@@ -104,25 +150,21 @@ public class MainMenuManager : MonoBehaviour {
         level.text = XPToLevel(newXP).ToString();
         xp.fillAmount = ProgressToLevel(newXP) - 0.07f; // to factor in that a 0.93 is the filled amount
     }
-
     int Equate(float xp) {
         return (int)Mathf.Floor(xp + 300 * Mathf.Pow(2, xp / 7));
     }
-
     int LevelToXP(int level) {
         float xp = 0;
         for (int i = 1; i < level; i++)
             xp += Equate(i);
         return (int)Mathf.Floor(xp / 4f);
     }
-
     int XPToLevel(int xp) {
         int level = 1;
         while (LevelToXP(level) < xp)
             level++;
         return level - 1;
     }
-
     float ProgressToLevel(float xp) {
         if (xp == 0)
             return 0;

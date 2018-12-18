@@ -8,7 +8,6 @@ public class ScaleOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private RectTransform rectTransform;
     private Vector3 initialSize;
 
-	// Use this for initialization
 	void Start () {
         rectTransform = GetComponent<RectTransform>();
         initialSize = rectTransform.localScale;

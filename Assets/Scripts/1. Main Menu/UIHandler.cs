@@ -31,6 +31,12 @@ public class UIHandler : MonoBehaviour {
     public Button quitConfirm;
     public Button quitCancel;
 
+    public bool ErrorShowing {
+        get {
+            return errorContainer.activeSelf;
+        }
+    }
+
     // Allows us to create instances
     void Awake() {
         if (instance == null) {
@@ -60,7 +66,7 @@ public class UIHandler : MonoBehaviour {
         ShowError(message);
         buttonClickUrl = url;
     }
-    void ErrorButtonClick() {
+    public void ErrorButtonClick() {
         if (buttonClickUrl == "") {
             errorContainer.SetActive(false);
         } else {

@@ -16,7 +16,7 @@ MonoBehaviour:
   isAvailable: 1
   championName: Garen
   icon: {fileID: 21300000, guid: 20b350630132148e98ee67a47ef63c07, type: 3}
-  maxHealth: 616.3
+  maxHealth: 616.16
   healthRegen: 8
   maxMana: 0
   manaRegen: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   movementSpeed: 340
   health: 616.3
   mana: 0
+  owner: 

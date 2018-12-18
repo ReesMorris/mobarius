@@ -126,7 +126,7 @@ public class ChampionSelect : MonoBehaviour {
                 container = PhotonNetwork.Instantiate(playerPrefabLeft.name, Vector3.zero, Quaternion.identity, 0) as GameObject;
                 container.GetComponent<ChampionLock>().SetPosition(true, player.NickName);
             } else {
-                container = PhotonNetwork.Instantiate(playerPrefabLeft.name, Vector3.zero, Quaternion.identity, 0) as GameObject;
+                container = PhotonNetwork.Instantiate(playerPrefabRight.name, Vector3.zero, Quaternion.identity, 0) as GameObject;
                 container.GetComponent<ChampionLock>().SetPosition(false, player.NickName);
             }
         }
