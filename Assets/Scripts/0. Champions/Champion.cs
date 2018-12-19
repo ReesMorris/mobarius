@@ -7,6 +7,13 @@ public class Champion : ScriptableObject {
     public bool isFree;
     public bool isAvailable;
 
+    [Header("Abilities")]
+    public Ability abilityPassive;
+    public Ability abilityQ;
+    public Ability abilityW;
+    public Ability abilityE;
+    public Ability abilityR;
+
     [Header("Stats")]
     public string championName;
     public Sprite icon;

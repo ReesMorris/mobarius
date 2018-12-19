@@ -28,8 +28,10 @@ public class PlayerChampion : MonoBehaviour {
             gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();              // Tell other players to rename this player's character to be the name of the champion             photonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = photonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
 
             // Update UI to show full health and mana, etc
-            if (photonView.isMine)
-                gameUIHandler.UpdateStats(Champion);              // Tell other players to update the health and mana bar of this player             photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+            if (photonView.isMine) {
+                gameUIHandler.UpdateAbilities(Champion.championName);
+                gameUIHandler.UpdateStats(Champion);
+            }              // Tell other players to update the health and mana bar of this player             photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
             photonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana }); 
         }
     }
