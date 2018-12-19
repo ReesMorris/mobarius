@@ -33,6 +33,7 @@ public class Champion : ScriptableObject {
         championName = c.championName;
         icon = c.icon;
         maxHealth = c.maxHealth;
+        healthRegen = c.healthRegen;
         maxMana = c.maxMana;
         manaRegen = c.manaRegen;
         range = c.range;
