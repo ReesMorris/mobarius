@@ -28,19 +28,11 @@ public class AbilityHandler : MonoBehaviour {
     }
 
     // Returns the ability associated with a champion
-    public Ability GetChampionAbilities(string championName, Abilities ability) {
+    public Ability GetChampionAbilities(string championName, Abilities _ability) {
         Champion champion = ChampionRoster.Instance.GetChampion(championName);
-        switch(ability) {
-            case Abilities.Passive:
-                return champion.abilityPassive;
-            case Abilities.Q:
-                return champion.abilityQ;
-            case Abilities.W:
-                return champion.abilityW;
-            case Abilities.E:
-                return champion.abilityE;
-            case Abilities.R:
-                return champion.abilityR;
+        foreach(Ability ability in champion.abilities) {
+            if (ability.abilityKey == _ability)
+                return ability;
         }
         return null;
     }

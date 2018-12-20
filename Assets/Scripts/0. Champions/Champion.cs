@@ -8,11 +8,7 @@ public class Champion : ScriptableObject {
     public bool isAvailable;
 
     [Header("Abilities")]
-    public Ability abilityPassive;
-    public Ability abilityQ;
-    public Ability abilityW;
-    public Ability abilityE;
-    public Ability abilityR;
+    public Ability[] abilities;
 
     [Header("Stats")]
     public string championName;
@@ -31,6 +27,11 @@ public class Champion : ScriptableObject {
     [HideInInspector] public float health;
     [HideInInspector] public float mana;
     [HideInInspector] public string owner;
+
+    // Hidden stats
+    [HideInInspector] public float physicalDamage;
+    [HideInInspector] public float magicDamage;
+    [HideInInspector] public float abilityPower;
 
     public void Init(Champion c, string o) {
         owner = o;

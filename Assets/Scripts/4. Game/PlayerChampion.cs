@@ -31,7 +31,7 @@ public class PlayerChampion : MonoBehaviour {
 
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
-                gameUIHandler.UpdateAbilities(Champion.championName);
+                gameUIHandler.UpdateAbilities(Champion);
                 gameUIHandler.UpdateStats(Champion);
             }
 

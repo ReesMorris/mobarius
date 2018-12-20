@@ -6,6 +6,7 @@ using UnityEngine;
 public class Ability {
 
     public string name;
+    public AbilityHandler.Abilities abilityKey;
     [TextArea(3, 12)] public string desc;
     public Sprite icon;
 
@@ -14,5 +15,8 @@ public class Ability {
     public float range;
     public float cooldown;
     public float speed;
-    public float damage;
+
+    [Header("Damage")]
+    public float physicalDamage;
+    public float magicDamage;
 }

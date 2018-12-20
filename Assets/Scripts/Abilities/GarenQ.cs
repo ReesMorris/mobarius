@@ -33,7 +33,7 @@ public class GarenQ : MonoBehaviour {
                     abilityHandler.UpdateIndicatorRotation(indicator, gameObject);
 
                 // Can we cast this ability?
-                if (GameUIHandler.Instance.CanCastAbility(AbilityHandler.Abilities.Q, ability, playerChampion.Champion)) {
+                if (GameUIHandler.Instance.CanCastAbility(abilityType, ability, playerChampion.Champion)) {
                     // Is Q being pressed down?
                     if (Input.GetKeyDown(KeyCode.Q))
                         abilityHandler.StartCasting(indicator, ability.range);
@@ -47,10 +47,10 @@ public class GarenQ : MonoBehaviour {
                         // Are we aiming? This ability requires aiming
                         if (abilityHandler.Aiming) {
                             // Tell the AbilityHandler that we've used this ability
-                            abilityHandler.OnAbilityCast(gameObject, indicator, AbilityHandler.Abilities.Q, ability.cooldown, true);
+                            abilityHandler.OnAbilityCast(gameObject, indicator, abilityType, ability.cooldown, true);
 
                             // Handle the actual unique part of this ability
-                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, ability.damage });
+                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, ability.physicalDamage });
 
                             // Take mana from the player
                             playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);

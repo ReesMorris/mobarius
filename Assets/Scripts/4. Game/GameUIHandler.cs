@@ -32,25 +32,18 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownR;
     float cooldownRDuration;
 
-    bool ready;
-
     void Start() {
         Instance = this;
         StartCoroutine("HandleCooldowns");
     }
 
-    public void UpdateAbilities(string championName) {
-        Champion champion = ChampionRoster.Instance.GetChampion(championName);
-
-        // First time running this? Let's load the icons
-        if (!ready) {
-            abilityPassive.SetupIcon(champion.abilityPassive, "");
-            abilityQ.SetupIcon(champion.abilityQ, "Q");
-            abilityW.SetupIcon(champion.abilityW, "W");
-            abilityE.SetupIcon(champion.abilityE, "E");
-            abilityR.SetupIcon(champion.abilityR, "R");
-            ready = true;
-        }
+    public void UpdateAbilities(Champion champion) {
+        Champion template = ChampionRoster.Instance.GetChampion(champion.championName);
+        abilityPassive.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Passive), "", champion);
+        abilityQ.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Q), "Q", champion);
+        abilityW.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.W), "W", champion);
+        abilityE.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.E), "E", champion);
+        abilityR.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.R), "R", champion);
     }
 
     public void UpdateStats(Champion champion) {
