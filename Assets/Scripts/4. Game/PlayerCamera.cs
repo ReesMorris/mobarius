@@ -10,7 +10,7 @@ public class PlayerCamera : MonoBehaviour {
 
     PhotonView photonView;
     float padding = 0.95f;
-    float cameraSpeed = 0.07f;
+    float cameraSpeed = 0.17f;
     bool lockedToPlayer;
 
     void Start() {

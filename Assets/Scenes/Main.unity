@@ -7359,16 +7359,6 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 195643828564561980, guid: 732864450f5fe40ae9cfa4659a762b41,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114946344727304366, guid: 732864450f5fe40ae9cfa4659a762b41,
-        type: 2}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 732864450f5fe40ae9cfa4659a762b41, type: 2}
   m_IsPrefabAsset: 0
@@ -24211,7 +24201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.0.6
+  currentVersion: 0.0.0.7
   versionCheckerUrl: https://rees.app/moba/i/version
   downloadUrl: https://rees.app
   versionText: {fileID: 940210175}
