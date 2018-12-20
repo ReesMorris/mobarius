@@ -50,5 +50,20 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    public void SetCooldown(float cooldownRemaining, float cooldownDuration) {
+        if (cooldownRemaining > 0f) {
+            iconBg.SetActive(true);
+            icon2.fillAmount = 1 - (cooldownRemaining / cooldownDuration);
+            if(cooldownRemaining > 1f)
+                cooldown.text = Mathf.Ceil(cooldownRemaining).ToString();
+            else
+                cooldown.text =cooldownRemaining.ToString("F1");
+
+        } else {
+            iconBg.SetActive(false);
+            cooldown.text = "";
+        }
+    }
+
 
 }

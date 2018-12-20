@@ -7,6 +7,8 @@ public class PlayerCamera : MonoBehaviour {
     public Transform target;
     public Vector3 distance;
     public Vector3 rotation;
+    public float scrollSensitivity;
+    public Vector2 minMaxFOV;
 
     PhotonView photonView;
     float padding = 0.95f;
@@ -20,6 +22,7 @@ public class PlayerCamera : MonoBehaviour {
 
 	void Update () {
         if (photonView.isMine) {
+            SetFOV();
             CheckForInput();
             CheckForMouseOnCorner();
             if (lockedToPlayer)
@@ -42,6 +45,14 @@ public class PlayerCamera : MonoBehaviour {
         if(lockOn)
             lockedToPlayer = true;
         CenterCamera();
+    }
+
+    // Set the field of view (Src: https://answers.unity.com/questions/218347/how-do-i-make-the-camera-zoom-in-and-out-with-the.html)
+    void SetFOV() {
+        float fov = Camera.main.fieldOfView;
+        fov += Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity;
+        fov = Mathf.Clamp(fov, minMaxFOV.x, minMaxFOV.y);
+        Camera.main.fieldOfView = fov;
     }
 
     // Center the camera on the player

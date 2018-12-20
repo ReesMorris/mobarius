@@ -6,6 +6,9 @@ using TMPro;
 
 public class GameUIHandler : MonoBehaviour {
 
+    public static GameUIHandler Instance;
+    public enum Abilities { Q, W, E, R };
+
     [Header("Abilities")]
     public AbilityIcon abilityPassive;
     public AbilityIcon abilityQ;
@@ -21,7 +24,21 @@ public class GameUIHandler : MonoBehaviour {
     public TMP_Text manaText;
     public TMP_Text manaRegenText;
 
+    float cooldownQ;
+    float cooldownQDuration;
+    float cooldownW;
+    float cooldownWDuration;
+    float cooldownE;
+    float cooldownEDuration;
+    float cooldownR;
+    float cooldownRDuration;
+
     bool ready;
+
+    void Start() {
+        Instance = this;
+        StartCoroutine("HandleCooldowns");
+    }
 
     public void UpdateAbilities(string championName) {
         Champion champion = ChampionRoster.Instance.GetChampion(championName);
@@ -52,4 +69,59 @@ public class GameUIHandler : MonoBehaviour {
         if (champion.mana < champion.maxMana)
             manaRegenText.text = "+" + champion.manaRegen.ToString("F1");
     }
+
+    public bool CanCastAbility(Abilities ability) {
+        switch (ability) {
+            case Abilities.Q:
+                return cooldownQ == 0f;
+            case Abilities.W:
+                return cooldownW == 0f;
+            case Abilities.E:
+                return cooldownE == 0f;
+            case Abilities.R:
+                return cooldownR == 0f;
+        }
+        return false;
+    }
+
+    public void OnAbilityCasted(Abilities ability, float cooldown) {
+        switch (ability) {
+            case Abilities.Q:
+                cooldownQ = cooldownQDuration = cooldown;
+                break;
+            case Abilities.W:
+                cooldownW = cooldownWDuration = cooldown;
+                break;
+            case Abilities.E:
+                cooldownE = cooldownEDuration = cooldown;
+                break;
+            case Abilities.R:
+                cooldownR = cooldownRDuration = cooldown;
+                break;
+        }
+    }
+
+    IEnumerator HandleCooldowns() {
+        float speed = 0.1f;
+        while(true) {
+            if(cooldownQ > 0f) {
+                cooldownQ = Mathf.Max(0f, cooldownQ - speed);
+                abilityQ.SetCooldown(cooldownQ, cooldownQDuration);
+            }
+            if (cooldownW > 0f) {
+                cooldownW = Mathf.Max(0f, cooldownW - speed);
+                abilityW.SetCooldown(cooldownW, cooldownWDuration);
+            }
+            if (cooldownE > 0f) {
+                cooldownE = Mathf.Max(0f, cooldownE - speed);
+                abilityE.SetCooldown(cooldownE, cooldownEDuration);
+            }
+            if (cooldownR > 0f) {
+                cooldownR = Mathf.Max(0f, cooldownR - speed);
+                abilityR.SetCooldown(cooldownR, cooldownRDuration);
+            }
+            yield return new WaitForSeconds(speed);
+        }
+    }
+
 }

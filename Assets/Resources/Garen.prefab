@@ -63,6 +63,7 @@ GameObject:
   - component: {fileID: 195643828564561980}
   - component: {fileID: 114164571452529412}
   - component: {fileID: 114366742856069678}
+  - component: {fileID: 114414566166014550}
   m_Layer: 0
   m_Name: Garen
   m_TagString: Untagged
@@ -373,6 +374,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46fcfc6d6544f4f2481421206b2fdd23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114414566166014550
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1272804252154214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e8571088a0ca734cbd2bf08b757fdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 10
+  cooldown: 2
+  speed: 12
+  damage: 340
+  bulletPrefab: {fileID: 1256582402650800, guid: e37f9647099d218489136da7c1123168,
+    type: 2}
+  projectileIndicatorPrefab: {fileID: 1885752896724658, guid: a56d0b1a9099b174ca4e9ca40d96e04e,
+    type: 2}
 --- !u!114 &114588278689443970
 MonoBehaviour:
   m_ObjectHideFlags: 1

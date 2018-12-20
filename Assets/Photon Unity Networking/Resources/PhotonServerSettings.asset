@@ -64,4 +64,5 @@ MonoBehaviour:
   - InstantiatePlayers
   - Spawn
   - OnDeath
+  - Shoot
   DisableAutoOpenWizard: 1
