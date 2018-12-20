@@ -35,7 +35,6 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        print("enter");
         if(tooltip != null) {
             tooltip.SetActive(true);
             tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(900, tooltipText.preferredHeight + 50f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
@@ -46,7 +45,6 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        print("exit");
         if(tooltip != null) {
             tooltip.SetActive(false);
         }

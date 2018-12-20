@@ -61,4 +61,7 @@ MonoBehaviour:
   - GiveMana
   - TakeMana
   - UpdatePlayerMana
+  - InstantiatePlayers
+  - Spawn
+  - OnDeath
   DisableAutoOpenWizard: 1

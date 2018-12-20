@@ -5,6 +5,7 @@ using UnityEngine;
 public class StatRegeneration : MonoBehaviour {
 
     Champion champion;
+    PlayerChampion playerChampion;
     PhotonView photonView;
 
     void Start() {
@@ -12,7 +13,8 @@ public class StatRegeneration : MonoBehaviour {
 
         // Only heal the local player
         if(photonView.isMine) {
-            champion = GetComponent<PlayerChampion>().Champion;
+            playerChampion = GetComponent<PlayerChampion>();
+            champion = playerChampion.Champion;
             StartCoroutine("RegenHealth");
             StartCoroutine("RegenMana");
         }
@@ -21,7 +23,9 @@ public class StatRegeneration : MonoBehaviour {
     // Will regen the player's health every 0.5 seconds, equivalent to their healthRegen variable
     IEnumerator RegenHealth() {
         while(true) {
-            photonView.RPC("Heal", PhotonTargets.All, champion.healthRegen / 5f);
+            if(!playerChampion.IsDead) {
+                photonView.RPC("Heal", PhotonTargets.All, champion.healthRegen / 5f);
+            }
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -29,7 +33,9 @@ public class StatRegeneration : MonoBehaviour {
     // Will regfen the player's mana every 0.5 seconds, equivalent to their manaRegen variable
     IEnumerator RegenMana() {
         while(true) {
-            photonView.RPC("GiveMana", PhotonTargets.All, champion.manaRegen / 5f);
+            if(!playerChampion.IsDead) {
+                photonView.RPC("GiveMana", PhotonTargets.All, champion.manaRegen / 5f);
+            }
             yield return new WaitForSeconds(0.5f);
         }
     }

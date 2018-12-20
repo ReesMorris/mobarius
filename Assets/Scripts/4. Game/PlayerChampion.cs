@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class PlayerChampion : MonoBehaviour {
 
@@ -16,23 +17,49 @@ public class PlayerChampion : MonoBehaviour {
     public Color enemyHealthColour;
 
     public Champion Champion { get; protected set; }
-    PhotonView photonView;
+    public bool IsDead { get; protected set; }
+    public PhotonView PhotonView { get; protected set; }
     float oldHealth;
     GameUIHandler gameUIHandler;
 
     /*  General Code  */
 
 	void Start () {
-        photonView = GetComponent<PhotonView>();
+        PhotonView = GetComponent<PhotonView>();
         if (PhotonNetwork.player.IsLocal) {
-            gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();              // Tell other players to rename this player's character to be the name of the champion             photonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = photonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
+            gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();              // Tell other players to rename this player's character to be the name of the champion             PhotonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = PhotonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
 
             // Update UI to show full health and mana, etc
-            if (photonView.isMine) {
+            if (PhotonView.isMine) {
                 gameUIHandler.UpdateAbilities(Champion.championName);
                 gameUIHandler.UpdateStats(Champion);
-            }              // Tell other players to update the health and mana bar of this player             photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
-            photonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana }); 
+            }
+
+            // Tell other players to update the health and mana bar of this player
+            PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+            PhotonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana }); 
+        }
+    }
+
+    public void Respawn() {
+        PhotonView = GetComponent<PhotonView>();
+        PhotonView.RPC("Spawn", PhotonTargets.All);
+    }
+
+    [PunRPC]
+    void Spawn() {
+        if(PhotonView.isMine) {
+            GameHandler gameHandler = GameHandler.Instance;
+            Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
+            if (PhotonView.owner.GetTeam() == PunTeams.Team.red) {
+                position = gameHandler.currentMap.redSpawns[0].transform.position;
+            }
+            position += (Vector3.up * 3f);
+            Camera.main.GetComponent<PlayerCamera>().FocusOnPlayer(true);
+            transform.position = position;
+            GetComponent<NavMeshAgent>().enabled = true;
+            GetComponent<PlayerMovement>().enabled = true;
+            IsDead = false;
         }
     }
 
@@ -41,22 +68,31 @@ public class PlayerChampion : MonoBehaviour {
         gameObject.name = newName;
     }
 
-
     // Called when a champion takes damage by a source
     [PunRPC]
     void Damage(float amount) {
         Champion.health = Mathf.Max(Champion.health - amount, 0f);
 
-        // Does the player have any health left?
-        if (Champion.health <= 0f)
-            print("Champion is dead");
-
         // If the champion is the local player, update their UI to reflect the damage
-        if (photonView.isMine)
+        if (PhotonView.isMine) {
             gameUIHandler.UpdateStats(Champion);
 
+            // Does the player have any health left?
+            if (Champion.health <= 0f) {
+                IsDead = true;
+                PhotonView.RPC("OnDeath", PhotonTargets.All);
+                DeathHandler.Instance.OnDeath(this);
+            }
+        }
+
         // Tell other players that this player has been damaged (to update the health bar)
-        photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+        PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+    }
+
+    [PunRPC]
+    void OnDeath() {
+        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
     }
 
     // Called when a champion is healed by a source
@@ -65,21 +101,21 @@ public class PlayerChampion : MonoBehaviour {
         Champion.health = Mathf.Min(Champion.health + amount, Champion.maxHealth);
 
         // If the champion is the local player, update their UI to reflect the healing
-        if (photonView.isMine)
+        if (PhotonView.isMine)
             gameUIHandler.UpdateStats(Champion);
 
         // Tell other players that this player has been healed (to update the health bar)
-        photonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+        PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
     }
 
     // Called when a champion is being given mana
     [PunRPC]
     void GiveMana(float amount) {
         Champion.mana = Mathf.Min(Champion.mana + amount, Champion.maxMana);
-        photonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana });
+        PhotonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana });
 
         // If the champion is the local player, update their UI to reflect the mana change
-        if (photonView.isMine)
+        if (PhotonView.isMine)
             gameUIHandler.UpdateStats(Champion);
     }
 
@@ -87,10 +123,10 @@ public class PlayerChampion : MonoBehaviour {
     [PunRPC]
     void TakeMana(float amount) {
         Champion.mana = Mathf.Max(Champion.mana - amount, 0f);
-        photonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana });
+        PhotonView.RPC("UpdatePlayerMana", PhotonTargets.All, new object[] { Champion.mana, Champion.maxMana });
 
         // If the champion is the local player, update their UI to reflect the mana change
-        if (photonView.isMine)
+        if (PhotonView.isMine)
             gameUIHandler.UpdateStats(Champion);
     }
 
@@ -118,7 +154,7 @@ public class PlayerChampion : MonoBehaviour {
         }
 
         // Colour
-        if (photonView.owner.GetTeam() != PhotonNetwork.player.GetTeam())
+        if (PhotonView.owner.GetTeam() != PhotonNetwork.player.GetTeam())
             healthBarFill.color = enemyHealthColour;
 
         oldHealth = health;
