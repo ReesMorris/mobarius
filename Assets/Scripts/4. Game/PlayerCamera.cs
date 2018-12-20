@@ -29,7 +29,10 @@ public class PlayerCamera : MonoBehaviour {
 
     // Recenter the camera on the player if input pressed
     void CheckForInput() {
-        if(Input.GetKeyDown(KeyCode.Space)) {
+        if(Input.GetKey(KeyCode.Space)) {
+            CenterCamera();
+        }
+        if(Input.GetKeyDown(KeyCode.Y)) {
             lockedToPlayer = !lockedToPlayer;
         }
     }
@@ -49,7 +52,7 @@ public class PlayerCamera : MonoBehaviour {
 
     // Check to see if the player is moving the screen
     void CheckForMouseOnCorner() {
-        if(Application.isFocused) {
+        if(Application.isFocused && !lockedToPlayer) {
             if (Input.mousePosition.y >= Screen.height * padding) {
                 lockedToPlayer = false;
                 transform.position += (Vector3.forward * cameraSpeed);
