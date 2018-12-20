@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class GarenQ : MonoBehaviour {
 
-    public float range;
-    public float cooldown;
-    public float speed;
-    public float damage;
+    public AbilityHandler.Abilities abilityType;
     public GameObject bulletPrefab;
     PlayerChampion playerChampion;
     PhotonView photonView;
 
     GameObject indicator;
     AbilityHandler abilityHandler;
+    Ability ability;
 
     bool preparing;
 
@@ -21,6 +19,7 @@ public class GarenQ : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
         photonView = GetComponent<PhotonView>();
         abilityHandler = AbilityHandler.Instance;
+        ability = abilityHandler.GetChampionAbilities(playerChampion.Champion.championName, abilityType);
         indicator = abilityHandler.SetupProjectileIndicator(gameObject);
     }
 
@@ -34,11 +33,10 @@ public class GarenQ : MonoBehaviour {
                     abilityHandler.UpdateIndicatorRotation(indicator, gameObject);
 
                 // Can we cast this ability?
-                if (GameUIHandler.Instance.CanCastAbility(AbilityHandler.Abilities.Q)) {
-
+                if (GameUIHandler.Instance.CanCastAbility(AbilityHandler.Abilities.Q, ability, playerChampion.Champion)) {
                     // Is Q being pressed down?
                     if (Input.GetKeyDown(KeyCode.Q))
-                        abilityHandler.StartCasting(indicator, range);
+                        abilityHandler.StartCasting(indicator, ability.range);
 
                     // Is Q being released?
                     if (Input.GetKeyUp(KeyCode.Q))
@@ -49,10 +47,13 @@ public class GarenQ : MonoBehaviour {
                         // Are we aiming? This ability requires aiming
                         if (abilityHandler.Aiming) {
                             // Tell the AbilityHandler that we've used this ability
-                            abilityHandler.OnAbilityCast(gameObject, indicator, AbilityHandler.Abilities.Q, cooldown, true);
+                            abilityHandler.OnAbilityCast(gameObject, indicator, AbilityHandler.Abilities.Q, ability.cooldown, true);
 
                             // Handle the actual unique part of this ability
-                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { speed, damage });
+                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, ability.damage });
+
+                            // Take mana from the player
+                            playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
                         }
                     }
                 }
@@ -65,7 +66,7 @@ public class GarenQ : MonoBehaviour {
     void Shoot(float speed, float damage) {
         GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
-        b.Setup(damage, transform.position, range);
+        b.Setup(damage, transform.position, ability.range);
         bullet.GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
 }

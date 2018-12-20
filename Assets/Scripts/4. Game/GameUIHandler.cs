@@ -69,8 +69,10 @@ public class GameUIHandler : MonoBehaviour {
             manaRegenText.text = "+" + champion.manaRegen.ToString("F1");
     }
 
-    public bool CanCastAbility(AbilityHandler.Abilities ability) {
-        switch (ability) {
+    public bool CanCastAbility(AbilityHandler.Abilities hotkey, Ability ability, Champion champion) {
+        if (champion.mana < ability.cost)
+            return false;
+        switch (hotkey) {
             case AbilityHandler.Abilities.Q:
                 return cooldownQ == 0f;
             case AbilityHandler.Abilities.W:

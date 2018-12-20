@@ -35,9 +35,8 @@ public class PlayerMovement : MonoBehaviour {
             }
             if (navMeshAgent.remainingDistance <= 0.2f) {
                 navMeshAgent.velocity = Vector3.zero;
-                navMeshAgent.Stop();
+                navMeshAgent.isStopped = true;
             }
-            //transform.LookAt(new Vector3(navMeshAgent.destination.x, transform.position.y, navMeshAgent.destination.z));
         }
     }
 

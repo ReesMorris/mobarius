@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbilityHandler : MonoBehaviour {
 
     public GameObject projectileIndicatorPrefab;
-    public enum Abilities { Q, W, E, R, D, F };
+    public enum Abilities { Passive, Q, W, E, R, D, F };
 
     public static AbilityHandler Instance;
     public bool Aiming { get; protected set; }
@@ -25,6 +25,24 @@ public class AbilityHandler : MonoBehaviour {
 
     public void UpdateIndicatorRotation(GameObject indicator, GameObject player) {
         indicator.transform.LookAt(GetDirection(player));
+    }
+
+    // Returns the ability associated with a champion
+    public Ability GetChampionAbilities(string championName, Abilities ability) {
+        Champion champion = ChampionRoster.Instance.GetChampion(championName);
+        switch(ability) {
+            case Abilities.Passive:
+                return champion.abilityPassive;
+            case Abilities.Q:
+                return champion.abilityQ;
+            case Abilities.W:
+                return champion.abilityW;
+            case Abilities.E:
+                return champion.abilityE;
+            case Abilities.R:
+                return champion.abilityR;
+        }
+        return null;
     }
 
     // Sets up a projectile indicator for the caller

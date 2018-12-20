@@ -18,8 +18,12 @@ MonoBehaviour:
     name: Perseverance
     desc: If Garen has not recently been struck by damage or enemy abilities, he regenerates
       a percentage of his total health each second. Minion damage does not stop Perseverance.
-    cost: 0
     icon: {fileID: 21300000, guid: e9079344e54734bdea9f8cf742697414, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: 0
   abilityQ:
     name: Decisive Strike
     desc: 'Garen gains a burst of movement speed, breaking free of all slows affecting
@@ -31,8 +35,12 @@ MonoBehaviour:
       for 1.5/2/2.5/3/3.5 seconds. His next basic attack within 4.5 seconds deals
       30/60/90/120/150 (+140% Attack Damage) physical damage and silences his target
       for 1.5 seconds.'
-    cost: 0
     icon: {fileID: 21300000, guid: 0ff6d5a566ef24262a36d74d322ee086, type: 3}
+    cost: 40
+    range: 10
+    cooldown: 3
+    speed: 20
+    damage: 238
   abilityW:
     name: Courage
     desc: 'Garen passively increases his armor and magic resist by killing enemies.
@@ -47,8 +55,12 @@ MonoBehaviour:
       Current Bonus: 0Active: Garen steels his courage for 2/3/4/5/6 seconds. For
       the first 0.75 seconds, he takes 60% less damage and gains 60% Tenacity. For
       the remaining duration, he takes 30% less damage.'
-    cost: 0
     icon: {fileID: 21300000, guid: 47fde08607d7e4b7e9c9c8898f19e985, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: 0
   abilityE:
     name: Judgement
     desc: 'Garen performs a dance of death with his sword, dealing damage around him
@@ -59,8 +71,12 @@ MonoBehaviour:
       damage to nearby enemies -- 14/18/22/26/30 plus 36/37/38/39/40% of his attack
       damage (+0), 0 times (increased by 1 every 3 champion levels) -- over the duration.Enemy
       champions hit by 4 spins lose 25% of their armor for 6 seconds.'
-    cost: 0
     icon: {fileID: 21300000, guid: 0170dbf2dd05640e6afea11a960e9414, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: 0
   abilityR:
     name: 'Demacian Justice '
     desc: 'The enemy champion with the most recent kills is the Villain. Garen''s
@@ -79,14 +95,18 @@ MonoBehaviour:
       Active: Garen calls upon the might of Demacia to attempt to execute an enemy
       champion, dealing magic damage equal to 175/350/525 plus 28/33/40% of the target''s
       missing health. Deals true damage to the Villain.'
-    cost: 0
     icon: {fileID: 21300000, guid: cc21186e54e214e1d9fb9672bf86e5a2, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: 0
   championName: Garen
   icon: {fileID: 21300000, guid: 20b350630132148e98ee67a47ef63c07, type: 3}
   maxHealth: 616.16
   healthRegen: 8
-  maxMana: 0
-  manaRegen: 0
+  maxMana: 400
+  manaRegen: 12
   range: 175
   attackDamage: 66
   attackSpeed: 0.625
