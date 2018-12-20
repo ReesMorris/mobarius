@@ -26,9 +26,11 @@ public class Bullet : MonoBehaviour {
     void OnCollisionEnter(Collision collision) {
         print(collision.gameObject.name);
         PlayerChampion playerChampion = collision.gameObject.GetComponent<PlayerChampion>();
+        print(playerChampion);
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient) {
+                print("damage!");
                 photonView.RPC("Damage", PhotonTargets.All, damage);
             }
         }

@@ -7,7 +7,6 @@ using TMPro;
 public class GameUIHandler : MonoBehaviour {
 
     public static GameUIHandler Instance;
-    public enum Abilities { Q, W, E, R };
 
     [Header("Abilities")]
     public AbilityIcon abilityPassive;
@@ -70,32 +69,32 @@ public class GameUIHandler : MonoBehaviour {
             manaRegenText.text = "+" + champion.manaRegen.ToString("F1");
     }
 
-    public bool CanCastAbility(Abilities ability) {
+    public bool CanCastAbility(AbilityHandler.Abilities ability) {
         switch (ability) {
-            case Abilities.Q:
+            case AbilityHandler.Abilities.Q:
                 return cooldownQ == 0f;
-            case Abilities.W:
+            case AbilityHandler.Abilities.W:
                 return cooldownW == 0f;
-            case Abilities.E:
+            case AbilityHandler.Abilities.E:
                 return cooldownE == 0f;
-            case Abilities.R:
+            case AbilityHandler.Abilities.R:
                 return cooldownR == 0f;
         }
         return false;
     }
 
-    public void OnAbilityCasted(Abilities ability, float cooldown) {
+    public void OnAbilityCasted(AbilityHandler.Abilities ability, float cooldown) {
         switch (ability) {
-            case Abilities.Q:
+            case AbilityHandler.Abilities.Q:
                 cooldownQ = cooldownQDuration = cooldown;
                 break;
-            case Abilities.W:
+            case AbilityHandler.Abilities.W:
                 cooldownW = cooldownWDuration = cooldown;
                 break;
-            case Abilities.E:
+            case AbilityHandler.Abilities.E:
                 cooldownE = cooldownEDuration = cooldown;
                 break;
-            case Abilities.R:
+            case AbilityHandler.Abilities.R:
                 cooldownR = cooldownRDuration = cooldown;
                 break;
         }

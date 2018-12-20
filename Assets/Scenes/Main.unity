@@ -2793,7 +2793,7 @@ GameObject:
   - component: {fileID: 207329622}
   - component: {fileID: 207329621}
   - component: {fileID: 207329620}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: InvisibleFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24228,6 +24228,7 @@ GameObject:
   - component: {fileID: 1730177484}
   - component: {fileID: 1730177485}
   - component: {fileID: 1730177486}
+  - component: {fileID: 1730177487}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -24555,6 +24556,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathOverlay: {fileID: 1019373469}
+--- !u!114 &1730177487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1730177470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42a49112e97fff7439e3292f42ed24ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileIndicatorPrefab: {fileID: 1885752896724658, guid: a56d0b1a9099b174ca4e9ca40d96e04e,
+    type: 2}
 --- !u!1 &1733615680
 GameObject:
   m_ObjectHideFlags: 0

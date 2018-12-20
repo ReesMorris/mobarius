@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Input.GetButton("Fire2") && !playerChampion.IsDead) {
-                if (Physics.Raycast(ray, out hit, 100)) {
+                if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
                     navMeshAgent.speed = (champion.movementSpeed / 120f);
