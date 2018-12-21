@@ -30,9 +30,7 @@ MonoBehaviour:
   - name: Q Ability
     abilityKey: 1
     desc: Aatrox slams his greatsword down, dealing {x}, {x}, and another {x} after
-      the hit is complete. This ability may be re-cast 2 additional times, each one
-      increasing the damage by 25%.\n\nStrikes that hit with the Edge knock enemies
-      up for 0.25s and deal 50% more damage.
+      the hit is complete.
     icon: {fileID: 21300000, guid: 0ff6d5a566ef24262a36d74d322ee086, type: 3}
     cost: 40
     range: 10
@@ -41,12 +39,6 @@ MonoBehaviour:
     damage:
     - key: bullet
       damage: 180
-      damageType: 0
-    - key: test
-      damage: 22
-      damageType: 1
-    - key: sleepy
-      damage: 69
       damageType: 0
   - name: W Ability
     abilityKey: 2

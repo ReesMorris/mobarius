@@ -23,6 +23,7 @@ public class DeathHandler : MonoBehaviour {
         yield return new WaitForSeconds(4f);
         deathOverlay.SetActive(false);
         playerChampion.PhotonView.RPC("Heal", PhotonTargets.All, playerChampion.Champion.maxHealth);
+        playerChampion.PhotonView.RPC("GiveMana", PhotonTargets.All, playerChampion.Champion.maxMana);
         playerChampion.Respawn();
     }
 	
