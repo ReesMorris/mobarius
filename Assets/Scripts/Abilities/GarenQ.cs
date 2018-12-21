@@ -50,7 +50,7 @@ public class GarenQ : MonoBehaviour {
                             abilityHandler.OnAbilityCast(gameObject, indicator, abilityType, ability.cooldown, true);
 
                             // Handle the actual unique part of this ability
-                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, ability.physicalDamage });
+                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, abilityHandler.GetDamageFromAbility(ability, "bullet") });
 
                             // Take mana from the player
                             playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);

@@ -17,6 +17,5 @@ public class Ability {
     public float speed;
 
     [Header("Damage")]
-    public float physicalDamage;
-    public float magicDamage;
+    public AbilityDamage[] damage;
 }

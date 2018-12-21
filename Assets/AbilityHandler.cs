@@ -6,6 +6,7 @@ public class AbilityHandler : MonoBehaviour {
 
     public GameObject projectileIndicatorPrefab;
     public enum Abilities { Passive, Q, W, E, R, D, F };
+    public enum DamageTypes { PhysicalDamage, MagicDamage };
 
     public static AbilityHandler Instance;
     public bool Aiming { get; protected set; }
@@ -46,20 +47,32 @@ public class AbilityHandler : MonoBehaviour {
         return indicator;
     }
 
+    // Called when an ability begins to be cast (displays indicator)
     public void StartCasting(GameObject indicator, float range) {
         Aiming = true;
         indicator.transform.localScale = new Vector3(indicator.transform.localScale.x, indicator.transform.localScale.y, range * 20f);
         indicator.SetActive(true);
     }
 
+    // Called when an ability stops being cast
     public void StopCasting(GameObject indicator) {
         Aiming = false;
         indicator.SetActive(false);
     }
 
+    // Calls when an ability has been fired (after showing indicator)
     public void OnAbilityCast(GameObject player, GameObject indicator, Abilities ability, float cooldown, bool lookAtMouse) {
         StopCasting(indicator);
         player.transform.LookAt(GetDirection(player));
         GameUIHandler.Instance.OnAbilityCasted(ability, cooldown);
+    }
+
+    // Returns the amount of damage a specific key in an ability will do
+    public float GetDamageFromAbility(Ability ability, string key) {
+        foreach(AbilityDamage abilityDamage in ability.damage) {
+            if (abilityDamage.key == key)
+                return abilityDamage.damage;
+        }
+        return 0f;
     }
 }

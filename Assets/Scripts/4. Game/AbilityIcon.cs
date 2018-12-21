@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,13 +24,10 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         icon.sprite = ability.icon;
         icon2.sprite = ability.icon;
         tooltip.SetActive(false);
-        string passive = "";
         if (keyCode != "") {
             iconBg.SetActive(false);
             cooldown.text = "";
             hotkey.text = keyCode;
-        } else {
-            passive = "(Passive)";
         }
 
         string cost = ability.cost + " Mana";
@@ -38,9 +36,18 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         // Replace string texts
         string desc = ability.desc;
-        desc = desc.Replace("{{physicalDamage}}", ability.physicalDamage + " <color=#fa8a01>(+" + champion.physicalDamage + ")</color>");
-        desc = desc.Replace("{{magicDamage}}", ability.magicDamage + " <color=#bd77ff>(+" + champion.magicDamage + ")</color>");
-        desc = desc.Replace("{{abilityPower}}", "<color=#266dec>(+" + champion.abilityPower + ")</color>");
+        foreach(AbilityDamage ad in ability.damage) {
+            string message = "";
+            print(ad.damageType);
+            if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage)
+                message = ad.damage + " <color=#fa8a01>(+" + champion.physicalDamage + ")</color> physical damage";
+            else if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage)
+                message = ad.damage + " <color=#bd77ff>(+" + champion.magicDamage + ")</color> magic damage";
+            else
+                message = "undefined";
+
+            desc = ReplaceFirst(desc, "{x}", message);
+        }
 
         tooltipText.text = 
             "<color=#dfcf8f><size=18>" + ability.name + "</size></color>\n" + 
@@ -80,6 +87,15 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             iconBg.SetActive(false);
             cooldown.text = "";
         }
+    }
+
+    // src https://stackoverflow.com/questions/141045/how-do-i-replace-the-first-instance-of-a-string-in-net
+    string ReplaceFirst(string text, string search, string replace) {
+        int pos = text.IndexOf(search);
+        if (pos < 0) {
+            return text;
+        }
+        return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
     }
 
 

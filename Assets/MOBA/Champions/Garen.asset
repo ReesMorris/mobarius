@@ -26,21 +26,28 @@ MonoBehaviour:
     range: 0
     cooldown: 0
     speed: 0
-    physicalDamage: 0
-    magicDamage: 0
+    damage: []
   - name: Q Ability
     abilityKey: 1
-    desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
-      This ability may be re-cast 2 additional times, each one increasing the damage
-      by 25%.\n\nStrikes that hit with the Edge knock enemies up for 0.25s and deal
-      50% more damage.
+    desc: Aatrox slams his greatsword down, dealing {x}, {x}, and another {x} after
+      the hit is complete. This ability may be re-cast 2 additional times, each one
+      increasing the damage by 25%.\n\nStrikes that hit with the Edge knock enemies
+      up for 0.25s and deal 50% more damage.
     icon: {fileID: 21300000, guid: 0ff6d5a566ef24262a36d74d322ee086, type: 3}
     cost: 40
     range: 10
     cooldown: 3
     speed: 22
-    physicalDamage: 100
-    magicDamage: 0
+    damage:
+    - key: bullet
+      damage: 180
+      damageType: 0
+    - key: test
+      damage: 22
+      damageType: 1
+    - key: sleepy
+      damage: 69
+      damageType: 0
   - name: W Ability
     abilityKey: 2
     desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
@@ -52,8 +59,7 @@ MonoBehaviour:
     range: 0
     cooldown: 0
     speed: 0
-    physicalDamage: 0
-    magicDamage: 0
+    damage: []
   - name: E Ability
     abilityKey: 3
     desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
@@ -65,8 +71,7 @@ MonoBehaviour:
     range: 0
     cooldown: 0
     speed: 0
-    physicalDamage: 0
-    magicDamage: 0
+    damage: []
   - name: R Ability
     abilityKey: 4
     desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
@@ -78,8 +83,7 @@ MonoBehaviour:
     range: 0
     cooldown: 0
     speed: 0
-    physicalDamage: 0
-    magicDamage: 0
+    damage: []
   championName: Garen
   icon: {fileID: 21300000, guid: 20b350630132148e98ee67a47ef63c07, type: 3}
   maxHealth: 616.16
