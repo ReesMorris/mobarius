@@ -12,8 +12,7 @@ public class GarenQ : MonoBehaviour {
     GameObject indicator;
     AbilityHandler abilityHandler;
     Ability ability;
-
-    bool preparing;
+    bool casting;
 
     void Start() {
         playerChampion = GetComponent<PlayerChampion>();
@@ -35,12 +34,13 @@ public class GarenQ : MonoBehaviour {
                 // Can we cast this ability?
                 if (GameUIHandler.Instance.CanCastAbility(abilityType, ability, playerChampion.Champion)) {
                     // Is Q being pressed down?
-                    if (Input.GetKeyDown(KeyCode.Q))
-                        abilityHandler.StartCasting(indicator, ability.range);
-
-                    // Is Q being released?
-                    if (Input.GetKeyUp(KeyCode.Q))
-                        abilityHandler.StopCasting(indicator);
+                    if (Input.GetKeyDown(KeyCode.Q)) {
+                        if(!casting)
+                            abilityHandler.StartCasting(indicator, ability.range);
+                        else
+                            abilityHandler.StopCasting(indicator);
+                        casting = !casting;
+                    }
 
                     // Are we trying to fire?
                     if(Input.GetMouseButtonDown(0)) {

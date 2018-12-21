@@ -38,7 +38,6 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         string desc = ability.desc;
         foreach(AbilityDamage ad in ability.damage) {
             string message = "";
-            print(ad.damageType);
             if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage)
                 message = ad.damage + " <color=#fa8a01>(+" + champion.physicalDamage + ")</color> physical damage";
             else if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage)
