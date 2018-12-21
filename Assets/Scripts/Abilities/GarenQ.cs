@@ -35,11 +35,10 @@ public class GarenQ : MonoBehaviour {
                 if (GameUIHandler.Instance.CanCastAbility(abilityType, ability, playerChampion.Champion)) {
                     // Is Q being pressed down?
                     if (Input.GetKeyDown(KeyCode.Q)) {
-                        if(!casting)
+                        if(!abilityHandler.Aiming)
                             abilityHandler.StartCasting(indicator, ability.range);
                         else
                             abilityHandler.StopCasting(indicator);
-                        casting = !casting;
                     }
 
                     // Are we trying to fire?
@@ -50,7 +49,7 @@ public class GarenQ : MonoBehaviour {
                             abilityHandler.OnAbilityCast(gameObject, indicator, abilityType, ability.cooldown, true);
 
                             // Handle the actual unique part of this ability
-                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, abilityHandler.GetDamageFromAbility(ability, "bullet") });
+                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, abilityHandler.GetDamageFromAbility(ability, "bullet"), abilityHandler.GetDirection(gameObject) });
 
                             // Take mana from the player
                             playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
@@ -63,7 +62,8 @@ public class GarenQ : MonoBehaviour {
 
     // The actual unique part of this ability
     [PunRPC]
-    void Shoot(float speed, float damage) {
+    void Shoot(float speed, float damage, Vector3 lookAt) {
+        transform.LookAt(lookAt);
         GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
         b.Setup(damage, transform.position, ability.range);

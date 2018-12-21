@@ -44,7 +44,6 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 message = ad.damage + " <color=#bd77ff>(+" + champion.magicDamage + ")</color> magic damage";
             else
                 message = "undefined";
-
             desc = ReplaceFirst(desc, "{x}", message);
         }
 
