@@ -91,6 +91,11 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void OnDeath() {
+        if(PhotonView.isMine)
+            SoundManager.Instance.PlayGlobalSound("Announcer/SelfSlain");
+        else
+            SoundManager.Instance.PlayGlobalSound("Announcer/EnemySlain");
+
         GetComponent<NavMeshAgent>().enabled = false;
         GetComponent<PlayerMovement>().enabled = false;
     }

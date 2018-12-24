@@ -66,4 +66,6 @@ MonoBehaviour:
   - OnDeath
   - Shoot
   - UpdateGameTimer
+  - GlobalSound
+  - LocationalSound
   DisableAutoOpenWizard: 1
