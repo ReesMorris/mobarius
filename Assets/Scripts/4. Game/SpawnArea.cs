@@ -6,7 +6,7 @@ public class SpawnArea : MonoBehaviour {
 
     public PunTeams.Team team;
 
-    float healthRegen = 100f;
+    float regenAmount = 100f;
 
     // Will increase the player's health regen if they are on the team of this side
     void OnTriggerEnter(Collider other) {
@@ -14,7 +14,8 @@ public class SpawnArea : MonoBehaviour {
         if (playerChampion) {
             PhotonView photonView = other.gameObject.GetComponent<PhotonView>();
             if(photonView.isMine && photonView.owner.GetTeam() == team) {
-                playerChampion.Champion.healthRegen += healthRegen;
+                playerChampion.Champion.healthRegen += regenAmount;
+                playerChampion.Champion.manaRegen += regenAmount;
             }
         }
     }
@@ -25,7 +26,8 @@ public class SpawnArea : MonoBehaviour {
         if (playerChampion) {
             PhotonView photonView = other.gameObject.GetComponent<PhotonView>();
             if(photonView.isMine && photonView.owner.GetTeam() == team) {
-                playerChampion.Champion.healthRegen -= healthRegen;
+                playerChampion.Champion.healthRegen -= regenAmount;
+                playerChampion.Champion.manaRegen += regenAmount;
             }
         }
     }
