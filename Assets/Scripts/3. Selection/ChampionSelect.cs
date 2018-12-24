@@ -156,7 +156,7 @@ public class ChampionSelect : MonoBehaviour {
 
                 // Game is beginning
                 if(playerState == PlayerStates.starting) {
-                    gameHandler.SpawnAll();
+                    gameHandler.StartGame();
                     photonView.RPC("OnGameStart", PhotonTargets.All);
                 }
 

@@ -65,4 +65,5 @@ MonoBehaviour:
   - Spawn
   - OnDeath
   - Shoot
+  - UpdateGameTimer
   DisableAutoOpenWizard: 1

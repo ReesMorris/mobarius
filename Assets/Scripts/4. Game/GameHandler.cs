@@ -16,6 +16,11 @@ public class GameHandler : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
     }
 
+    public void StartGame() {
+        SpawnAll();
+        GameUIHandler.Instance.StartGameTimer();
+    }
+
     public void SpawnAll() {
         photonView.RPC("InstantiatePlayers", PhotonTargets.All);
     }

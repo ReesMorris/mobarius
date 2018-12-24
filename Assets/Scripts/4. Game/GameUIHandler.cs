@@ -8,6 +8,12 @@ public class GameUIHandler : MonoBehaviour {
 
     public static GameUIHandler Instance;
 
+    [Header("Top Bar")]
+    public TMP_Text gameTimer;
+    public TMP_Text minionKills;
+    public TMP_Text kda;
+    public TMP_Text score;
+
     [Header("Abilities")]
     public AbilityIcon abilityPassive;
     public AbilityIcon abilityQ;
@@ -31,9 +37,12 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownEDuration;
     float cooldownR;
     float cooldownRDuration;
+    int timeElapsed;
+    PhotonView photonView;
 
     void Start() {
         Instance = this;
+        photonView = GetComponent<PhotonView>();
         StartCoroutine("HandleCooldowns");
     }
 
@@ -116,6 +125,26 @@ public class GameUIHandler : MonoBehaviour {
             }
             yield return new WaitForSeconds(speed);
         }
+    }
+
+    /* Game Timer */
+
+    public void StartGameTimer() {
+        if (PhotonNetwork.isMasterClient)
+            StartCoroutine("Timer");
+    }
+    IEnumerator Timer() {
+        while(true) {
+            yield return new WaitForSeconds(1f);
+            timeElapsed++;
+            photonView.RPC("UpdateGameTimer", PhotonTargets.All, timeElapsed);
+        }
+    }
+    [PunRPC]
+    public void UpdateGameTimer(int timeElapsed) {
+        float mins = Mathf.Floor(timeElapsed / 60f);
+        float secs = timeElapsed % 60;
+        gameTimer.text = mins.ToString("00") + ":" + secs.ToString("00");
     }
 
 }
