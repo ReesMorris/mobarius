@@ -25,13 +25,9 @@ public class Bullet : MonoBehaviour {
 
     void Update() {
         if(target != null) {
-            print(target.layer);
-            print(LayerMask.NameToLayer("Targetable"));
             if (target.layer == LayerMask.NameToLayer("Targetable")) {
-                print("A");
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 4f * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10f * Time.deltaTime);
             } else {
-                print("B");
                 target = null;
                 Destroy(gameObject);
             }
@@ -50,6 +46,16 @@ public class Bullet : MonoBehaviour {
                 photonView.RPC("Damage", PhotonTargets.All, damage);
             }
         }
+
+        Turret turret = collision.gameObject.GetComponent<Turret>();
+        if(turret != null) {
+            PhotonView photonView = turret.GetComponent<PhotonView>();
+            if (PhotonNetwork.isMasterClient) {
+                photonView.RPC("Damage", PhotonTargets.All, damage);
+            }
+        }
+
+
         Destroy(gameObject);
     }
 }

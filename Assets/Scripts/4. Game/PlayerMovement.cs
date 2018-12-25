@@ -30,7 +30,9 @@ public class PlayerMovement : MonoBehaviour {
             RaycastHit hit;
             if (Input.GetButton("Fire2") && !playerChampion.IsDead) {
                 if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Targetable"))) {
-                    defaultAttack.target = hit.transform.gameObject;
+                    Targetable targetable = hit.transform.GetComponent<Targetable>();
+                    if (targetable == null || (targetable != null && targetable.allowTargetingBy == photonView.owner.GetTeam()))
+                        defaultAttack.target = hit.transform.gameObject;
                 } else if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
                     if(!AbilityHandler.Instance.Aiming) {
                         defaultAttack.target = null;
