@@ -32,10 +32,12 @@ public class PlayerMovement : MonoBehaviour {
                 if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Targetable"))) {
                     defaultAttack.target = hit.transform.gameObject;
                 } else if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
-                    defaultAttack.target = null;
-                    navMeshAgent.destination = hit.point;
-                    navMeshAgent.isStopped = false;
-                    navMeshAgent.speed = (champion.movementSpeed / 120f);
+                    if(!AbilityHandler.Instance.Aiming) {
+                        defaultAttack.target = null;
+                        navMeshAgent.destination = hit.point;
+                        navMeshAgent.isStopped = false;
+                        navMeshAgent.speed = (champion.movementSpeed / 120f);
+                    }
                 }
             }
             if (navMeshAgent.remainingDistance <= 0.2f) {

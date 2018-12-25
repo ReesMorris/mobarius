@@ -1,20 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GarenQ : MonoBehaviour {
 
     public AbilityHandler.Abilities abilityType;
     public GameObject bulletPrefab;
+
     PlayerChampion playerChampion;
     PhotonView photonView;
-
+    NavMeshAgent navMeshAgent;
     GameObject indicator;
     AbilityHandler abilityHandler;
     Ability ability;
     bool casting;
 
     void Start() {
+        navMeshAgent = GetComponent<NavMeshAgent>();
         playerChampion = GetComponent<PlayerChampion>();
         photonView = GetComponent<PhotonView>();
         abilityHandler = AbilityHandler.Instance;
@@ -40,7 +43,6 @@ public class GarenQ : MonoBehaviour {
                         else
                             abilityHandler.StopCasting(indicator);
                     }
-
                     // Are we trying to fire?
                     if(Input.GetMouseButtonDown(0)) {
                         // Are we aiming? This ability requires aiming
@@ -55,6 +57,11 @@ public class GarenQ : MonoBehaviour {
                             playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
                         }
                     }
+                }
+                // Cancel ability
+                if (Input.GetMouseButtonDown(1) && abilityHandler.Aiming) {
+                    navMeshAgent.isStopped = true;
+                    abilityHandler.StopCasting(indicator);
                 }
             }
         }
