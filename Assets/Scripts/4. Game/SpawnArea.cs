@@ -27,7 +27,7 @@ public class SpawnArea : MonoBehaviour {
             PhotonView photonView = other.gameObject.GetComponent<PhotonView>();
             if(photonView.isMine && photonView.owner.GetTeam() == team) {
                 playerChampion.Champion.healthRegen -= regenAmount;
-                playerChampion.Champion.manaRegen += regenAmount;
+                playerChampion.Champion.manaRegen -= regenAmount;
             }
         }
     }

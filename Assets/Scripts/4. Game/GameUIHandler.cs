@@ -29,6 +29,8 @@ public class GameUIHandler : MonoBehaviour {
     public TMP_Text manaText;
     public TMP_Text manaRegenText;
 
+    public int TimeElapsed { get; protected set; }
+
     float cooldownQ;
     float cooldownQDuration;
     float cooldownW;
@@ -37,7 +39,6 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownEDuration;
     float cooldownR;
     float cooldownRDuration;
-    int timeElapsed;
     PhotonView photonView;
 
     void Start() {
@@ -136,8 +137,8 @@ public class GameUIHandler : MonoBehaviour {
     IEnumerator Timer() {
         while(true) {
             yield return new WaitForSeconds(1f);
-            timeElapsed++;
-            photonView.RPC("UpdateGameTimer", PhotonTargets.All, timeElapsed);
+            TimeElapsed++;
+            photonView.RPC("UpdateGameTimer", PhotonTargets.All, TimeElapsed);
         }
     }
     [PunRPC]

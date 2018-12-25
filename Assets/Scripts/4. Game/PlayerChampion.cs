@@ -48,6 +48,7 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void Spawn() {
+        gameObject.layer = LayerMask.NameToLayer("Targetable");
         if(PhotonView.isMine) {
             GameHandler gameHandler = GameHandler.Instance;
             Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
@@ -71,6 +72,7 @@ public class PlayerChampion : MonoBehaviour {
     // Called when a champion takes damage by a source
     [PunRPC]
     void Damage(float amount) {
+        //Champion.damage.Add(new Damage(attacker, amount, gameUIHandler.TimeElapsed));
         Champion.health = Mathf.Max(Champion.health - amount, 0f);
 
         // If the champion is the local player, update their UI to reflect the damage
@@ -91,11 +93,11 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void OnDeath() {
-        if(PhotonView.isMine)
-            SoundManager.Instance.PlayGlobalSound("Announcer/SelfSlain");
-        else
-            SoundManager.Instance.PlayGlobalSound("Announcer/EnemySlain");
 
+        // Make this player untargetable for abilities, etc.
+        gameObject.layer = LayerMask.NameToLayer("Default");
+
+        // Stop player from being able to move
         GetComponent<NavMeshAgent>().enabled = false;
         GetComponent<PlayerMovement>().enabled = false;
     }

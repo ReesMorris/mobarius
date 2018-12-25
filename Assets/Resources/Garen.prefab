@@ -64,7 +64,8 @@ GameObject:
   - component: {fileID: 114164571452529412}
   - component: {fileID: 114366742856069678}
   - component: {fileID: 114414566166014550}
-  m_Layer: 0
+  - component: {fileID: 114703343477096050}
+  m_Layer: 10
   m_Name: Garen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,6 +416,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114703343477096050
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1272804252154214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be864648cc7c94ebc974ed1682266b33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownTime: 0.7
+  bulletPrefab: {fileID: 1256582402650800, guid: e37f9647099d218489136da7c1123168,
+    type: 2}
+  target: {fileID: 0}
 --- !u!114 &114703637841155136
 MonoBehaviour:
   m_ObjectHideFlags: 1

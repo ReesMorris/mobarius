@@ -49,7 +49,7 @@ public class GarenQ : MonoBehaviour {
                             abilityHandler.OnAbilityCast(gameObject, indicator, abilityType, ability.cooldown, true);
 
                             // Handle the actual unique part of this ability
-                            photonView.RPC("Shoot", PhotonTargets.All, new object[] { ability.speed, abilityHandler.GetDamageFromAbility(ability, "bullet"), abilityHandler.GetDirection(gameObject) });
+                            photonView.RPC("Shoot", PhotonTargets.All, ability.speed, abilityHandler.GetDamageFromAbility(ability, "bullet"), abilityHandler.GetDirection(gameObject), photonView.owner);
 
                             // Take mana from the player
                             playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
@@ -62,11 +62,11 @@ public class GarenQ : MonoBehaviour {
 
     // The actual unique part of this ability
     [PunRPC]
-    void Shoot(float speed, float damage, Vector3 lookAt) {
+    void Shoot(float speed, float damage, Vector3 lookAt, PhotonPlayer shooter) {
         transform.LookAt(lookAt);
         GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
-        b.Setup(damage, transform.position, ability.range);
+        b.Setup(damage, transform.position, ability.range, shooter);
         bullet.GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
 }

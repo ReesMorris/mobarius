@@ -11,11 +11,13 @@ public class PlayerMovement : MonoBehaviour {
     NavMeshAgent navMeshAgent;
     Champion champion;
     PlayerChampion playerChampion;
+    DefaultAttack defaultAttack;
 
     void Start() {
         photonView = GetComponent<PhotonView>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerChampion = GetComponent<PlayerChampion>();
+        defaultAttack = GetComponent<DefaultAttack>();
         champion = playerChampion.Champion;
     }
 
@@ -27,7 +29,10 @@ public class PlayerMovement : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Input.GetButton("Fire2") && !playerChampion.IsDead) {
-                if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
+                if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Targetable"))) {
+                    defaultAttack.target = hit.transform.gameObject;
+                } else if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
+                    defaultAttack.target = null;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
                     navMeshAgent.speed = (champion.movementSpeed / 120f);

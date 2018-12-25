@@ -15,9 +15,9 @@ TagManager:
   - 
   - PostProcessing
   - Floor
-  - 
-  - 
-  - 
+  - Targetable
+  - Projectile
+  - Environment
   - 
   - 
   - 

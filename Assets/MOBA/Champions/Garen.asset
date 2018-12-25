@@ -82,7 +82,7 @@ MonoBehaviour:
   healthRegen: 8
   maxMana: 400
   manaRegen: 12
-  range: 175
+  range: 6
   attackDamage: 66
   attackSpeed: 0.625
   armour: 36
@@ -94,3 +94,4 @@ MonoBehaviour:
   physicalDamage: 0
   magicDamage: 0
   abilityPower: 0
+  damage: []

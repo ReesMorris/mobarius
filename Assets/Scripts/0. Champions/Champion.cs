@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(menuName="MOBA / Champion", order = 999)]
 public class Champion : ScriptableObject {
@@ -32,6 +33,7 @@ public class Champion : ScriptableObject {
     [HideInInspector] public float physicalDamage;
     [HideInInspector] public float magicDamage;
     [HideInInspector] public float abilityPower;
+    [HideInInspector] public List<Damage> damage;
 
     public void Init(Champion c, string o) {
         owner = o;
@@ -50,6 +52,8 @@ public class Champion : ScriptableObject {
         armour = c.armour;
         magicResist = c.magicResist;
         movementSpeed = c.movementSpeed;
+
+        damage = new List<Damage>();
     }
 
     public bool IsOwned {
