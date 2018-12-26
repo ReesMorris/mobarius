@@ -6672,7 +6672,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -6.49
+      value: -9.46
       objectReference: {fileID: 0}
     - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
       propertyPath: m_LocalPosition.y
@@ -18164,9 +18164,14 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 2}
+      propertyPath: prerequisites.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -11.49
+      value: -26.58
       objectReference: {fileID: 0}
     - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
       propertyPath: m_LocalPosition.y
@@ -18218,6 +18223,26 @@ Prefab:
     - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 2}
       propertyPath: prerequisite
+      value: 
+      objectReference: {fileID: 105328270}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 2}
+      propertyPath: regeneratesHealth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 2}
+      propertyPath: healthRegenAmount
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 2}
+      propertyPath: healthRegenDelay
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 2}
+      propertyPath: prerequisites.Array.data[0]
       value: 
       objectReference: {fileID: 105328270}
     m_RemovedComponents: []
@@ -25193,9 +25218,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.0.8
+  currentVersion: 0.0.0.9
   versionCheckerUrl: https://rees.app/moba/i/version
-  downloadUrl: https://rees.app
+  downloadUrl: https://rees.app/moba/download
   versionText: {fileID: 940210175}
   outdated: 0
 --- !u!114 &1730177475

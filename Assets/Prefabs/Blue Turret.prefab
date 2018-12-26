@@ -406,7 +406,10 @@ MonoBehaviour:
   incDamage: 30
   team: 2
   radius: 11
-  prerequisite: {fileID: 0}
+  regeneratesHealth: 0
+  healthRegenAmount: 0
+  healthRegenDelay: 0
+  prerequisites: []
   bulletSpawn: {fileID: 4434607290967806}
   healthbarUI: {fileID: 1707728149815906}
   healthImage: {fileID: 114924283644748144}
@@ -486,8 +489,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 5
-  instantiationId: 5
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &114924283644748144

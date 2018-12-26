@@ -17,10 +17,7 @@ MonoBehaviour:
   abilities:
   - name: Passive Ability
     abilityKey: 0
-    desc: Aatrox slams his greatsword down, dealing 10 <color=#fa8a01>(+46)</color>
-      physical damage. This ability may be re-cast 2 additional times, each one increasing
-      the damage by 25%.\n\nStrikes that hit with the Edge knock enemies up for 0.25s
-      and deal 50% more damage.
+    desc: WIP
     icon: {fileID: 21300000, guid: e9079344e54734bdea9f8cf742697414, type: 3}
     cost: 0
     range: 0
@@ -29,12 +26,11 @@ MonoBehaviour:
     damage: []
   - name: Q Ability
     abilityKey: 1
-    desc: Aatrox slams his greatsword down, dealing {x}, {x}, and another {x} after
-      the hit is complete.
+    desc: Garen shoots a bullet forwards, dealing {x} upon collision with an enemy.
     icon: {fileID: 21300000, guid: 0ff6d5a566ef24262a36d74d322ee086, type: 3}
-    cost: 40
+    cost: 0
     range: 10
-    cooldown: 3
+    cooldown: 2.1
     speed: 22
     damage:
     - key: bullet
@@ -42,10 +38,7 @@ MonoBehaviour:
       damageType: 0
   - name: W Ability
     abilityKey: 2
-    desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
-      This ability may be re-cast 2 additional times, each one increasing the damage
-      by 25%.\n\nStrikes that hit with the Edge knock enemies up for 0.25s and deal
-      50% more damage.
+    desc: WIP
     icon: {fileID: 21300000, guid: 47fde08607d7e4b7e9c9c8898f19e985, type: 3}
     cost: 0
     range: 0
@@ -54,10 +47,7 @@ MonoBehaviour:
     damage: []
   - name: E Ability
     abilityKey: 3
-    desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
-      This ability may be re-cast 2 additional times, each one increasing the damage
-      by 25%.\n\nStrikes that hit with the Edge knock enemies up for 0.25s and deal
-      50% more damage.
+    desc: WIP
     icon: {fileID: 21300000, guid: 0170dbf2dd05640e6afea11a960e9414, type: 3}
     cost: 0
     range: 0
@@ -66,10 +56,7 @@ MonoBehaviour:
     damage: []
   - name: R Ability
     abilityKey: 4
-    desc: Aatrox slams his greatsword down, dealing {{physicalDamage}} physical damage.
-      This ability may be re-cast 2 additional times, each one increasing the damage
-      by 25%.\n\nStrikes that hit with the Edge knock enemies up for 0.25s and deal
-      50% more damage.
+    desc: WIP
     icon: {fileID: 21300000, guid: cc21186e54e214e1d9fb9672bf86e5a2, type: 3}
     cost: 0
     range: 0
@@ -80,14 +67,15 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 20b350630132148e98ee67a47ef63c07, type: 3}
   maxHealth: 616.16
   healthRegen: 8
-  maxMana: 400
-  manaRegen: 12
+  maxMana: 0
+  manaRegen: 0
   range: 6
-  attackDamage: 660
+  attackDamage: 66
   attackSpeed: 0.625
   armour: 36
   magicResist: 32.1
   movementSpeed: 340
+  invincible: 0
   health: 616.3
   mana: 0
   owner: 
