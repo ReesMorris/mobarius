@@ -31,11 +31,12 @@ public class Turret : MonoBehaviour {
     float currentDamage;
     PlayerChampion currentTarget;
     PhotonView photonView;
-    bool started;
     float currentHealth;
+    bool started;
     float maxRegenHealth;
 
     void Start() {
+        GameHandler.onGameStart += OnGameStart;
         photonView = GetComponent<PhotonView>();
         ResetDamage();
         enemies = new List<PlayerChampion>();
@@ -44,14 +45,25 @@ public class Turret : MonoBehaviour {
         healthImage.fillAmount = 1;
     }
 
+    void OnGameStart() {
+        // Set health bar colours
+        healthImage.color = GameUIHandler.Instance.enemyHealthColour;
+        if (PhotonNetwork.player.GetTeam() == team)
+            healthImage.color = GameUIHandler.Instance.allyHealthColour;
+
+        // Set master client things
+        if(PhotonNetwork.isMasterClient) {
+            if(regeneratesHealth)
+                StartCoroutine("RegenerateHealth");
+        }
+    }
+
     public void EnemyEnterRadius(PlayerChampion enemy) {
         enemies.Add(enemy);
         currentTarget = enemies[0];
         if(!started && PhotonNetwork.isMasterClient) {
             started = true;
             StartCoroutine("TargetEnemies");
-            if(regeneratesHealth)
-                StartCoroutine("RegenerateHealth");
         }
     }
 
@@ -134,8 +146,12 @@ public class Turret : MonoBehaviour {
     IEnumerator TargetEnemies() {
         while(currentHealth > 0f) {
             if(currentTarget != null) {
-                photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
-                currentDamage += baseDamage;
+                if(currentTarget.IsDead) {
+                    EnemyLeaveRadius(currentTarget);
+                } else {
+                    photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
+                    currentDamage += baseDamage;
+                }
             }
             yield return new WaitForSeconds(0.833f);
         }

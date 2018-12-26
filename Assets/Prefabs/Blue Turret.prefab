@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1434398124225746}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.49, y: 1.828, z: 49.15}
+  m_LocalPosition: {x: -9.46, y: 1.828, z: 49.15}
   m_LocalScale: {x: 1, y: 3.8450427, z: 1}
   m_Children:
   - {fileID: 224442080530146530}
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHealth: 5000
   baseDamage: 120
-  incDamage: 30
+  incDamage: 0
   team: 2
   radius: 11
   regeneratesHealth: 0

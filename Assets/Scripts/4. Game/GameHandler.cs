@@ -7,6 +7,9 @@ public class GameHandler : MonoBehaviour {
 
     public static GameHandler Instance;
 
+    public delegate void OnGameStart();
+    public static OnGameStart onGameStart;
+
     public Map currentMap {get; set;}
     Vector2 spawnIndexes;
     PhotonView photonView;
@@ -19,10 +22,16 @@ public class GameHandler : MonoBehaviour {
     public void StartGame() {
         SpawnAll();
         GameUIHandler.Instance.StartGameTimer();
+        photonView.RPC("Begin", PhotonTargets.All);
     }
 
     public void SpawnAll() {
         photonView.RPC("InstantiatePlayers", PhotonTargets.All);
+    }
+
+    [PunRPC]
+    void Begin() {
+        onGameStart();
     }
 
     [PunRPC]

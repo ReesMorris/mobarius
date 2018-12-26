@@ -8,6 +8,10 @@ public class GameUIHandler : MonoBehaviour {
 
     public static GameUIHandler Instance;
 
+    [Header("Generic")]
+    public Color allyHealthColour;
+    public Color enemyHealthColour;
+
     [Header("Top Bar")]
     public TMP_Text gameTimer;
     public TMP_Text minionKills;

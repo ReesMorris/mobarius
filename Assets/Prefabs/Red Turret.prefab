@@ -342,7 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHealth: 5000
   baseDamage: 120
-  incDamage: 30
+  incDamage: 0
   team: 1
   radius: 11
   regeneratesHealth: 0
@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turret: {fileID: 114476464113397056}
-  showRadius: 1
+  showRadius: 0
 --- !u!114 &114608255718153742
 MonoBehaviour:
   m_ObjectHideFlags: 1

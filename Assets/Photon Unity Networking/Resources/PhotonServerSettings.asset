@@ -68,4 +68,5 @@ MonoBehaviour:
   - UpdateGameTimer
   - GlobalSound
   - LocationalSound
+  - Begin
   DisableAutoOpenWizard: 1
