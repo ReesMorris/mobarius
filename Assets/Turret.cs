@@ -101,8 +101,16 @@ public class Turret : MonoBehaviour {
     public void Damage(float amount) {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
-        if (currentHealth == 0f)
+        if (currentHealth == 0f) {
+            if (PhotonNetwork.player.GetTeam() == team) {
+                SoundManager.Instance.PlaySound("Announcer/AllyTurretDestroyed");
+                GameUIHandler.Instance.ShowPlayerText("Ally turret destroyed!");
+            } else {
+                SoundManager.Instance.PlaySound("Announcer/EnemyTurretDestroyed");
+                GameUIHandler.Instance.ShowPlayerText("Enemy turret destroyed!");
+            }
             Destroy(gameObject);
+        }
     }
 
     public void EnemyLeaveRadius(PlayerChampion enemy) {
@@ -124,7 +132,7 @@ public class Turret : MonoBehaviour {
     }
 
     IEnumerator TargetEnemies() {
-        while(true) {
+        while(currentHealth > 0f) {
             if(currentTarget != null) {
                 photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
                 currentDamage += baseDamage;

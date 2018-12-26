@@ -70,12 +70,12 @@ MonoBehaviour:
   maxMana: 0
   manaRegen: 0
   range: 6
-  attackDamage: 66
+  attackDamage: 6600
   attackSpeed: 0.625
   armour: 36
   magicResist: 32.1
   movementSpeed: 340
-  invincible: 0
+  invincible: 1
   health: 616.3
   mana: 0
   owner: 

@@ -21,6 +21,9 @@ public class GameUIHandler : MonoBehaviour {
     public AbilityIcon abilityE;
     public AbilityIcon abilityR;
 
+    [Header("Display Text")]
+    public TMP_Text displayText;
+
     [Header("Stats")]
     public Image healthBar;
     public TMP_Text healthText;
@@ -148,4 +151,15 @@ public class GameUIHandler : MonoBehaviour {
         gameTimer.text = mins.ToString("00") + ":" + secs.ToString("00");
     }
 
+    /* Display Text */
+
+    public void ShowPlayerText(string message) {
+        StartCoroutine(ShowText(message));
+    }
+
+    IEnumerator ShowText(string message) {
+        displayText.text = message;
+        yield return new WaitForSeconds(3f);
+        displayText.text = "";
+    }
 }
