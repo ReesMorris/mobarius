@@ -12,8 +12,13 @@ public class Turret : MonoBehaviour {
     public PunTeams.Team team;
     public float radius;
 
+    [Header("Health")]
+    public bool regeneratesHealth;
+    public float healthRegenAmount;
+    public float healthRegenDelay;
+
     [Header("Conditionals")]
-    public Turret prerequisite;
+    public List<Turret> prerequisites;
 
     [Header("UI & Objects")]
     public Transform bulletSpawn;
@@ -28,13 +33,14 @@ public class Turret : MonoBehaviour {
     PhotonView photonView;
     bool started;
     float currentHealth;
+    float maxRegenHealth;
 
     void Start() {
         photonView = GetComponent<PhotonView>();
         ResetDamage();
         enemies = new List<PlayerChampion>();
         radiusTrigger.transform.localScale = new Vector3(radius, radiusTrigger.transform.localScale.y, radius);
-        currentHealth = baseHealth;
+        currentHealth = maxRegenHealth = baseHealth;
         healthImage.fillAmount = 1;
     }
 
@@ -44,6 +50,8 @@ public class Turret : MonoBehaviour {
         if(!started && PhotonNetwork.isMasterClient) {
             started = true;
             StartCoroutine("TargetEnemies");
+            if(regeneratesHealth)
+                StartCoroutine("RegenerateHealth");
         }
     }
 
@@ -51,19 +59,42 @@ public class Turret : MonoBehaviour {
         CheckInvincibility();
     }
 
+    IEnumerator RegenerateHealth() {
+        while(currentHealth > 0f) {
+            float percentageHealth = (currentHealth / baseHealth) * 100;
+            if (percentageHealth < 33.3f)
+                maxRegenHealth = (baseHealth * 0.3f);
+            if (percentageHealth < 66.6f)
+                maxRegenHealth = (baseHealth * 0.6f);
+            else
+                maxRegenHealth = baseHealth;
+
+            photonView.RPC("Heal", PhotonTargets.All, healthRegenAmount);
+            yield return new WaitForSeconds(healthRegenDelay);
+        }
+    }
+
+    // A turret is invincible if it has prerequisites which are alive
     void CheckInvincibility() {
         if (gameObject.layer == LayerMask.NameToLayer("Default")) {
-            if(prerequisite != null) {
-                if(prerequisite.currentHealth <= 0f) {
-                    prerequisite = null;
+            if(prerequisites.Count > 0) {
+                foreach(Turret t in prerequisites) {
+                    if(t == null)
+                        prerequisites.Remove(t);
+                    else if (t.currentHealth <= 0f)
+                        prerequisites.Remove(t);
                 }
             }
-
-            if (prerequisite == null)
+            if (prerequisites.Count == 0)
                 gameObject.layer = LayerMask.NameToLayer("Targetable");
-
-            healthbarUI.SetActive(prerequisite == null);
+            healthbarUI.SetActive(prerequisites.Count == 0);
         }
+    }
+
+    [PunRPC]
+    public void Heal(float amount) {
+        currentHealth = Mathf.Min(maxRegenHealth, currentHealth + amount);
+        healthImage.fillAmount = (currentHealth / baseHealth);
     }
 
     [PunRPC]

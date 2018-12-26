@@ -72,23 +72,25 @@ public class PlayerChampion : MonoBehaviour {
     // Called when a champion takes damage by a source
     [PunRPC]
     void Damage(float amount) {
-        //Champion.damage.Add(new Damage(attacker, amount, gameUIHandler.TimeElapsed));
-        Champion.health = Mathf.Max(Champion.health - amount, 0f);
+        if(!Champion.invincible) {
+            //Champion.damage.Add(new Damage(attacker, amount, gameUIHandler.TimeElapsed));
+            Champion.health = Mathf.Max(Champion.health - amount, 0f);
 
-        // If the champion is the local player, update their UI to reflect the damage
-        if (PhotonView.isMine) {
-            gameUIHandler.UpdateStats(Champion);
+            // If the champion is the local player, update their UI to reflect the damage
+            if (PhotonView.isMine) {
+                gameUIHandler.UpdateStats(Champion);
 
-            // Does the player have any health left?
-            if (Champion.health <= 0f) {
-                IsDead = true;
-                PhotonView.RPC("OnDeath", PhotonTargets.All);
-                DeathHandler.Instance.OnDeath(this);
+                // Does the player have any health left?
+                if (Champion.health <= 0f) {
+                    IsDead = true;
+                    PhotonView.RPC("OnDeath", PhotonTargets.All);
+                    DeathHandler.Instance.OnDeath(this);
+                }
             }
-        }
 
-        // Tell other players that this player has been damaged (to update the health bar)
-        PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+            // Tell other players that this player has been damaged (to update the health bar)
+            PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+        }
     }
 
     [PunRPC]

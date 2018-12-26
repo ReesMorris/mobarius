@@ -24,6 +24,7 @@ public class Champion : ScriptableObject {
     public float armour;
     public float magicResist;
     public float movementSpeed;
+    public bool invincible;
 
     [HideInInspector] public float health;
     [HideInInspector] public float mana;
@@ -52,6 +53,7 @@ public class Champion : ScriptableObject {
         armour = c.armour;
         magicResist = c.magicResist;
         movementSpeed = c.movementSpeed;
+        invincible = c.invincible;
 
         damage = new List<Damage>();
     }

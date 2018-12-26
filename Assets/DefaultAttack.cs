@@ -23,14 +23,15 @@ public class DefaultAttack : MonoBehaviour {
 
     void Update() {
         if(photonView.isMine) {
+            print(target);
             if (!playerChampion.IsDead) {
                 if(target != null) {
                     if(target.GetComponent<PhotonView>() != photonView) {
                         if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
                             if(Time.time >= (lastShotTime + cooldownTime)) {
+                                print("shooting");
                                 lastShotTime = Time.time;
                                 photonView.RPC("Shoot", PhotonTargets.All, 100f, playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.owner);
-                                target = null;
                                 navMeshAgent.destination = transform.position;
                             }
                         } else {

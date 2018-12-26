@@ -46,6 +46,8 @@ public class PlayerMovement : MonoBehaviour {
             if (navMeshAgent.remainingDistance <= 0.2f || playerChampion.IsDead) {
                 navMeshAgent.velocity = Vector3.zero;
                 navMeshAgent.isStopped = true;
+            }
+            if(playerChampion.IsDead) {
                 defaultAttack.target = null;
             }
         }
