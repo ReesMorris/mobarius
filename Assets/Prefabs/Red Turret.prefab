@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114476464113397056}
   - component: {fileID: 114809398871881968}
   - component: {fileID: 114868600292399342}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Red Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1265392272587508}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.528, z: 0}
+  m_LocalPosition: {x: 0, y: 0.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4637114381500786}
@@ -354,12 +354,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHealth: 5000
   baseDamage: 120
-  healthImage: {fileID: 114728259839862056}
   incDamage: 30
   team: 1
+  radius: 11
+  prerequisite: {fileID: 0}
+  bulletSpawn: {fileID: 4494992686068870}
+  healthbarUI: {fileID: 1738022067429758}
+  healthImage: {fileID: 114728259839862056}
   bulletPrefab: {fileID: 1256582402650800, guid: e37f9647099d218489136da7c1123168,
     type: 2}
-  radius: 11
   radiusTrigger: {fileID: 1444829142281726}
 --- !u!114 &114582970531388202
 MonoBehaviour:

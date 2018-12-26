@@ -5,13 +5,21 @@ using UnityEngine.UI;
 
 public class Turret : MonoBehaviour {
 
+    [Header("Damage")]
     public float baseHealth;
     public float baseDamage;
-    public Image healthImage;
     public float incDamage;
     public PunTeams.Team team;
-    public GameObject bulletPrefab;
     public float radius;
+
+    [Header("Conditionals")]
+    public Turret prerequisite;
+
+    [Header("UI & Objects")]
+    public Transform bulletSpawn;
+    public GameObject healthbarUI;
+    public Image healthImage;
+    public GameObject bulletPrefab;
     public GameObject radiusTrigger;
 
     List<PlayerChampion> enemies;
@@ -36,6 +44,25 @@ public class Turret : MonoBehaviour {
         if(!started && PhotonNetwork.isMasterClient) {
             started = true;
             StartCoroutine("TargetEnemies");
+        }
+    }
+
+    private void Update() {
+        CheckInvincibility();
+    }
+
+    void CheckInvincibility() {
+        if (gameObject.layer == LayerMask.NameToLayer("Default")) {
+            if(prerequisite != null) {
+                if(prerequisite.currentHealth <= 0f) {
+                    prerequisite = null;
+                }
+            }
+
+            if (prerequisite == null)
+                gameObject.layer = LayerMask.NameToLayer("Targetable");
+
+            healthbarUI.SetActive(prerequisite == null);
         }
     }
 
@@ -68,7 +95,7 @@ public class Turret : MonoBehaviour {
     IEnumerator TargetEnemies() {
         while(true) {
             if(currentTarget != null) {
-                photonView.RPC("Shoot", PhotonTargets.All, 100f, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, photonView.owner);
+                photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
                 currentDamage += baseDamage;
             }
             yield return new WaitForSeconds(0.833f);
@@ -76,8 +103,8 @@ public class Turret : MonoBehaviour {
     }
 
     [PunRPC]
-    void Shoot(float speed, float damage, int photonId, PhotonPlayer shooter) {
-        GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
+    void Shoot(float speed, Vector3 spawnPos, float damage, int photonId, PhotonPlayer shooter) {
+        GameObject bullet = Instantiate(bulletPrefab, spawnPos, transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
         b.Setup(damage, transform.position, photonId, shooter);
     }

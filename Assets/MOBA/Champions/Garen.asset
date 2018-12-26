@@ -83,7 +83,7 @@ MonoBehaviour:
   maxMana: 400
   manaRegen: 12
   range: 6
-  attackDamage: 66
+  attackDamage: 660
   attackSpeed: 0.625
   armour: 36
   magicResist: 32.1
