@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour {
         } else {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
+
             if (Input.GetButton("Fire2") && !playerChampion.IsDead) {
                 if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Targetable"))) {
                     Targetable targetable = hit.transform.GetComponent<Targetable>();
@@ -42,9 +43,10 @@ public class PlayerMovement : MonoBehaviour {
                     }
                 }
             }
-            if (navMeshAgent.remainingDistance <= 0.2f) {
+            if (navMeshAgent.remainingDistance <= 0.2f || playerChampion.IsDead) {
                 navMeshAgent.velocity = Vector3.zero;
                 navMeshAgent.isStopped = true;
+                defaultAttack.target = null;
             }
         }
     }
