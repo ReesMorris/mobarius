@@ -7,6 +7,9 @@ using UnityEngine.AI;
 
 public class PlayerChampion : MonoBehaviour {
 
+    public delegate void OnPlayerDamaged();
+    public static OnPlayerDamaged onPlayerDamaged;
+
     [Header("UI")]
     public TMP_Text usernameText;
     public Image healthBarFill;
@@ -78,6 +81,7 @@ public class PlayerChampion : MonoBehaviour {
 
             // If the champion is the local player, update their UI to reflect the damage
             if (PhotonView.isMine) {
+                onPlayerDamaged();
                 gameUIHandler.UpdateStats(Champion);
 
                 // Does the player have any health left?

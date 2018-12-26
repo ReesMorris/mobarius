@@ -74,7 +74,7 @@ public class GameUIHandler : MonoBehaviour {
         // Mana
         manaRegenText.text = "";
         manaBar.fillAmount = champion.mana / champion.maxMana;
-        manaText.text = champion.mana.ToString("F1") + " / " + champion.maxMana;
+        manaText.text = champion.mana.ToString("F1") + " / " + champion.maxMana.ToString("F1");
         if (champion.mana < champion.maxMana)
             manaRegenText.text = "+" + champion.manaRegen.ToString("F1");
     }

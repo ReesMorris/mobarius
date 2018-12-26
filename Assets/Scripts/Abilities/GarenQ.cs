@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class GarenQ : MonoBehaviour {
@@ -17,6 +18,8 @@ public class GarenQ : MonoBehaviour {
     bool casting;
 
     void Start() {
+        GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
+
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerChampion = GetComponent<PlayerChampion>();
         photonView = GetComponent<PhotonView>();
@@ -26,6 +29,10 @@ public class GarenQ : MonoBehaviour {
     }
 
     void Update() {
+        AttemptAbility(false);
+    }
+
+    public void AttemptAbility(bool buttonPressed) {
         // Are we the player doing this?
         if (photonView.isMine) {
             // Are we alive?
@@ -37,7 +44,7 @@ public class GarenQ : MonoBehaviour {
                 // Can we cast this ability?
                 if (GameUIHandler.Instance.CanCastAbility(abilityType, ability, playerChampion.Champion)) {
                     // Is Q being pressed down?
-                    if (Input.GetKeyDown(KeyCode.Q)) {
+                    if (Input.GetKeyDown(KeyCode.Q) || buttonPressed) {
                         if(!abilityHandler.Aiming)
                             abilityHandler.StartCasting(indicator, ability.range);
                         else

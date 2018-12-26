@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour {
 
+    public delegate void OnPlayerMove();
+    public static OnPlayerMove onPlayerMove;
+
     PhotonView photonView;
     Vector3 trueLoc;
     Quaternion trueRot;
@@ -19,6 +22,12 @@ public class PlayerMovement : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
         defaultAttack = GetComponent<DefaultAttack>();
         champion = playerChampion.Champion;
+    }
+
+    public void StopMovement() {
+        defaultAttack.target = null;
+        navMeshAgent.velocity = Vector3.zero;
+        navMeshAgent.isStopped = true;
     }
 
     void Update() {
@@ -49,6 +58,9 @@ public class PlayerMovement : MonoBehaviour {
             }
             if(playerChampion.IsDead) {
                 defaultAttack.target = null;
+            }
+            if (!navMeshAgent.isStopped) {
+                onPlayerMove();
             }
         }
     }
