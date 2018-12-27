@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour {
     PhotonPlayer shooter;
     GameObject target;
     PunTeams.Team team;
+    CapsuleCollider collider;
 
     public void Setup(float _damage, Vector3 _startingPos, float _range, PhotonPlayer _shooter) {
         shooter = _shooter;
@@ -24,9 +25,11 @@ public class Bullet : MonoBehaviour {
         startingPos = _startingPos;
         target = PhotonView.Find(photonId).gameObject;
         ValidateSetup();
+        collider.enabled = false;
     }
 
     void ValidateSetup() {
+        collider = GetComponent<CapsuleCollider>();
         if (shooter == null)
             team = PunTeams.Team.none;
         else
@@ -37,6 +40,10 @@ public class Bullet : MonoBehaviour {
         if(target != null) {
             if (target.layer == LayerMask.NameToLayer("Targetable")) {
                 transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10f * Time.deltaTime);
+                if(Vector3.Distance(transform.position, target.transform.position) < .5f) {
+                    print("oncollide");
+                    OnCollide(target);
+                }
             } else {
                 target = null;
                 Destroy(gameObject);
@@ -49,7 +56,11 @@ public class Bullet : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
-        PlayerChampion playerChampion = collision.gameObject.GetComponent<PlayerChampion>();
+        OnCollide(collision.gameObject);
+    }
+
+    void OnCollide(GameObject collision) {
+        PlayerChampion playerChampion = collision.GetComponent<PlayerChampion>();
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && photonView.owner.GetTeam() != team) {
@@ -57,15 +68,14 @@ public class Bullet : MonoBehaviour {
             }
         }
 
-        Turret turret = collision.gameObject.GetComponent<Turret>();
-        if(turret != null) {
+        Turret turret = collision.GetComponent<Turret>();
+        if (turret != null) {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
                 photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
         }
-
 
         Destroy(gameObject);
     }

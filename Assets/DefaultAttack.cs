@@ -50,7 +50,7 @@ public class DefaultAttack : MonoBehaviour {
 
     [PunRPC]
     void Shoot(float speed, float damage, Vector3 position, int photonId, PhotonPlayer shooter) {
-        transform.LookAt(position);
+        transform.LookAt(new Vector3(position.x, transform.position.y, position.z));
         GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
         b.Setup(damage, transform.position, photonId, shooter);
