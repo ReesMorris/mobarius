@@ -65,4 +65,15 @@ public class Champion : ScriptableObject {
     public bool IsAvailable {
         get { return isAvailable;  }
     }
+
+    public void ResetDamage() {
+        damage.Clear();
+    }
+    public PhotonPlayer GetKiller() {
+        foreach(Damage d in damage) {
+            if (d.player != null && d.timeInflicted + 10f >= GameUIHandler.Instance.TimeElapsed)
+                return d.player;
+        }
+        return null;
+    }
 }

@@ -114,13 +114,10 @@ public class Turret : MonoBehaviour {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {
-            if (PhotonNetwork.player.GetTeam() == team) {
-                SoundManager.Instance.PlaySound("Announcer/AllyTurretDestroyed");
-                GameUIHandler.Instance.ShowPlayerText("Ally turret destroyed!");
-            } else {
-                SoundManager.Instance.PlaySound("Announcer/EnemyTurretDestroyed");
-                GameUIHandler.Instance.ShowPlayerText("Enemy turret destroyed!");
-            }
+            if (PhotonNetwork.player.GetTeam() == team)
+                GameUIHandler.Instance.KillMessage("Announcer/AllyTurretDestroyed", "Ally turret destroyed!");
+            else
+                GameUIHandler.Instance.KillMessage("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
             Destroy(gameObject);
         }
     }

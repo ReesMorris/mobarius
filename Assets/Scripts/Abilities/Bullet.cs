@@ -53,7 +53,7 @@ public class Bullet : MonoBehaviour {
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && photonView.owner.GetTeam() != team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
         }
 
@@ -62,7 +62,7 @@ public class Bullet : MonoBehaviour {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
         }
 

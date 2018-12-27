@@ -74,20 +74,21 @@ public class PlayerChampion : MonoBehaviour {
 
     // Called when a champion takes damage by a source
     [PunRPC]
-    void Damage(float amount) {
+    void Damage(float amount, PhotonPlayer attacker) {
         if(!Champion.invincible) {
-            //Champion.damage.Add(new Damage(attacker, amount, gameUIHandler.TimeElapsed));
             Champion.health = Mathf.Max(Champion.health - amount, 0f);
 
             // If the champion is the local player, update their UI to reflect the damage
             if (PhotonView.isMine) {
+                Champion.damage.Insert(0, new Damage(attacker, amount, gameUIHandler.TimeElapsed));
                 onPlayerDamaged();
                 gameUIHandler.UpdateStats(Champion);
 
                 // Does the player have any health left?
                 if (Champion.health <= 0f) {
                     IsDead = true;
-                    PhotonView.RPC("OnDeath", PhotonTargets.All);
+                    PhotonView.RPC("OnDeath", PhotonTargets.All, Champion.GetKiller());
+                    Champion.ResetDamage();
                     DeathHandler.Instance.OnDeath(this);
                 }
             }
@@ -98,7 +99,40 @@ public class PlayerChampion : MonoBehaviour {
     }
 
     [PunRPC]
-    void OnDeath() {
+    void OnDeath(PhotonPlayer killer) {
+
+        // Kill messages
+        if (killer == null) {
+            // Executed
+            GameUIHandler.Instance.KillMessage("Announcer/Executed", "Executed!");
+        } else {
+            if(ScoreHandler.Instance.IsFirstBlood()) {
+                GameUIHandler.Instance.KillMessage("Announcer/FirstBlood", "First blood!");
+            } else if (PhotonNetwork.player.GetTeam() == PhotonView.owner.GetTeam()) {
+                // Death was on ally side
+                if(PhotonView.isMine) {
+                    GameUIHandler.Instance.KillMessage("Announcer/SelfSlain", "You have been slain!");
+                } else {
+                    // Ally player death
+                    GameUIHandler.Instance.KillMessage("Announcer/AllySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                }
+            } else {
+                // Death was on enemy side
+                if(PhotonNetwork.player == killer) {
+                    GameUIHandler.Instance.KillMessage("Announcer/SelfKill", "You have slain " + PhotonView.owner.NickName);
+                } else {
+                    // I didn't kill them
+                    GameUIHandler.Instance.KillMessage("Announcer/EnemySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                }
+            }
+            ScoreHandler.Instance.IncreaseScore(killer.GetTeam());
+
+            // KDA scores
+            if (PhotonView.isMine)
+                ScoreHandler.Instance.OnDeath();
+            if (PhotonNetwork.player == killer)
+                ScoreHandler.Instance.OnKill();
+        }
 
         // Make this player untargetable for abilities, etc.
         gameObject.layer = LayerMask.NameToLayer("Default");

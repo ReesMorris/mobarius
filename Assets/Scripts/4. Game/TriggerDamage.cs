@@ -11,7 +11,7 @@ public class TriggerDamage : MonoBehaviour {
         if(playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (photonView.isMine) {
-                photonView.RPC("Damage", PhotonTargets.All, damage);
+                photonView.RPC("Damage", PhotonTargets.All, damage, null);
             }
         }
     }

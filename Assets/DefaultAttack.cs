@@ -25,17 +25,21 @@ public class DefaultAttack : MonoBehaviour {
         if(photonView.isMine) {
             if (!playerChampion.IsDead) {
                 if(target != null) {
-                    if(target.GetComponent<PhotonView>() != photonView) {
-                        if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
-                            if(Time.time >= (lastShotTime + cooldownTime)) {
-                                lastShotTime = Time.time;
-                                photonView.RPC("Shoot", PhotonTargets.All, 100f, playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.owner);
-                                navMeshAgent.destination = transform.position;
+                    if(!target.GetComponent<PlayerChampion>().IsDead) {
+                        if(target.GetComponent<PhotonView>() != photonView) {
+                            if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
+                                if(Time.time >= (lastShotTime + cooldownTime)) {
+                                    lastShotTime = Time.time;
+                                    photonView.RPC("Shoot", PhotonTargets.All, 100f, playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.owner);
+                                    navMeshAgent.destination = transform.position;
+                                }
+                            } else {
+                                navMeshAgent.destination = target.transform.position;
+                                navMeshAgent.isStopped = false;
                             }
-                        } else {
-                            navMeshAgent.destination = target.transform.position;
-                            navMeshAgent.isStopped = false;
                         }
+                    } else {
+                        target = null;
                     }
                 }
             }

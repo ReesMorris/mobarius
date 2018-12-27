@@ -69,4 +69,5 @@ MonoBehaviour:
   - GlobalSound
   - LocationalSound
   - Begin
+  - UpdateScoreUI
   DisableAutoOpenWizard: 1

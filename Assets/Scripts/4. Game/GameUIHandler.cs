@@ -153,6 +153,11 @@ public class GameUIHandler : MonoBehaviour {
         float mins = Mathf.Floor(timeElapsed / 60f);
         float secs = timeElapsed % 60;
         gameTimer.text = mins.ToString("00") + ":" + secs.ToString("00");
+
+        if (mins == 0f && secs == 3f) {
+            SoundManager.Instance.PlaySound("Announcer/WelcomeToSummonersRift");
+            ShowPlayerText("Welcome to Summoners Rift");
+        }
     }
 
     /* Display Text */
@@ -165,5 +170,11 @@ public class GameUIHandler : MonoBehaviour {
         displayText.text = message;
         yield return new WaitForSeconds(3f);
         displayText.text = "";
+    }
+
+    /* Text & Sound & Kill Message */
+    public void KillMessage(string sound, string displayText) {
+        SoundManager.Instance.PlaySound(sound);
+        ShowPlayerText(displayText);
     }
 }
