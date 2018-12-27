@@ -59,11 +59,13 @@ public class Turret : MonoBehaviour {
     }
 
     public void EnemyEnterRadius(PlayerChampion enemy) {
-        enemies.Add(enemy);
-        currentTarget = enemies[0];
-        if(!started && PhotonNetwork.isMasterClient) {
-            started = true;
-            StartCoroutine("TargetEnemies");
+        if(!enemy.GetComponent<PlayerChampion>().IsDead) {
+            enemies.Add(enemy);
+            currentTarget = enemies[0];
+            if(!started && PhotonNetwork.isMasterClient) {
+                started = true;
+                StartCoroutine("TargetEnemies");
+            }
         }
     }
 
