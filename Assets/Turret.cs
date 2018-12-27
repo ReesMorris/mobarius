@@ -110,7 +110,7 @@ public class Turret : MonoBehaviour {
     }
 
     [PunRPC]
-    public void Damage(float amount) {
+    public void Damage(float amount, PhotonPlayer shooter) {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {

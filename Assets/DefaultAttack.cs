@@ -25,8 +25,12 @@ public class DefaultAttack : MonoBehaviour {
         if(photonView.isMine) {
             if (!playerChampion.IsDead) {
                 if(target != null) {
-                    if(!target.GetComponent<PlayerChampion>().IsDead) {
-                        if(target.GetComponent<PhotonView>() != photonView) {
+                    PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();
+                    if (targetChampion != null)
+                        if (targetChampion.IsDead)
+                            target = null;
+                    if(target != null) {
+                        if (target.GetComponent<PhotonView>() != photonView) {
                             if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
                                 if(Time.time >= (lastShotTime + cooldownTime)) {
                                     lastShotTime = Time.time;
@@ -38,8 +42,6 @@ public class DefaultAttack : MonoBehaviour {
                                 navMeshAgent.isStopped = false;
                             }
                         }
-                    } else {
-                        target = null;
                     }
                 }
             }
