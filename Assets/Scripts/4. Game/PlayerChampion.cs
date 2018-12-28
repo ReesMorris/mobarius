@@ -51,6 +51,8 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void Spawn() {
+        PhotonView = GetComponent<PhotonView>();
+        GetComponent<Entity>().team = PhotonView.owner.GetTeam();
         gameObject.layer = LayerMask.NameToLayer("Targetable");
         if(PhotonView.isMine) {
             GameHandler gameHandler = GameHandler.Instance;
@@ -58,7 +60,6 @@ public class PlayerChampion : MonoBehaviour {
             if (PhotonView.owner.GetTeam() == PunTeams.Team.red) {
                 position = gameHandler.currentMap.redSpawns[0].transform.position;
             }
-            GetComponent<Entity>().team = PhotonView.owner.GetTeam();
             position += (Vector3.up * 3f);
             transform.position = position;
             Camera.main.GetComponent<PlayerCamera>().FocusOnPlayer(true);

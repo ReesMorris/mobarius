@@ -26,6 +26,7 @@ public class Bullet : MonoBehaviour {
         target = PhotonView.Find(photonId).gameObject;
         ValidateSetup();
         collider.enabled = false;
+        print("target: " + target.name);
     }
 
     void ValidateSetup() {
@@ -70,17 +71,16 @@ public class Bullet : MonoBehaviour {
             }
         }
         else if (entity != null) {
-            print(entity.name);
             PhotonView photonView = entity.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && entity.team != team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
             }
         }
         else if (turret != null) {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
             }
         }
 

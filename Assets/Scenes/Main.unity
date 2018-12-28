@@ -1267,12 +1267,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
---- !u!114 &105328270 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-    type: 2}
-  m_PrefabInternal: {fileID: 522283359}
-  m_Script: {fileID: 11500000, guid: bd040d2e1cfd449e89d81f68009a1c58, type: 3}
 --- !u!1 &105554085
 GameObject:
   m_ObjectHideFlags: 0
@@ -6929,6 +6923,10 @@ Prefab:
       propertyPath: instantiationId
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1434398124225746, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
   m_IsPrefabAsset: 0
@@ -9923,7 +9921,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4637114381500786, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 38.49
+      value: 46.85
       objectReference: {fileID: 0}
     - target: {fileID: 4637114381500786, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
       propertyPath: m_LocalRotation.x
@@ -9943,7 +9941,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4637114381500786, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1163973393471894, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
       propertyPath: m_Name
@@ -9958,6 +9956,10 @@ Prefab:
         type: 2}
       propertyPath: instantiationId
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163973393471894, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d59094a70b2144c8fa1a603f1da9976c, type: 2}
@@ -18539,102 +18541,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1228452015}
   m_CullTransparentMesh: 0
---- !u!1001 &1239038316
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: prerequisites.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -26.58
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.828
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 49.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_RootOrder
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: viewIdField
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: instantiationId
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1434398124225746, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-      propertyPath: m_Name
-      value: Inner Blue Turret
-      objectReference: {fileID: 0}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: healthbarUI
-      value: 
-      objectReference: {fileID: 1239038318}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: prerequisite
-      value: 
-      objectReference: {fileID: 105328270}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: regeneratesHealth
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: healthRegenAmount
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: healthRegenDelay
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
-        type: 2}
-      propertyPath: prerequisites.Array.data[0]
-      value: 
-      objectReference: {fileID: 105328270}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 2}
-  m_IsPrefabAsset: 0
---- !u!1 &1239038318 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1707728149815906, guid: 7710cc87051b54fab9d836bf70bac2c8,
-    type: 2}
-  m_PrefabInternal: {fileID: 1239038316}
 --- !u!1 &1239072902
 GameObject:
   m_ObjectHideFlags: 0
@@ -21839,12 +21745,12 @@ Prefab:
     - target: {fileID: 114341346543464114, guid: 8f6a45cd7e88449898a211b5eec92592,
         type: 2}
       propertyPath: viewIdField
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114341346543464114, guid: 8f6a45cd7e88449898a211b5eec92592,
         type: 2}
       propertyPath: instantiationId
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1720393037192630, guid: 8f6a45cd7e88449898a211b5eec92592, type: 2}
       propertyPath: m_IsActive

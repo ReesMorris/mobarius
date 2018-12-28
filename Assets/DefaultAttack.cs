@@ -26,8 +26,12 @@ public class DefaultAttack : MonoBehaviour {
             if (!playerChampion.IsDead) {
                 if(target != null) {
                     PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();
+                    Entity targetEntity = target.GetComponent<Entity>();
                     if (targetChampion != null)
                         if (targetChampion.IsDead)
+                            target = null;
+                    if (targetEntity != null)
+                        if (targetEntity.IsDead)
                             target = null;
                     if(target != null) {
                         if (target.GetComponent<PhotonView>() != photonView) {

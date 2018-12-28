@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Entity : MonoBehaviour {
 
-    public PunTeams.Team team;
-    public bool IsDead;
+    public Image healthBarFill;
+
     PhotonView photonView;
+    [HideInInspector] public PunTeams.Team team;
+    [HideInInspector] public bool IsDead;
 
     float health;
     float maxHealth;
 
     void Start() {
         photonView = GetComponent<PhotonView>();
+       
+        if(healthBarFill != null) {
+            healthBarFill.color = GameUIHandler.Instance.enemyHealthColour;
+            if (PhotonNetwork.player.GetTeam() == team)
+                healthBarFill.color = GameUIHandler.Instance.allyHealthColour;
+        }
     }
 
     public void Init(float _maxHealth) {
@@ -21,10 +30,10 @@ public class Entity : MonoBehaviour {
 
     // Called when a champion takes damage by a source
     [PunRPC]
-    void Damage(float amount, PhotonPlayer attacker) {
-        print("entity is taking damage");
+    void EntityDamage(float amount, PhotonPlayer attacker) {
         health = Mathf.Max(health - amount, 0f);
-        if(health <= 0f) {
+        healthBarFill.fillAmount = health / maxHealth;
+        if (health <= 0f) {
             IsDead = true;
             gameObject.SetActive(false);
         }

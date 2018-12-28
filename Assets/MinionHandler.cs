@@ -36,7 +36,7 @@ public class MinionHandler : MonoBehaviour {
 
     IEnumerator SpawnMinions(PunTeams.Team team) {
         int spawned = 0;
-        while(spawned < 1) {
+        while(spawned < 6) {
             photonView.RPC("SpawnMinion", PhotonTargets.All, team);
             spawned++;
             yield return new WaitForSeconds(0.5f);
