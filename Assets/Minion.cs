@@ -22,26 +22,38 @@ public class Minion : MonoBehaviour {
         targetable = GetComponent<Targetable>();
 	}
 
-    public void Init(Transform spawnPoint, Transform[] _waypoints, PunTeams.Team _team) {
+    public void Init(PunTeams.Team team) {
         Start();
-        transform.position = spawnPoint.position;
-        waypoints = _waypoints;
-        GetComponent<Entity>().team = _team;
+        photonView.RPC("MinionInit", PhotonTargets.All, team);
+    }
 
-        if (_team == PunTeams.Team.blue)
+    [PunRPC]
+    void MinionInit(PunTeams.Team team) {
+        Start();
+        if (photonView.isMine) {
+            MinionWaypoints minionData;
+            if (team == PunTeams.Team.blue)
+                minionData = GameHandler.Instance.currentMap.blueMinions[0];
+            else
+                minionData = GameHandler.Instance.currentMap.redMinions[0];
+            transform.position = minionData.spawnPosition.position;
+            waypoints = minionData.destinations;
+            navMeshAgent.enabled = true;
+            navMeshAgent.speed = speed / 120f;
+            GoToNextWaypoint();
+        }
+        GetComponent<Entity>().team = team;
+        gameObject.name = "Minion";
+        if (team == PunTeams.Team.blue)
             targetable.allowTargetingBy = PunTeams.Team.red;
-        else if (_team == PunTeams.Team.red)
+        else if (team == PunTeams.Team.red)
             targetable.allowTargetingBy = PunTeams.Team.blue;
-
-        navMeshAgent.enabled = true;
-        navMeshAgent.speed = speed / 120f;
-        GoToNextWaypoint();
     }
 	
 	void Update () {
         if (!photonView.isMine) {
-            transform.position = Vector3.Lerp(transform.position, trueLoc, Time.deltaTime * 5);
-            transform.rotation = Quaternion.Lerp(transform.rotation, trueRot, Time.deltaTime * 5);
+            //transform.position = Vector3.Lerp(transform.position, trueLoc, Time.deltaTime * 5);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, trueRot, Time.deltaTime * 5);
         } else {
             if(navMeshAgent.remainingDistance <= 0.2f) {
                 if(waypoints.Length > (waypointIndex + 1)) {

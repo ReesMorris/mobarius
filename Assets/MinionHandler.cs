@@ -35,26 +35,22 @@ public class MinionHandler : MonoBehaviour {
     }
 
     IEnumerator SpawnMinions(PunTeams.Team team) {
-        int spawned = 0;
-        while(spawned < 6) {
-            photonView.RPC("SpawnMinion", PhotonTargets.All, team);
-            spawned++;
-            yield return new WaitForSeconds(0.5f);
+        if (PhotonNetwork.isMasterClient) {
+            int spawned = 0;
+            while (spawned < 6) {
+                SpawnMinion(team);
+                spawned++;
+                yield return new WaitForSeconds(0.5f);
+            }
         }
     }
 
     [PunRPC]
     void SpawnMinion(PunTeams.Team team) {
-        GameObject minion = PhotonNetwork.Instantiate(minionPrefab.name, Vector3.zero, Quaternion.identity, 0);
-        minion.name = minionPrefab.name;
-
-        MinionWaypoints minionData;
-        if (team == PunTeams.Team.blue)
-            minionData = GameHandler.Instance.currentMap.blueMinions[0];
-        else
-            minionData = GameHandler.Instance.currentMap.redMinions[0];
-
-        minion.GetComponent<Entity>().Init(477);
-        minion.GetComponent<Minion>().Init(minionData.spawnPosition, minionData.destinations, team);
+        if (PhotonNetwork.isMasterClient) {
+            GameObject minion = PhotonNetwork.Instantiate(minionPrefab.name, Vector3.zero, Quaternion.identity, 0);
+            minion.GetComponent<Entity>().Init(477);
+            minion.GetComponent<Minion>().Init(team);
+        }
     }
 }

@@ -59,8 +59,8 @@ GameObject:
   - component: {fileID: 33989077485874024}
   - component: {fileID: 23235120811490210}
   - component: {fileID: 65403261044516336}
-  - component: {fileID: 195854914652497380}
   - component: {fileID: 114341346543464114}
+  - component: {fileID: 195854914652497380}
   - component: {fileID: 114260268466860294}
   - component: {fileID: 114060990865288562}
   - component: {fileID: 114575083679333772}
@@ -242,12 +242,12 @@ MonoBehaviour:
   group: 0
   OwnerShipWasTransfered: 0
   prefixBackup: -1
-  synchronization: 0
+  synchronization: 1
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 4519428862808860}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1

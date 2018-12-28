@@ -26,7 +26,6 @@ public class Bullet : MonoBehaviour {
         target = PhotonView.Find(photonId).gameObject;
         ValidateSetup();
         collider.enabled = false;
-        print("target: " + target.name);
     }
 
     void ValidateSetup() {

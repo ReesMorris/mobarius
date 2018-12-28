@@ -67,11 +67,11 @@ public class PlayerMovement : MonoBehaviour {
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.isReading) {
-            if(!photonView.isMine) {
+            if (!photonView.isMine) {
                 this.trueLoc = (Vector3)stream.ReceiveNext();
             }
         } else {
-            if(photonView.isMine){
+            if (photonView.isMine) {
                 stream.SendNext(transform.position);
             }
         }

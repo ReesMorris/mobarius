@@ -24,7 +24,13 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public void Init(float _maxHealth) {
+    public void Init(float maxHealth) {
+        photonView = GetComponent<PhotonView>();
+        photonView.RPC("EntityInit", PhotonTargets.All, maxHealth);
+    }
+
+    [PunRPC]
+    void EntityInit(float _maxHealth) {
         health = maxHealth = _maxHealth;
     }
 

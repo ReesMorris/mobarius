@@ -72,4 +72,6 @@ MonoBehaviour:
   - UpdateScoreUI
   - SpawnMinion
   - EntityDamage
+  - MinionInit
+  - EntityInit
   DisableAutoOpenWizard: 1

@@ -30,6 +30,7 @@ public class PlayerChampion : MonoBehaviour {
     void Start () {
         PhotonView = GetComponent<PhotonView>();
         if (PhotonNetwork.player.IsLocal) {
+            GetComponent<Entity>().team = PhotonView.owner.GetTeam();
             gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();              // Tell other players to rename this player's character to be the name of the champion             PhotonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = PhotonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
 
             // Update UI to show full health and mana, etc
@@ -52,7 +53,6 @@ public class PlayerChampion : MonoBehaviour {
     [PunRPC]
     void Spawn() {
         PhotonView = GetComponent<PhotonView>();
-        GetComponent<Entity>().team = PhotonView.owner.GetTeam();
         gameObject.layer = LayerMask.NameToLayer("Targetable");
         if(PhotonView.isMine) {
             GameHandler gameHandler = GameHandler.Instance;
