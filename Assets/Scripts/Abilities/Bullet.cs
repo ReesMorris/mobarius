@@ -60,15 +60,23 @@ public class Bullet : MonoBehaviour {
 
     void OnCollide(GameObject collision) {
         PlayerChampion playerChampion = collision.GetComponent<PlayerChampion>();
+        Entity entity = collision.GetComponent<Entity>();
+        Turret turret = collision.GetComponent<Turret>();
+
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && photonView.owner.GetTeam() != team) {
                 photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
         }
-
-        Turret turret = collision.GetComponent<Turret>();
-        if (turret != null) {
+        else if (entity != null) {
+            print(entity.name);
+            PhotonView photonView = entity.GetComponent<PhotonView>();
+            if (PhotonNetwork.isMasterClient && entity.team != team) {
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+            }
+        }
+        else if (turret != null) {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {

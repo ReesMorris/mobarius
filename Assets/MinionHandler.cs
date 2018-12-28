@@ -36,7 +36,7 @@ public class MinionHandler : MonoBehaviour {
 
     IEnumerator SpawnMinions(PunTeams.Team team) {
         int spawned = 0;
-        while(spawned < 6) {
+        while(spawned < 1) {
             photonView.RPC("SpawnMinion", PhotonTargets.All, team);
             spawned++;
             yield return new WaitForSeconds(0.5f);
@@ -54,6 +54,7 @@ public class MinionHandler : MonoBehaviour {
         else
             minionData = GameHandler.Instance.currentMap.redMinions[0];
 
+        minion.GetComponent<Entity>().Init(477);
         minion.GetComponent<Minion>().Init(minionData.spawnPosition, minionData.destinations, team);
     }
 }
