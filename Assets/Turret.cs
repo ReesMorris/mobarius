@@ -27,9 +27,9 @@ public class Turret : MonoBehaviour {
     public GameObject bulletPrefab;
     public GameObject radiusTrigger;
 
-    List<PlayerChampion> enemies;
+    List<Entity> enemies;
     float currentDamage;
-    PlayerChampion currentTarget;
+    Entity currentTarget;
     PhotonView photonView;
     float currentHealth;
     bool started;
@@ -39,7 +39,7 @@ public class Turret : MonoBehaviour {
         GameHandler.onGameStart += OnGameStart;
         photonView = GetComponent<PhotonView>();
         ResetDamage();
-        enemies = new List<PlayerChampion>();
+        enemies = new List<Entity>();
         radiusTrigger.transform.localScale = new Vector3(radius, radiusTrigger.transform.localScale.y, radius);
         currentHealth = maxRegenHealth = baseHealth;
         healthImage.fillAmount = 1;
@@ -58,8 +58,8 @@ public class Turret : MonoBehaviour {
         }
     }
 
-    public void EnemyEnterRadius(PlayerChampion enemy) {
-        if(!enemy.GetComponent<PlayerChampion>().IsDead) {
+    public void EnemyEnterRadius(Entity enemy) {
+        if(!enemy.GetComponent<Entity>().IsDead) {
             enemies.Add(enemy);
             currentTarget = enemies[0];
             if(!started && PhotonNetwork.isMasterClient) {
@@ -117,14 +117,14 @@ public class Turret : MonoBehaviour {
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {
             if (PhotonNetwork.player.GetTeam() == team)
-                GameUIHandler.Instance.KillMessage("Announcer/AllyTurretDestroyed", "Ally turret destroyed!");
+                GameUIHandler.Instance.MessageWithSound("Announcer/AllyTurretDestroyed", "Ally turret destroyed!");
             else
-                GameUIHandler.Instance.KillMessage("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
+                GameUIHandler.Instance.MessageWithSound("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
             Destroy(gameObject);
         }
     }
 
-    public void EnemyLeaveRadius(PlayerChampion enemy) {
+    public void EnemyLeaveRadius(Entity enemy) {
         enemies.Remove(enemy);
         if (!enemies.Contains(currentTarget)) {
             ResetDamage();

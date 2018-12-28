@@ -70,4 +70,5 @@ MonoBehaviour:
   - LocationalSound
   - Begin
   - UpdateScoreUI
+  - SpawnMinion
   DisableAutoOpenWizard: 1

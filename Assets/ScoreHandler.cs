@@ -6,10 +6,10 @@ using TMPro;
 public class ScoreHandler : MonoBehaviour {
 
 	public static ScoreHandler Instance;
-    public PhotonView photonView;
     public TMP_Text scoreUI;
     public TMP_Text kdaUI;
 
+    PhotonView photonView;
     int blueScore;
     int redScore;
     int kills;

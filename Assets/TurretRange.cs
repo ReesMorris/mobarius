@@ -14,22 +14,20 @@ public class TurretRange : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        PlayerChampion playerChampion = other.GetComponent<PlayerChampion>();
-        if(playerChampion != null) {
-            PhotonView photonView = playerChampion.GetComponent<PhotonView>();
-            if(photonView.owner.GetTeam() != turret.team) {
-                turret.EnemyEnterRadius(playerChampion);
+        Entity entity = other.GetComponent<Entity>();
+        if(entity != null) {
+            PhotonView photonView = entity.GetComponent<PhotonView>();
+            if (entity.team != turret.team) {
+                turret.EnemyEnterRadius(entity);
             }
         }
     }
 
     private void OnTriggerExit(Collider other) {
-        PlayerChampion playerChampion = other.GetComponent<PlayerChampion>();
-        if(playerChampion != null) {
-            PhotonView photonView = playerChampion.GetComponent<PhotonView>();
-            if (photonView.owner.GetTeam() != turret.team) {
-                turret.EnemyLeaveRadius(playerChampion);
-            }
+        Entity entity = other.GetComponent<Entity>();
+        if(entity != null) {
+            PhotonView photonView = entity.GetComponent<PhotonView>();
+            turret.EnemyLeaveRadius(entity);
         }
     }
 }

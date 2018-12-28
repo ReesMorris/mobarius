@@ -9,4 +9,6 @@ public class Map {
     public byte maxPlayers;
     public GameObject[] redSpawns;
     public GameObject[] blueSpawns;
+    public MinionWaypoints[] redMinions;
+    public MinionWaypoints[] blueMinions;
 }

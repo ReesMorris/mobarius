@@ -41,7 +41,6 @@ public class Bullet : MonoBehaviour {
             if (target.layer == LayerMask.NameToLayer("Targetable")) {
                 transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10f * Time.deltaTime);
                 if(Vector3.Distance(transform.position, target.transform.position) < .5f) {
-                    print("oncollide");
                     OnCollide(target);
                 }
             } else {

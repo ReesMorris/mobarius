@@ -8,6 +8,9 @@ public class GameUIHandler : MonoBehaviour {
 
     public static GameUIHandler Instance;
 
+    public delegate void OnGameTimeUpdate(int timeElapsed);
+    public static OnGameTimeUpdate onGameTimeUpdate;
+
     [Header("Generic")]
     public Color allyHealthColour;
     public Color enemyHealthColour;
@@ -158,6 +161,7 @@ public class GameUIHandler : MonoBehaviour {
             SoundManager.Instance.PlaySound("Announcer/WelcomeToSummonersRift");
             ShowPlayerText("Welcome to Summoners Rift");
         }
+        onGameTimeUpdate(timeElapsed);
     }
 
     /* Display Text */
@@ -173,7 +177,11 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     /* Text & Sound & Kill Message */
-    public void KillMessage(string sound, string displayText) {
+    public void KillMessageWithSound(string sound, string displayText) {
+        SoundManager.Instance.PlaySound(sound);
+        ShowPlayerText(displayText);
+    }
+    public void MessageWithSound(string sound, string displayText) {
         SoundManager.Instance.PlaySound(sound);
         ShowPlayerText(displayText);
     }

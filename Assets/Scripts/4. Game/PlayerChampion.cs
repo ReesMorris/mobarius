@@ -58,6 +58,7 @@ public class PlayerChampion : MonoBehaviour {
             if (PhotonView.owner.GetTeam() == PunTeams.Team.red) {
                 position = gameHandler.currentMap.redSpawns[0].transform.position;
             }
+            GetComponent<Entity>().team = PhotonView.owner.GetTeam();
             position += (Vector3.up * 3f);
             transform.position = position;
             Camera.main.GetComponent<PlayerCamera>().FocusOnPlayer(true);
@@ -104,25 +105,25 @@ public class PlayerChampion : MonoBehaviour {
         // Kill messages
         if (killer == null) {
             // Executed
-            GameUIHandler.Instance.KillMessage("Announcer/Executed", "Executed!");
+            GameUIHandler.Instance.MessageWithSound("Announcer/Executed", "Executed!");
         } else {
             if(ScoreHandler.Instance.IsFirstBlood()) {
-                GameUIHandler.Instance.KillMessage("Announcer/FirstBlood", "First blood!");
+                GameUIHandler.Instance.MessageWithSound("Announcer/FirstBlood", "First blood!");
             } else if (PhotonNetwork.player.GetTeam() == PhotonView.owner.GetTeam()) {
                 // Death was on ally side
                 if(PhotonView.isMine) {
-                    GameUIHandler.Instance.KillMessage("Announcer/SelfSlain", "You have been slain!");
+                    GameUIHandler.Instance.MessageWithSound("Announcer/SelfSlain", "You have been slain!");
                 } else {
                     // Ally player death
-                    GameUIHandler.Instance.KillMessage("Announcer/AllySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                    GameUIHandler.Instance.MessageWithSound("Announcer/AllySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
                 }
             } else {
                 // Death was on enemy side
                 if(PhotonNetwork.player == killer) {
-                    GameUIHandler.Instance.KillMessage("Announcer/SelfKill", "You have slain " + PhotonView.owner.NickName);
+                    GameUIHandler.Instance.MessageWithSound("Announcer/SelfKill", "You have slain " + PhotonView.owner.NickName);
                 } else {
                     // I didn't kill them
-                    GameUIHandler.Instance.KillMessage("Announcer/EnemySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                    GameUIHandler.Instance.MessageWithSound("Announcer/EnemySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
                 }
             }
             ScoreHandler.Instance.IncreaseScore(killer.GetTeam());
