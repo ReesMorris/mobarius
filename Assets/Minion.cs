@@ -51,14 +51,13 @@ public class Minion : MonoBehaviour {
     }
 	
 	void Update () {
-        if (!photonView.isMine) {
-            //transform.position = Vector3.Lerp(transform.position, trueLoc, Time.deltaTime * 5);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, trueRot, Time.deltaTime * 5);
-        } else {
-            if(navMeshAgent.remainingDistance <= 0.2f) {
-                if(waypoints.Length > (waypointIndex + 1)) {
-                    waypointIndex++;
-                    GoToNextWaypoint();
+        if (photonView.isMine) {
+            if (waypoints != null) {
+                if (navMeshAgent.remainingDistance <= 0.2f) {
+                    if (waypoints.Length > (waypointIndex + 1)) {
+                        waypointIndex++;
+                        GoToNextWaypoint();
+                    }
                 }
             }
         }

@@ -42,7 +42,14 @@ public class Entity : MonoBehaviour {
         if (health <= 0f) {
             IsDead = true;
             gameObject.SetActive(false);
+            StartCoroutine("DespawnEntity");
         }
+    }
+
+    // Gives us enough time to remove any potential targeting on this entity before it is despawned
+    IEnumerator DespawnEntity() {
+        yield return new WaitForSeconds(10f);
+        Destroy(gameObject);
     }
 
 }
