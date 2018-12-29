@@ -43,6 +43,7 @@ public class Turret : MonoBehaviour {
         radiusTrigger.transform.localScale = new Vector3(radius, radiusTrigger.transform.localScale.y, radius);
         currentHealth = maxRegenHealth = baseHealth;
         healthImage.fillAmount = 1;
+        GetComponent<Entity>().team = team;
     }
 
     void OnGameStart() {
@@ -59,7 +60,7 @@ public class Turret : MonoBehaviour {
     }
 
     public void EnemyEnterRadius(Entity enemy) {
-        if(!enemy.GetComponent<Entity>().IsDead) {
+        if(!enemy.GetComponent<Entity>().GetIsDead()) {
             enemies.Add(enemy);
             currentTarget = enemies[0];
             if(!started && PhotonNetwork.isMasterClient) {
@@ -144,13 +145,11 @@ public class Turret : MonoBehaviour {
 
     IEnumerator TargetEnemies() {
         while(currentHealth > 0f) {
-            if(currentTarget != null) {
-                if(currentTarget.IsDead) {
-                    EnemyLeaveRadius(currentTarget);
-                } else {
-                    photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
-                    currentDamage += baseDamage;
-                }
+            if(currentTarget == null || currentTarget.GetIsDead())
+                EnemyLeaveRadius(currentTarget);
+            else {
+                photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
+                currentDamage += baseDamage;
             }
             yield return new WaitForSeconds(0.833f);
         }

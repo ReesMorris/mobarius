@@ -2,26 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Entity : MonoBehaviour {
 
+    public bool useEntityBehaviour;
     public Image healthBarFill;
 
     PhotonView photonView;
     [HideInInspector] public PunTeams.Team team;
-    [HideInInspector] public bool IsDead;
+    [HideInInspector] bool IsDead;
 
     float health;
     float maxHealth;
 
     void Start() {
-        photonView = GetComponent<PhotonView>();
-       
-        if(healthBarFill != null) {
-            healthBarFill.color = GameUIHandler.Instance.enemyHealthColour;
-            if (PhotonNetwork.player.GetTeam() == team)
-                healthBarFill.color = GameUIHandler.Instance.allyHealthColour;
+        if (useEntityBehaviour) {
+            photonView = GetComponent<PhotonView>();
+
+            if (healthBarFill != null) {
+                healthBarFill.color = GameUIHandler.Instance.enemyHealthColour;
+                if (PhotonNetwork.player.GetTeam() == team)
+                    healthBarFill.color = GameUIHandler.Instance.allyHealthColour;
+            }
         }
+    }
+
+    public bool GetIsDead() {
+        PlayerChampion playerChampion = GetComponent<PlayerChampion>();
+        if (playerChampion)
+            return playerChampion.IsDead;
+        return IsDead;
     }
 
     public void Init(float maxHealth) {
@@ -37,19 +48,15 @@ public class Entity : MonoBehaviour {
     // Called when a champion takes damage by a source
     [PunRPC]
     void EntityDamage(float amount, PhotonPlayer attacker) {
-        health = Mathf.Max(health - amount, 0f);
-        healthBarFill.fillAmount = health / maxHealth;
-        if (health <= 0f) {
-            IsDead = true;
-            gameObject.SetActive(false);
-            StartCoroutine("DespawnEntity");
+        if (useEntityBehaviour) {
+            health = Mathf.Max(health - amount, 0f);
+            if (healthBarFill != null)
+                healthBarFill.fillAmount = health / maxHealth;
+            if (health <= 0f) {
+                IsDead = true;
+                Destroy(gameObject);
+            }
         }
-    }
-
-    // Gives us enough time to remove any potential targeting on this entity before it is despawned
-    IEnumerator DespawnEntity() {
-        yield return new WaitForSeconds(10f);
-        Destroy(gameObject);
     }
 
 }

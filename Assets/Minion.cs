@@ -7,6 +7,10 @@ public class Minion : MonoBehaviour {
 
     public float speed;
     public float range;
+    public float attackSpeed;
+    public float attackDamage;
+    public GameObject bulletPrefab;
+    public Entity Entity { get; protected set; }
 
     PhotonView photonView;
     Vector3 trueLoc;
@@ -16,19 +20,20 @@ public class Minion : MonoBehaviour {
     Targetable targetable;
     int waypointIndex;
 
-	void Start () {
+    void Start() {
+        Entity = GetComponent<Entity>();
         photonView = GetComponent<PhotonView>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         targetable = GetComponent<Targetable>();
-	}
+    }
 
-    public void Init(PunTeams.Team team) {
+    public void Init(int packIndex, PunTeams.Team team) {
         Start();
-        photonView.RPC("MinionInit", PhotonTargets.All, team);
+        photonView.RPC("MinionInit", PhotonTargets.All, packIndex, team);
     }
 
     [PunRPC]
-    void MinionInit(PunTeams.Team team) {
+    void MinionInit(int packIndex, PunTeams.Team team) {
         Start();
         if (photonView.isMine) {
             MinionWaypoints minionData;
@@ -40,41 +45,42 @@ public class Minion : MonoBehaviour {
             waypoints = minionData.destinations;
             navMeshAgent.enabled = true;
             navMeshAgent.speed = speed / 120f;
-            GoToNextWaypoint();
+            GoToWaypoint();
         }
         GetComponent<Entity>().team = team;
         gameObject.name = "Minion";
+        range += packIndex;
         if (team == PunTeams.Team.blue)
             targetable.allowTargetingBy = PunTeams.Team.red;
         else if (team == PunTeams.Team.red)
             targetable.allowTargetingBy = PunTeams.Team.blue;
     }
-	
-	void Update () {
+
+    void Update() {
         if (photonView.isMine) {
             if (waypoints != null) {
                 if (navMeshAgent.remainingDistance <= 0.2f) {
                     if (waypoints.Length > (waypointIndex + 1)) {
                         waypointIndex++;
-                        GoToNextWaypoint();
+                        GoToWaypoint();
                     }
                 }
             }
         }
-	}
+    }
 
-    void GoToNextWaypoint() {
+    public void GoToWaypoint() {
         navMeshAgent.destination = waypoints[waypointIndex].position;
         navMeshAgent.isStopped = false;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.isReading) {
-            if(!photonView.isMine) {
+            if (!photonView.isMine) {
                 this.trueLoc = (Vector3)stream.ReceiveNext();
             }
         } else {
-            if(photonView.isMine){
+            if (photonView.isMine) {
                 stream.SendNext(transform.position);
             }
         }

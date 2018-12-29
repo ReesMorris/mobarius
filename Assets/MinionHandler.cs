@@ -36,21 +36,19 @@ public class MinionHandler : MonoBehaviour {
 
     IEnumerator SpawnMinions(PunTeams.Team team) {
         if (PhotonNetwork.isMasterClient) {
-            int spawned = 0;
-            while (spawned < 6) {
-                SpawnMinion(team);
-                spawned++;
+            for(int i = 0; i < 6; i++) {
+                SpawnMinion(i, team);
                 yield return new WaitForSeconds(0.5f);
             }
         }
     }
 
     [PunRPC]
-    void SpawnMinion(PunTeams.Team team) {
+    void SpawnMinion(int packIndex, PunTeams.Team team) {
         if (PhotonNetwork.isMasterClient) {
             GameObject minion = PhotonNetwork.Instantiate(minionPrefab.name, Vector3.zero, Quaternion.identity, 0);
             minion.GetComponent<Entity>().Init(477);
-            minion.GetComponent<Minion>().Init(team);
+            minion.GetComponent<Minion>().Init(packIndex, team);
         }
     }
 }

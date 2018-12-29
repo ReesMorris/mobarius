@@ -69,16 +69,15 @@ public class Bullet : MonoBehaviour {
                 photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
         }
-        else if (entity != null) {
-            PhotonView photonView = entity.GetComponent<PhotonView>();
-            if (PhotonNetwork.isMasterClient && entity.team != team) {
-                photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
-            }
-        }
         else if (turret != null) {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+            }
+        } else if (entity != null) {
+            PhotonView photonView = entity.GetComponent<PhotonView>();
+            if (PhotonNetwork.isMasterClient && entity.team != team) {
                 photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
             }
         }

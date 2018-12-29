@@ -31,7 +31,7 @@ public class DefaultAttack : MonoBehaviour {
                         if (targetChampion.IsDead)
                             target = null;
                     if (targetEntity != null)
-                        if (targetEntity.IsDead)
+                        if (targetEntity.GetIsDead())
                             target = null;
                     if(target != null) {
                         if (target.GetComponent<PhotonView>() != photonView) {
