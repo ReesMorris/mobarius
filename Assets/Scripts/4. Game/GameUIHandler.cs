@@ -32,6 +32,8 @@ public class GameUIHandler : MonoBehaviour {
     public TMP_Text displayText;
 
     [Header("Stats")]
+    public GameObject deathBar;
+    public TMP_Text deathBarText;
     public Image healthBar;
     public TMP_Text healthText;
     public TMP_Text healthRegenText;

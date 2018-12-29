@@ -299,6 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb106fcb5dfe4112abbc4ac733d8648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useEntityBehaviour: 1
   healthBarFill: {fileID: 114751942423393032}
   team: 0
 --- !u!114 &114139140548864998
@@ -345,7 +346,8 @@ MonoBehaviour:
   range: 110
   attackSpeed: 1.25
   attackDamage: 12
-  bulletPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 1256582402650800, guid: e37f9647099d218489136da7c1123168,
+    type: 2}
 --- !u!114 &114302228601651714
 MonoBehaviour:
   m_ObjectHideFlags: 1

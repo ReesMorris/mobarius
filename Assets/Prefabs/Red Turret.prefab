@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114476464113397056}
   - component: {fileID: 114809398871881968}
   - component: {fileID: 114868600292399342}
+  - component: {fileID: 114177498366768038}
   m_Layer: 0
   m_Name: Red Turret
   m_TagString: Untagged
@@ -302,6 +303,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114177498366768038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1163973393471894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb106fcb5dfe4112abbc4ac733d8648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useEntityBehaviour: 0
+  healthBarFill: {fileID: 0}
+  team: 0
 --- !u!114 &114268879827313700
 MonoBehaviour:
   m_ObjectHideFlags: 1
