@@ -19,7 +19,7 @@ public class MinionHandler : MonoBehaviour {
                 GameUIHandler.Instance.MessageWithSound("Announcer/Minions30", "Thirty seconds until minions spawn");
             else if(newTime == 65)
                 GameUIHandler.Instance.MessageWithSound("Announcer/Minions0", "Minions have spawned");
-            if(newTime >= 65) {
+            if(newTime >= 65 || true) {
                 if(newTime % 30 == 5) {
                     StartCoroutine(SpawnMinions(PunTeams.Team.blue));
                     StartCoroutine(SpawnMinions(PunTeams.Team.red));

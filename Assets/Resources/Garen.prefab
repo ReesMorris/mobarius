@@ -268,9 +268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecb106fcb5dfe4112abbc4ac733d8648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useEntityBehaviour: 0
   healthBarFill: {fileID: 0}
   team: 0
-  IsDead: 0
 --- !u!114 &114164571452529412
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -743,7 +743,7 @@ NavMeshAgent:
   m_Height: 1
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!222 &222257629990076470
 CanvasRenderer:
   m_ObjectHideFlags: 1
