@@ -159,7 +159,7 @@ public class GameUIHandler : MonoBehaviour {
         float secs = timeElapsed % 60;
         gameTimer.text = mins.ToString("00") + ":" + secs.ToString("00");
 
-        if (mins == 0f && secs == 3f) {
+        if (mins == 0f && secs == 15f) {
             SoundManager.Instance.PlaySound("Announcer/WelcomeToSummonersRift");
             ShowPlayerText("Welcome to Summoners Rift");
         }
