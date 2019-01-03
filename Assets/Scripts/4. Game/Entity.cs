@@ -57,7 +57,9 @@ public class Entity : MonoBehaviour {
 
                 // Last hit?
                 if(attacker != null) {
-                    print(attacker.NickName);
+                    if(attacker == PhotonNetwork.player) {
+                        ScoreHandler.Instance.OnMinionKill();
+                    }
                 }
 
                 if (PhotonNetwork.isMasterClient) {

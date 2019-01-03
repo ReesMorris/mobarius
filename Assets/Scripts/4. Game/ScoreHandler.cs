@@ -8,6 +8,7 @@ public class ScoreHandler : MonoBehaviour {
 	public static ScoreHandler Instance;
     public TMP_Text scoreUI;
     public TMP_Text kdaUI;
+    public TMP_Text minionKillsUI;
 
     PhotonView photonView;
     int blueScore;
@@ -15,6 +16,7 @@ public class ScoreHandler : MonoBehaviour {
     int kills;
     int deaths;
     int assists;
+    int minionKills;
 
     void Start() {
         Instance = this;
@@ -66,5 +68,9 @@ public class ScoreHandler : MonoBehaviour {
     }
     public void UpdateKdaUI() {
         kdaUI.text = kills + "/" + deaths + "/" + assists;
+    }
+    public void OnMinionKill() {
+        minionKills++;
+        minionKillsUI.text = minionKills.ToString();
     }
 }

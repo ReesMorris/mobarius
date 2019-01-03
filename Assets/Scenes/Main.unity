@@ -21225,7 +21225,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -33.3}
+  m_AnchoredPosition: {x: 0, y: -33.30005}
   m_SizeDelta: {x: 200, y: 96.100006}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1298678678
@@ -28171,6 +28171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreUI: {fileID: 2125443920}
   kdaUI: {fileID: 1794019903}
+  minionKillsUI: {fileID: 906896565}
 --- !u!114 &1730177490
 MonoBehaviour:
   m_ObjectHideFlags: 0
