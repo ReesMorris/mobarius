@@ -245,12 +245,13 @@ GameObject:
   - component: {fileID: 114882822721836858}
   - component: {fileID: 114425352809837872}
   - component: {fileID: 114547143325001832}
+  - component: {fileID: 5137024062016531919}
   m_Layer: 0
   m_Name: Blue Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4259734157873718
 Transform:
@@ -409,6 +410,22 @@ MonoBehaviour:
   useEntityBehaviour: 0
   healthBarFill: {fileID: 0}
   team: 0
+--- !u!208 &5137024062016531919
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434398124225746}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1576069209038502
 GameObject:
   m_ObjectHideFlags: 0
