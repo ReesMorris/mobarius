@@ -29,6 +29,16 @@ public class GameHandler : MonoBehaviour {
         photonView.RPC("InstantiatePlayers", PhotonTargets.All);
     }
 
+    void OnPhotonPlayerConnected(PhotonPlayer other) {
+        if(GameUIHandler.Instance.TimeElapsed > 10f)
+            SoundManager.Instance.PlaySound("Announcer/SummonerReconnected");
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer other) {
+        if (GameUIHandler.Instance.TimeElapsed > 10f)
+            SoundManager.Instance.PlaySound("Announcer/SummonerDisconnected");
+    }
+
     [PunRPC]
     void Begin() {
         onGameStart();
