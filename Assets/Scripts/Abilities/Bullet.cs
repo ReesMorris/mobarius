@@ -12,28 +12,26 @@ public class Bullet : MonoBehaviour {
     PunTeams.Team team;
     CapsuleCollider collider;
 
-    public void Setup(float _damage, Vector3 _startingPos, float _range, PhotonPlayer _shooter) {
+    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, float _range, PhotonPlayer _shooter) {
+        ValidateSetup();
         shooter = _shooter;
+        team = _team;
         damage = _damage;
         startingPos = _startingPos;
         range = _range;
-        ValidateSetup();
     }
-    public void Setup(float _damage, Vector3 _startingPos, int photonId, PhotonPlayer _shooter) {
+    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, int photonId, PhotonPlayer _shooter) {
+        ValidateSetup();
         shooter = _shooter;
+        team = _team;
         damage = _damage;
         startingPos = _startingPos;
         target = PhotonView.Find(photonId).gameObject;
-        ValidateSetup();
         collider.enabled = false;
     }
 
     void ValidateSetup() {
         collider = GetComponent<CapsuleCollider>();
-        if (shooter == null)
-            team = PunTeams.Team.none;
-        else
-            team = shooter.GetTeam();
     }
 
     void Update() {
@@ -59,6 +57,7 @@ public class Bullet : MonoBehaviour {
     }
 
     void OnCollide(GameObject collision) {
+        print(collision.name);
         PlayerChampion playerChampion = collision.GetComponent<PlayerChampion>();
         Entity entity = collision.GetComponent<Entity>();
         Turret turret = collision.GetComponent<Turret>();
@@ -75,7 +74,8 @@ public class Bullet : MonoBehaviour {
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
                 photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
-        } else if (entity != null) {
+        }
+        else if (entity != null) {
             PhotonView photonView = entity.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && entity.team != team) {
                 photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);

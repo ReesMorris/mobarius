@@ -94,7 +94,7 @@ public class LobbyNetwork : MonoBehaviour {
         // RoomOptions source = https://forum.photonengine.com/discussion/5575/pun-4-0-0-6-how-to-use-the-new-room-options ; accessed 3 January 2019
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = gameHandler.currentMap.maxPlayers;
-        roomOptions.PlayerTtl = int.MaxValue;
+        roomOptions.PlayerTtl = 0;
         roomOptions.EmptyRoomTtl = 0;
         roomOptions.CustomRoomPropertiesForLobby = new string[1] { "m" };
         roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() {

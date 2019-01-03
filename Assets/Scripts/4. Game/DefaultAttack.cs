@@ -38,7 +38,7 @@ public class DefaultAttack : MonoBehaviour {
                             if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
                                 if(Time.time >= (lastShotTime + cooldownTime)) {
                                     lastShotTime = Time.time;
-                                    photonView.RPC("Shoot", PhotonTargets.All, 100f, playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.owner);
+                                    photonView.RPC("Shoot", PhotonTargets.All, 100f, PhotonNetwork.player.GetTeam(), playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.owner);
                                     navMeshAgent.destination = transform.position;
                                 }
                             } else {
@@ -53,10 +53,10 @@ public class DefaultAttack : MonoBehaviour {
     }
 
     [PunRPC]
-    void Shoot(float speed, float damage, Vector3 position, int photonId, PhotonPlayer shooter) {
+    void Shoot(float speed, PunTeams.Team team, float damage, Vector3 position, int photonId, PhotonPlayer shooter) {
         transform.LookAt(new Vector3(position.x, transform.position.y, position.z));
         GameObject bullet = Instantiate(bulletPrefab, (transform.position + transform.forward), transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
-        b.Setup(damage, transform.position, photonId, shooter);
+        b.Setup(damage, team, transform.position, photonId, shooter);
     }
 }

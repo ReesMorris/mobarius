@@ -114,6 +114,7 @@ public class Turret : MonoBehaviour {
 
     [PunRPC]
     public void Damage(float amount, PhotonPlayer shooter) {
+        print("Turret taking damage");
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {
@@ -162,6 +163,6 @@ public class Turret : MonoBehaviour {
     void Shoot(float speed, Vector3 spawnPos, float damage, int photonId, PhotonPlayer shooter) {
         GameObject bullet = Instantiate(bulletPrefab, spawnPos, transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
-        b.Setup(damage, transform.position, photonId, shooter);
+        b.Setup(damage, team, transform.position, photonId, shooter);
     }
 }

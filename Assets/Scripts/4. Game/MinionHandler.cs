@@ -14,7 +14,9 @@ public class MinionHandler : MonoBehaviour {
     }
 
     void OnGameTimeUpdate(int newTime) {
-        if(newTime == 35)
+        if(newTime == 2)
+            MinionWave();
+        if (newTime == 35)
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions30", "Thirty seconds until minions spawn");
         else if(newTime == 65)
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions0", "Minions have spawned");
@@ -27,7 +29,7 @@ public class MinionHandler : MonoBehaviour {
 
     void MinionWave() {
         if (PhotonNetwork.isMasterClient) {
-            StartCoroutine(SpawnMinions(PunTeams.Team.blue));
+            //StartCoroutine(SpawnMinions(PunTeams.Team.blue));
             StartCoroutine(SpawnMinions(PunTeams.Team.red));
         }
     }
