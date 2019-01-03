@@ -7367,7 +7367,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1434398124225746, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4259734157873718, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10627,7 +10627,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1163973393471894, guid: d59094a70b2144c8fa1a603f1da9976c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4637114381500786, guid: d59094a70b2144c8fa1a603f1da9976c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27792,7 +27792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.0.10
+  currentVersion: 0.0.0.92
   versionCheckerUrl: https://rees.app/moba/i/version
   downloadUrl: https://rees.app/moba/download
   versionText: {fileID: 940210175}
