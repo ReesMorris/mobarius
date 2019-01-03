@@ -54,7 +54,15 @@ public class Entity : MonoBehaviour {
                 healthBarFill.fillAmount = health / maxHealth;
             if (health <= 0f) {
                 IsDead = true;
-                Destroy(gameObject);
+
+                // Last hit?
+                if(attacker != null) {
+                    print(attacker.NickName);
+                }
+
+                if (PhotonNetwork.isMasterClient) {
+                    PhotonNetwork.Destroy(gameObject);
+                }
             }
         }
     }

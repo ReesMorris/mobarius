@@ -27880,6 +27880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa9272aeedec843abb632e571f46cc56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  setGameIdURL: https://rees.app/moba/i/update-last-game-id
   cancelButton: {fileID: 634849732}
   lobbyState: 0
 --- !u!114 &1730177479
@@ -28150,6 +28151,12 @@ MonoBehaviour:
   - name: Announcer/FirstBlood
     audioClips:
     - {fileID: 8300000, guid: f397681f74e5b47d184fef536cf4114c, type: 3}
+  - name: Announcer/SummonerDisconnected
+    audioClips:
+    - {fileID: 8300000, guid: 291cff6efa9d15d4bb8ca58dd0469707, type: 3}
+  - name: Announcer/SummonerReconnected
+    audioClips:
+    - {fileID: 8300000, guid: c0edc4be828778d4f9f72dac0ae8bcb5, type: 3}
 --- !u!114 &1730177489
 MonoBehaviour:
   m_ObjectHideFlags: 0

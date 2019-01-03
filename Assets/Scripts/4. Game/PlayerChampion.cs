@@ -28,15 +28,27 @@ public class PlayerChampion : MonoBehaviour {
     /*  General Code  */
 
     void Start () {
+        print("A");
         PhotonView = GetComponent<PhotonView>();
         if (PhotonNetwork.player.IsLocal) {
+            print("B");
             GetComponent<Entity>().team = PhotonView.owner.GetTeam();
-            gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();              // Tell other players to rename this player's character to be the name of the champion             PhotonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = PhotonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
+            gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();
+
+            // Tell other players to rename this player's character to be the name of the champion
+            gameObject.name = PhotonNetwork.player.CustomProperties["championName"].ToString();             PhotonView.RPC("Rename", PhotonTargets.All, PhotonNetwork.player.CustomProperties["championName"].ToString());             usernameText.text = PhotonView.owner.NickName;              // Create a new champion class for this player so that we can store their details             Champion = ScriptableObject.CreateInstance<Champion>();             Champion.Init(ChampionRoster.Instance.GetChampion(gameObject.name), PhotonNetwork.player.NickName);             Champion.health = oldHealth = Champion.maxHealth;             Champion.mana = Champion.maxMana;
 
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
+                print("C");
+                PlayerCamera playerCamera = Camera.main.GetComponent<PlayerCamera>();
+                playerCamera.target = gameObject.transform;
+                playerCamera.enabled = true;
+
                 gameUIHandler.UpdateAbilities(Champion);
                 gameUIHandler.UpdateStats(Champion);
+                Respawn();
+                UIHandler.Instance.HideLobbyUI();
             }
 
             // Tell other players to update the health and mana bar of this player
@@ -66,6 +78,15 @@ public class PlayerChampion : MonoBehaviour {
             GetComponent<NavMeshAgent>().enabled = true;
             GetComponent<PlayerMovement>().enabled = true;
             IsDead = false;
+        }
+    }
+
+    void Test() {
+        print("A");
+        if (PhotonView.isMine) {
+            print("B");
+            LobbyNetwork.Instance.lobbyState = LobbyNetwork.LobbyStates.inGame;
+            UIHandler.Instance.HideLobbyUI();
         }
     }
 

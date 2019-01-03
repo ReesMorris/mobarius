@@ -35,7 +35,6 @@ public class AuthenticationManager : MonoBehaviour {
     private UIHandler UIHandler;
     private VersionManager VersionManager;
     private MainMenuManager mainMenuManager;
-    private UserManager userManager;
     public bool LoggedIn { get; private set; }
 
     private void Start() {
@@ -43,7 +42,6 @@ public class AuthenticationManager : MonoBehaviour {
         UIHandler = GetComponent<UIHandler>();
         VersionManager = GetComponent<VersionManager>();
         mainMenuManager = GetComponent<MainMenuManager>();
-        userManager = GetComponent<UserManager>();
 
         // Labels
         registerLabel.onClick.AddListener(OnRegisterLabelClick);
@@ -170,7 +168,7 @@ public class AuthenticationManager : MonoBehaviour {
 
     void LoginUser(JSONNode user) {
         StopCoroutine("LoggingInTimer");
-        userManager.account = new Account(user["username"], user["email"], user["created_at"], int.Parse(user["xp"]));
+        UserManager.Instance.account = new Account(user["_id"], user["username"], user["email"], user["created_at"], int.Parse(user["xp"]), user["lastGameID"], user["sessionToken"]);
         LoggedIn = true;
         mainMenuManager.Prepare();
     }

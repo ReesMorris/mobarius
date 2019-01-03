@@ -32,7 +32,6 @@ public class ChampionSelect : MonoBehaviour {
     LobbyNetwork lobbyNetwork;
     PhotonView photonView;
     GameHandler gameHandler;
-    UIHandler uiHandler;
     bool lockedIn;
     int playersReady;
 
@@ -43,7 +42,6 @@ public class ChampionSelect : MonoBehaviour {
         gameHandler = GetComponent<GameHandler>();
         championRoster = GetComponent<ChampionRoster>();
         lobbyNetwork = GetComponent<LobbyNetwork>();
-        uiHandler = GetComponent<UIHandler>();
         photonView = GetComponent<PhotonView>();
         lockinButton.onClick.AddListener(LockChampion);
 
@@ -214,7 +212,7 @@ public class ChampionSelect : MonoBehaviour {
 
     [PunRPC]
     void OnGameStart() {
-        uiHandler.HideLobbyUI();
+        UIHandler.Instance.HideLobbyUI();
         playerState = PlayerStates.started;
     }
 }

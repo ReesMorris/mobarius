@@ -4,7 +4,7 @@ using TMPro;
 
 public class UIHandler : MonoBehaviour {
 
-    public static UIHandler instance;
+    public static UIHandler Instance;
 
     public GameObject lobbyUI;
     public GameObject gameUI;
@@ -39,9 +39,9 @@ public class UIHandler : MonoBehaviour {
 
     // Allows us to create instances
     void Awake() {
-        if (instance == null) {
-            instance = this;
-        } else if (instance != this) {
+        if (Instance == null) {
+            Instance = this;
+        } else if (Instance != this) {
             Destroy(gameObject);
         }
     }

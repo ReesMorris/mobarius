@@ -37,10 +37,6 @@ public class GameHandler : MonoBehaviour {
     [PunRPC]
     void InstantiatePlayers() {
         GameObject player = PhotonNetwork.Instantiate(PhotonNetwork.player.CustomProperties["championName"].ToString(), Vector3.zero, Quaternion.identity, 0);
-        player.name = PhotonNetwork.player.CustomProperties["championName"].ToString();
-        PlayerCamera playerCamera = Camera.main.GetComponent<PlayerCamera>();
-        playerCamera.target = player.transform;
-        playerCamera.enabled = true;
         player.GetComponent<PlayerChampion>().Respawn();
     }
 

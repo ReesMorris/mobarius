@@ -38,7 +38,7 @@ public class MinionHandler : MonoBehaviour {
         if (PhotonNetwork.isMasterClient) {
             for(int i = 0; i < 6; i++) {
                 SpawnMinion(i, team);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1.2f);
             }
         }
     }
