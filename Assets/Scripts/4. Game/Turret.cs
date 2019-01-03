@@ -84,7 +84,7 @@ public class Turret : MonoBehaviour {
             else
                 maxRegenHealth = baseHealth;
 
-            photonView.RPC("Heal", PhotonTargets.All, healthRegenAmount);
+            photonView.RPC("Heal", PhotonTargets.AllBuffered, healthRegenAmount);
             yield return new WaitForSeconds(healthRegenDelay);
         }
     }
@@ -121,7 +121,10 @@ public class Turret : MonoBehaviour {
                 GameUIHandler.Instance.MessageWithSound("Announcer/AllyTurretDestroyed", "Ally turret destroyed!");
             else
                 GameUIHandler.Instance.MessageWithSound("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
-            Destroy(gameObject);
+            
+            if(PhotonNetwork.isMasterClient) {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
     }
 

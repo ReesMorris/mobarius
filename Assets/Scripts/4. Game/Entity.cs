@@ -37,7 +37,7 @@ public class Entity : MonoBehaviour {
 
     public void Init(float maxHealth) {
         photonView = GetComponent<PhotonView>();
-        photonView.RPC("EntityInit", PhotonTargets.All, maxHealth);
+        photonView.RPC("EntityInit", PhotonTargets.AllBuffered, maxHealth);
     }
 
     [PunRPC]
