@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class Turret : MonoBehaviour {
 
     [Header("Damage")]
-    public float baseHealth;
     public float baseDamage;
     public float incDamage;
     public PunTeams.Team team;
     public float radius;
 
     [Header("Health")]
+    public float baseHealth;
     public bool regeneratesHealth;
     public float healthRegenAmount;
     public float healthRegenDelay;
@@ -34,6 +34,9 @@ public class Turret : MonoBehaviour {
     float currentHealth;
     bool started;
     float maxRegenHealth;
+
+    public delegate void OnTurretDestroyed(Turret turret);
+    public static OnTurretDestroyed onTurretDestroyed;
 
     void Start() {
         GameHandler.onGameStart += OnGameStart;
@@ -114,7 +117,6 @@ public class Turret : MonoBehaviour {
 
     [PunRPC]
     public void Damage(float amount, PhotonPlayer shooter) {
-        print("Turret taking damage");
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {
@@ -124,6 +126,11 @@ public class Turret : MonoBehaviour {
                 GameUIHandler.Instance.MessageWithSound("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
             
             if(PhotonNetwork.isMasterClient) {
+
+                // Tell other scripts that this turret has been destroyed
+                if (onTurretDestroyed != null)
+                    onTurretDestroyed(this);
+
                 PhotonNetwork.Destroy(gameObject);
             }
         }

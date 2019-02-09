@@ -57,10 +57,10 @@ public class Bullet : MonoBehaviour {
     }
 
     void OnCollide(GameObject collision) {
-        print(collision.name);
         PlayerChampion playerChampion = collision.GetComponent<PlayerChampion>();
         Entity entity = collision.GetComponent<Entity>();
         Turret turret = collision.GetComponent<Turret>();
+        Inhibitor inhibitor = collision.GetComponent<Inhibitor>();
 
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
@@ -74,8 +74,13 @@ public class Bullet : MonoBehaviour {
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
                 photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
             }
-        }
-        else if (entity != null) {
+        } else if (inhibitor != null) {
+            PhotonView photonView = inhibitor.GetComponent<PhotonView>();
+            Targetable targetable = inhibitor.GetComponent<Targetable>();
+            if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+            }
+        } else if (entity != null) {
             PhotonView photonView = entity.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && entity.team != team) {
                 photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
