@@ -15,6 +15,10 @@ public class PlayerCamera : MonoBehaviour {
     float cameraSpeed = 0.17f;
     bool lockedToPlayer;
 
+    Vector3 gameOverTarget = Vector3.zero;
+    float smoothTime = 1F;
+    Vector3 velocity = Vector3.zero;
+
     void Start() {
         lockedToPlayer = true;
         photonView = target.GetComponent<PhotonView>();
@@ -22,11 +26,15 @@ public class PlayerCamera : MonoBehaviour {
 
 	void Update () {
         if (photonView.isMine) {
-            SetFOV();
-            CheckForInput();
-            CheckForMouseOnCorner();
-            if (lockedToPlayer)
-                CenterCamera();
+            if (gameOverTarget != Vector3.zero) {
+                transform.position = Vector3.SmoothDamp(transform.position, gameOverTarget, ref velocity, smoothTime); // Source: https://docs.unity3d.com/ScriptReference/Vector3.SmoothDamp.html [10 February 2019]
+            } else {
+                SetFOV();
+                CheckForInput();
+                CheckForMouseOnCorner();
+                if (lockedToPlayer)
+                    CenterCamera();
+            }
         }
 	}
 
@@ -81,5 +89,10 @@ public class PlayerCamera : MonoBehaviour {
                 transform.position += (Vector3.left * cameraSpeed);
             }
         }
+    }
+
+    // End of game target
+    public void SetEndOfGameTarget(Vector3 target) {
+        gameOverTarget = target;
     }
 }

@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Inhibitor : MonoBehaviour {
-    
+public class Nexus : MonoBehaviour {
+
     public float baseHealth;
     public float healthRegen;
     public PunTeams.Team team;
-    public List<Turret> prerequisites;
+    public List<Inhibitor> prerequisites;
     public GameObject healthbarUI;
     public Image healthImage;
 
-    public delegate void OnInhibitorDestroyed(Inhibitor inhibitor);
-    public static OnInhibitorDestroyed onInhibitorDestroyed;
-
     float currentHealth;
+    bool canReheal = true;
     PhotonView photonView;
 
     void Start() {
@@ -29,7 +27,7 @@ public class Inhibitor : MonoBehaviour {
     }
 
     void OnGameStart() {
-        Turret.onTurretDestroyed += OnTurretDestroyed;
+        Inhibitor.onInhibitorDestroyed += OnInhibitorDestroyed;
 
         // Set health bar colours
         healthImage.color = GameUIHandler.Instance.enemyHealthColour;
@@ -43,18 +41,18 @@ public class Inhibitor : MonoBehaviour {
 
     // Health regeneration
     IEnumerator RegenHealth() {
-        while(true) {
+        while (canReheal) {
             yield return new WaitForSeconds(1f);
             photonView.RPC("Heal", PhotonTargets.AllBuffered, 15f);
         }
     }
 
     // Called when a turret is destroyed
-    void OnTurretDestroyed(Turret turret) {
-        if(prerequisites.Count > 0) {
-            foreach(Turret t in prerequisites) {
-                if(t == turret) {
-                    prerequisites.Remove(t);
+    void OnInhibitorDestroyed(Inhibitor inhibitor) {
+        if (prerequisites.Count > 0) {
+            foreach (Inhibitor i in prerequisites) {
+                if (i == inhibitor) {
+                    prerequisites.Remove(i);
                     break;
                 }
             }
@@ -75,18 +73,10 @@ public class Inhibitor : MonoBehaviour {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {
-            if (PhotonNetwork.player.GetTeam() == team)
-                GameUIHandler.Instance.MessageWithSound("Announcer/AllyInhibitorDestroyed", "Ally inhibitor destroyed!");
-            else
-                GameUIHandler.Instance.MessageWithSound("Announcer/EnemyInhibitorDestroyed", "Enemy inhibitor destroyed!");
-
-            if (PhotonNetwork.isMasterClient) {
-                PhotonNetwork.Destroy(gameObject);
-
-                // Tell other scripts we're dead
-                if (onInhibitorDestroyed != null)
-                    onInhibitorDestroyed(this);
-            }
+            canReheal = false;
+            healthbarUI.SetActive(false);
+            if(PhotonNetwork.isMasterClient)
+                GameHandler.Instance.Victory(GetComponent<Targetable>().allowTargetingBy);
         }
     }
 

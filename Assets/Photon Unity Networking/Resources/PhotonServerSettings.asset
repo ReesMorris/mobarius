@@ -76,4 +76,5 @@ MonoBehaviour:
   - MinionInit
   - EntityInit
   - BecomeTargetable
+  - OnVictory
   DisableAutoOpenWizard: 1

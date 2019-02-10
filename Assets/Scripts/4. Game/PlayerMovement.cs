@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour {
     DefaultAttack defaultAttack;
 
     void Start() {
+        GameHandler.onGameEnd += OnGameEnd;
         photonView = GetComponent<PhotonView>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerChampion = GetComponent<PlayerChampion>();
@@ -75,5 +76,9 @@ public class PlayerMovement : MonoBehaviour {
                 stream.SendNext(transform.position);
             }
         }
+    }
+
+    void OnGameEnd() {
+        Destroy(this);
     }
 }
