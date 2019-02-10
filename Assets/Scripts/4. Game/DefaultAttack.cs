@@ -12,6 +12,7 @@ public class DefaultAttack : MonoBehaviour {
     PlayerChampion playerChampion;
     NavMeshAgent navMeshAgent;
     float lastShotTime;
+    bool gameEnded;
 
     [HideInInspector] public GameObject target;
 
@@ -19,10 +20,15 @@ public class DefaultAttack : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        GameHandler.onGameEnd += OnGameEnd;
+    }
+
+    void OnGameEnd() {
+        gameEnded = true;
     }
 
     void Update() {
-        if(photonView.isMine) {
+        if(photonView.isMine && !gameEnded) {
             if (!playerChampion.IsDead) {
                 if(target != null) {
                     PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();

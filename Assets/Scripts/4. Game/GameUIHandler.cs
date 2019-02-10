@@ -53,6 +53,8 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownRDuration;
     PhotonView photonView;
 
+    bool gameEnded;
+
     void Start() {
         Instance = this;
         GameHandler.onGameEnd += OnGameEnd;
@@ -86,6 +88,8 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     public bool CanCastAbility(AbilityHandler.Abilities hotkey, Ability ability, Champion champion) {
+        if (gameEnded)
+            return false;
         if (champion.mana < ability.cost)
             return false;
         switch (hotkey) {
@@ -192,5 +196,6 @@ public class GameUIHandler : MonoBehaviour {
     /* Game Over */
     void OnGameEnd() {
         StopCoroutine("Timer");
+        gameEnded = true;
     }
 }

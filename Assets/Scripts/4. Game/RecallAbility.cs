@@ -10,6 +10,7 @@ public class RecallAbility : MonoBehaviour {
     PlayerMovement playerMovement;
     float recallTimeRemaining;
     bool isRecalling;
+    bool gameEnded;
 
     void Start() {
         // Stop channeling if player moves or is hit
@@ -22,6 +23,11 @@ public class RecallAbility : MonoBehaviour {
         playerMovement = GetComponent<PlayerMovement>();
         playerChampion = GetComponent<PlayerChampion>();
         StopChannel();
+        GameHandler.onGameEnd += OnGameEnd;
+    }
+
+    void OnGameEnd() {
+        gameEnded = true;
     }
 
     void Update() {
@@ -32,7 +38,7 @@ public class RecallAbility : MonoBehaviour {
 
     // Recall if all conditions match
     void AttemptRecall() {
-        if(photonView.isMine) {
+        if(photonView.isMine && !gameEnded) {
             if (!playerChampion.IsDead) {
                 if(!isRecalling) {
                     StartChannel();

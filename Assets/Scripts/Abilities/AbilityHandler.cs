@@ -20,8 +20,11 @@ public class AbilityHandler : MonoBehaviour {
     public static AbilityHandler Instance;
     public bool Aiming { get; protected set; }
 
+    bool gameEnded;
+
     void Start () {
         Instance = this;
+        GameHandler.onGameEnd += OnGameEnd;
     }
 
     // Returns the direction an indicator will need to be in relation to a player
@@ -49,18 +52,23 @@ public class AbilityHandler : MonoBehaviour {
 
     // Sets up a projectile indicator for the caller
     public GameObject SetupProjectileIndicator(GameObject player) {
-        GameObject indicator = Instantiate(projectileIndicatorPrefab, player.transform.position, Quaternion.identity);
-        indicator.transform.parent = player.gameObject.transform;
-        indicator.transform.localPosition = Vector3.zero;
-        indicator.SetActive(false);
-        return indicator;
+        if (!gameEnded) {
+            GameObject indicator = Instantiate(projectileIndicatorPrefab, player.transform.position, Quaternion.identity);
+            indicator.transform.parent = player.gameObject.transform;
+            indicator.transform.localPosition = Vector3.zero;
+            indicator.SetActive(false);
+            return indicator;
+        }
+        return null;
     }
 
     // Called when an ability begins to be cast (displays indicator)
     public void StartCasting(GameObject indicator, float range) {
-        Aiming = true;
-        indicator.transform.localScale = new Vector3(indicator.transform.localScale.x, indicator.transform.localScale.y, range * 20f);
-        indicator.SetActive(true);
+        if (!gameEnded) {
+            Aiming = true;
+            indicator.transform.localScale = new Vector3(indicator.transform.localScale.x, indicator.transform.localScale.y, range * 20f);
+            indicator.SetActive(true);
+        }
     }
 
     // Called when an ability stops being cast
@@ -71,9 +79,11 @@ public class AbilityHandler : MonoBehaviour {
 
     // Calls when an ability has been fired (after showing indicator)
     public void OnAbilityCast(GameObject player, GameObject indicator, Abilities ability, float cooldown, bool lookAtMouse) {
-        StopCasting(indicator);
-        player.transform.LookAt(GetDirection(player));
-        GameUIHandler.Instance.OnAbilityCasted(ability, cooldown);
+        if (!gameEnded) {
+            StopCasting(indicator);
+            player.transform.LookAt(GetDirection(player));
+            GameUIHandler.Instance.OnAbilityCasted(ability, cooldown);
+        }
     }
 
     // Returns the amount of damage a specific key in an ability will do
@@ -83,5 +93,9 @@ public class AbilityHandler : MonoBehaviour {
                 return abilityDamage.damage;
         }
         return 0f;
+    }
+
+    void OnGameEnd() {
+        gameEnded = true;
     }
 }
