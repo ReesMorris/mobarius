@@ -64,10 +64,19 @@ public class GameHandler : MonoBehaviour {
         else
             losingNexus = GameObject.Find("Blue Nexus").transform;
         Vector3 pos = new Vector3(losingNexus.position.x, 15f, losingNexus.position.z - 15f);
-        Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos);
+        Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos, 1f);
 
+        StartCoroutine(VictoryEnum(winningTeam));
         if (onGameEnd != null)
             onGameEnd();
+    }
+
+    IEnumerator VictoryEnum(PunTeams.Team winningTeam) {
+        yield return new WaitForSeconds(1f);
+        if (PhotonNetwork.player.GetTeam() == winningTeam)
+            SoundManager.Instance.PlaySound("Announcer/Victory");
+        else
+            SoundManager.Instance.PlaySound("Announcer/Defeat");
     }
 
 }

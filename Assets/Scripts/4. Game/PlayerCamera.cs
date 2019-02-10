@@ -16,7 +16,7 @@ public class PlayerCamera : MonoBehaviour {
     bool lockedToPlayer;
 
     Vector3 gameOverTarget = Vector3.zero;
-    float smoothTime = 1F;
+    float smoothTime;
     Vector3 velocity = Vector3.zero;
 
     void Start() {
@@ -92,7 +92,8 @@ public class PlayerCamera : MonoBehaviour {
     }
 
     // End of game target
-    public void SetEndOfGameTarget(Vector3 target) {
+    public void SetEndOfGameTarget(Vector3 target, float smoothingTime) {
         gameOverTarget = target;
+        smoothTime = smoothingTime;
     }
 }

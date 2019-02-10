@@ -55,6 +55,7 @@ public class GameUIHandler : MonoBehaviour {
 
     void Start() {
         Instance = this;
+        GameHandler.onGameEnd += OnGameEnd;
         photonView = GetComponent<PhotonView>();
         StartCoroutine("HandleCooldowns");
     }
@@ -186,5 +187,10 @@ public class GameUIHandler : MonoBehaviour {
     public void MessageWithSound(string sound, string displayText) {
         SoundManager.Instance.PlaySound(sound);
         ShowPlayerText(displayText);
+    }
+
+    /* Game Over */
+    void OnGameEnd() {
+        StopCoroutine("Timer");
     }
 }

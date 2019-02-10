@@ -13,6 +13,7 @@ public class Nexus : MonoBehaviour {
     public Image healthImage;
 
     float currentHealth;
+    bool destroyed;
     bool canReheal = true;
     PhotonView photonView;
 
@@ -72,8 +73,9 @@ public class Nexus : MonoBehaviour {
     public void Damage(float amount, PhotonPlayer shooter) {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
-        if (currentHealth == 0f) {
+        if (currentHealth == 0f && !destroyed) {
             canReheal = false;
+            destroyed = true;
             healthbarUI.SetActive(false);
             if(PhotonNetwork.isMasterClient)
                 GameHandler.Instance.Victory(GetComponent<Targetable>().allowTargetingBy);
