@@ -106,6 +106,7 @@ public class ChampionSelect : MonoBehaviour {
     }
 
     public void OnStart() {
+        lockedIn = false;
         playerState = PlayerStates.picking;
         playersReady = 0;
         waitingForTeams = true;
@@ -214,5 +215,6 @@ public class ChampionSelect : MonoBehaviour {
     void OnGameStart() {
         UIHandler.Instance.HideLobbyUI();
         playerState = PlayerStates.started;
+        champSelectUI.SetActive(false);
     }
 }

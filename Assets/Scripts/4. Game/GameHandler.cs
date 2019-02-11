@@ -77,6 +77,10 @@ public class GameHandler : MonoBehaviour {
             SoundManager.Instance.PlaySound("Announcer/Victory");
         else
             SoundManager.Instance.PlaySound("Announcer/Defeat");
+
+        yield return new WaitForSeconds(4f);
+        UIHandler.Instance.ShowLobbyUI();
+        LobbyNetwork.Instance.StopPlay();
     }
 
 }

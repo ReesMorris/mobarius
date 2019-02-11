@@ -108,5 +108,8 @@ public class UIHandler : MonoBehaviour {
     public void HideLobbyUI() {
         lobbyUI.SetActive(false);
     }
+    public void ShowLobbyUI() {
+        lobbyUI.SetActive(true);
+    }
 
 }

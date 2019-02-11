@@ -53,7 +53,7 @@ public class LobbyNetwork : MonoBehaviour {
     void OnJoinedLobby() {
         mainMenuManager.Ready();
         print("Joined Lobby");
-        // AttemptRejoin(); // BROKEN!
+        // AttemptRejoin(); // TODO: FIX; BROKEN!
     }
 
     // Will attempt to rejoin the server last played on
