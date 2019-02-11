@@ -40,7 +40,9 @@ public class SearchingLabel : MonoBehaviour {
         cancelButton.gameObject.SetActive(false);
         StopCoroutine("RunTimer");
         StopCoroutine("SearchingText");
-        GetComponent<ScaleOnHover>().enabled = true;
+        ScaleOnHover scaleOnHover = GetComponent<ScaleOnHover>();
+        if(scaleOnHover != null)
+            GetComponent<ScaleOnHover>().enabled = true;
     }
 
     // Called to pause searching for a game; does not reset timer

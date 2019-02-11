@@ -137,6 +137,7 @@ public class LobbyNetwork : MonoBehaviour {
                         StartCoroutine(UpdateGameID());
                         if(PhotonNetwork.isMasterClient) {
                             PhotonNetwork.room.IsVisible = false;
+                            PhotonNetwork.Instantiate(gameHandler.currentMap.map.name, gameHandler.currentMap.map.transform.position, gameHandler.currentMap.map.transform.rotation, 0);
                         }
                     }
                 }

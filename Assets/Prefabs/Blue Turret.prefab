@@ -340,11 +340,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd040d2e1cfd449e89d81f68009a1c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseHealth: 5000
   baseDamage: 120
   incDamage: 0
   team: 2
   radius: 11
+  baseHealth: 5000
   regeneratesHealth: 0
   healthRegenAmount: 0
   healthRegenDelay: 0

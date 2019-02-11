@@ -65,8 +65,10 @@ public class PlayerCamera : MonoBehaviour {
 
     // Center the camera on the player
     void CenterCamera() {
-        transform.localPosition = target.position + distance;
-        transform.localEulerAngles = rotation;
+        if (target != null) {
+            transform.localPosition = target.position + distance;
+            transform.localEulerAngles = rotation;
+        }
     }
 
     // Check to see if the player is moving the screen
@@ -92,6 +94,9 @@ public class PlayerCamera : MonoBehaviour {
     }
 
     // End of game target
+    public void ClearEndOfGameTarget() {
+        gameOverTarget = Vector3.zero;
+    }
     public void SetEndOfGameTarget(Vector3 target, float smoothingTime) {
         gameOverTarget = target;
         smoothTime = smoothingTime;

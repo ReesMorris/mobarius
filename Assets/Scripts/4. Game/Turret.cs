@@ -34,12 +34,12 @@ public class Turret : MonoBehaviour {
     float currentHealth;
     bool started;
     float maxRegenHealth;
+    bool ready;
 
     public delegate void OnTurretDestroyed(Turret turret);
     public static OnTurretDestroyed onTurretDestroyed;
 
     void Start() {
-        GameHandler.onGameStart += OnGameStart;
         photonView = GetComponent<PhotonView>();
         ResetDamage();
         enemies = new List<Entity>();
@@ -60,6 +60,7 @@ public class Turret : MonoBehaviour {
             if(regeneratesHealth)
                 StartCoroutine("RegenerateHealth");
         }
+        ready = true;
     }
 
     public void EnemyEnterRadius(Entity enemy) {
@@ -73,7 +74,9 @@ public class Turret : MonoBehaviour {
         }
     }
 
-    private void Update() {
+    void Update() {
+        if (healthImage != null && !ready)
+            OnGameStart();
         CheckInvincibility();
     }
 

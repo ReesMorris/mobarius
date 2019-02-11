@@ -24,6 +24,7 @@ public class AbilityHandler : MonoBehaviour {
 
     void Start () {
         Instance = this;
+        GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
     }
 
@@ -95,6 +96,10 @@ public class AbilityHandler : MonoBehaviour {
         return 0f;
     }
 
+    // Game Start and End functions
+    void OnGameStart() {
+        gameEnded = false;
+    }
     void OnGameEnd() {
         gameEnded = true;
     }

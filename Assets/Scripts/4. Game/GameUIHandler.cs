@@ -57,6 +57,7 @@ public class GameUIHandler : MonoBehaviour {
 
     void Start() {
         Instance = this;
+        GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
         photonView = GetComponent<PhotonView>();
         StartCoroutine("HandleCooldowns");
@@ -193,7 +194,10 @@ public class GameUIHandler : MonoBehaviour {
         ShowPlayerText(displayText);
     }
 
-    /* Game Over */
+    /* Game Start and End */
+    void OnGameStart() {
+        gameEnded = false;
+    }
     void OnGameEnd() {
         StopCoroutine("Timer");
         gameEnded = true;

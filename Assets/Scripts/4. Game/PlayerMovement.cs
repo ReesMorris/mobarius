@@ -61,6 +61,7 @@ public class PlayerMovement : MonoBehaviour {
                 defaultAttack.target = null;
             }
             if (!navMeshAgent.isStopped) {
+                if(onPlayerMove != null)
                 onPlayerMove();
             }
         }

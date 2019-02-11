@@ -13,21 +13,25 @@ public class RecallAbility : MonoBehaviour {
     bool gameEnded;
 
     void Start() {
-        // Stop channeling if player moves or is hit
-        PlayerMovement.onPlayerMove += StopChannel;
-        PlayerChampion.onPlayerDamaged += StopChannel;
-
+        // Called whenever Garen is spawned
         abilityHandler = AbilityHandler.Instance;
         abilityHandler.recallButton.onClick.AddListener(AttemptRecall);
         photonView = GetComponent<PhotonView>();
         playerMovement = GetComponent<PlayerMovement>();
         playerChampion = GetComponent<PlayerChampion>();
         StopChannel();
+
+        // Listeners
         GameHandler.onGameEnd += OnGameEnd;
+        PlayerMovement.onPlayerMove += StopChannel;
+        PlayerChampion.onPlayerDamaged += StopChannel;
     }
 
     void OnGameEnd() {
         gameEnded = true;
+        PlayerMovement.onPlayerMove -= StopChannel;
+        PlayerChampion.onPlayerDamaged -= StopChannel;
+        StopAllCoroutines();
     }
 
     void Update() {
@@ -49,16 +53,20 @@ public class RecallAbility : MonoBehaviour {
 
     // Begin channeling from the start
     void StartChannel() {
-        playerMovement.StopMovement();
-        isRecalling = true;
-        StartCoroutine("Channel");
+        if (!gameEnded) {
+            playerMovement.StopMovement();
+            isRecalling = true;
+            StartCoroutine("Channel");
+        }
     }
 
     // Stop channeling for any reason
     void StopChannel() {
-        isRecalling = false;
-        StopCoroutine("Channel");
-        abilityHandler.recallContainer.SetActive(false);
+        if (this != null) {
+            isRecalling = false;
+            StopCoroutine("Channel");
+            abilityHandler.recallContainer.SetActive(false);
+        }
     }
 
     // Channel UI & Handler

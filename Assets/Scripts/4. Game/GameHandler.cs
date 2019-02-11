@@ -43,7 +43,8 @@ public class GameHandler : MonoBehaviour {
 
     [PunRPC]
     void Begin() {
-        onGameStart();
+        if(onGameStart != null)
+            onGameStart();
     }
 
     [PunRPC]
@@ -79,6 +80,7 @@ public class GameHandler : MonoBehaviour {
             SoundManager.Instance.PlaySound("Announcer/Defeat");
 
         yield return new WaitForSeconds(4f);
+        Camera.main.GetComponent<PlayerCamera>().ClearEndOfGameTarget();
         UIHandler.Instance.ShowLobbyUI();
         LobbyNetwork.Instance.StopPlay();
     }

@@ -14,18 +14,23 @@ public class Inhibitor : MonoBehaviour {
 
     public delegate void OnInhibitorDestroyed(Inhibitor inhibitor);
     public static OnInhibitorDestroyed onInhibitorDestroyed;
+    bool ready;
 
     float currentHealth;
     PhotonView photonView;
 
     void Start() {
-        GameHandler.onGameStart += OnGameStart;
         GetComponent<Entity>().team = team;
         healthbarUI.SetActive(false);
         healthImage.fillAmount = 1;
         photonView = GetComponent<PhotonView>();
 
         currentHealth = baseHealth;
+    }
+
+    void Update() {
+        if (healthImage != null && !ready)
+            OnGameStart();
     }
 
     void OnGameStart() {
@@ -37,8 +42,14 @@ public class Inhibitor : MonoBehaviour {
             healthImage.color = GameUIHandler.Instance.allyHealthColour;
 
         // Health regen
-        if (PhotonNetwork.isMasterClient)
-            StartCoroutine(RegenHealth());
+        //if (PhotonNetwork.isMasterClient)
+        //StartCoroutine("RegenHealth");
+        ready = true;
+    }
+
+    void OnDestroy() {
+        Turret.onTurretDestroyed -= OnTurretDestroyed;
+        StopAllCoroutines();
     }
 
     // Health regeneration
@@ -51,15 +62,17 @@ public class Inhibitor : MonoBehaviour {
 
     // Called when a turret is destroyed
     void OnTurretDestroyed(Turret turret) {
-        if(prerequisites.Count > 0) {
-            foreach(Turret t in prerequisites) {
-                if(t == turret) {
-                    prerequisites.Remove(t);
-                    break;
+        if (this != null) {
+            if (prerequisites.Count > 0) {
+                foreach (Turret t in prerequisites) {
+                    if (t == turret) {
+                        prerequisites.Remove(t);
+                        break;
+                    }
                 }
+                if (prerequisites.Count == 0)
+                    photonView.RPC("BecomeTargetable", PhotonTargets.AllBuffered);
             }
-            if (prerequisites.Count == 0)
-                photonView.RPC("BecomeTargetable", PhotonTargets.AllBuffered);
         }
     }
 

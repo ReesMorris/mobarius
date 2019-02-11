@@ -100,7 +100,8 @@ public class PlayerChampion : MonoBehaviour {
             // If the champion is the local player, update their UI to reflect the damage
             if (PhotonView.isMine) {
                 Champion.damage.Insert(0, new Damage(attacker, amount, gameUIHandler.TimeElapsed));
-                onPlayerDamaged();
+                if(onPlayerDamaged != null)
+                    onPlayerDamaged();
                 gameUIHandler.UpdateStats(Champion);
 
                 // Does the player have any health left?

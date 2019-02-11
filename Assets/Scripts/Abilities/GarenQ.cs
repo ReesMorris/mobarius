@@ -38,7 +38,9 @@ public class GarenQ : MonoBehaviour {
             // Are we alive?
             if (!playerChampion.IsDead) {
                 // If the indicator is visible, update its rotation
-                if (indicator.activeSelf)
+                if (indicator == null)
+                    indicator = abilityHandler.SetupProjectileIndicator(gameObject);
+                else if (indicator.activeSelf)
                     abilityHandler.UpdateIndicatorRotation(indicator, gameObject);
 
                 // Can we cast this ability?

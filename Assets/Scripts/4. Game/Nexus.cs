@@ -16,15 +16,20 @@ public class Nexus : MonoBehaviour {
     bool destroyed;
     bool canReheal = true;
     PhotonView photonView;
+    bool ready;
 
     void Start() {
-        GameHandler.onGameStart += OnGameStart;
         GetComponent<Entity>().team = team;
         healthbarUI.SetActive(false);
         healthImage.fillAmount = 1;
         photonView = GetComponent<PhotonView>();
 
         currentHealth = baseHealth;
+    }
+
+    void Update() {
+        if (healthImage != null && !ready)
+            OnGameStart();
     }
 
     void OnGameStart() {
@@ -38,6 +43,7 @@ public class Nexus : MonoBehaviour {
         // Health regen
         if (PhotonNetwork.isMasterClient)
             StartCoroutine(RegenHealth());
+        ready = true;
     }
 
     // Health regeneration
@@ -46,6 +52,11 @@ public class Nexus : MonoBehaviour {
             yield return new WaitForSeconds(1f);
             photonView.RPC("Heal", PhotonTargets.AllBuffered, 15f);
         }
+    }
+
+    void OnDestroy() {
+        Inhibitor.onInhibitorDestroyed -= OnInhibitorDestroyed;
+        StopAllCoroutines();
     }
 
     // Called when a turret is destroyed
