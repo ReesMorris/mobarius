@@ -31,7 +31,7 @@ public class Turret : MonoBehaviour {
     float currentDamage;
     Entity currentTarget;
     PhotonView photonView;
-    float currentHealth;
+    public float CurrentHealth { get; protected set; }
     bool started;
     float maxRegenHealth;
     bool ready;
@@ -44,7 +44,7 @@ public class Turret : MonoBehaviour {
         ResetDamage();
         enemies = new List<Entity>();
         radiusTrigger.transform.localScale = new Vector3(radius, radiusTrigger.transform.localScale.y, radius);
-        currentHealth = maxRegenHealth = baseHealth;
+        CurrentHealth = maxRegenHealth = baseHealth;
         healthImage.fillAmount = 1;
         GetComponent<Entity>().team = team;
     }
@@ -81,8 +81,8 @@ public class Turret : MonoBehaviour {
     }
 
     IEnumerator RegenerateHealth() {
-        while(currentHealth > 0f) {
-            float percentageHealth = (currentHealth / baseHealth) * 100;
+        while(CurrentHealth > 0f) {
+            float percentageHealth = (CurrentHealth / baseHealth) * 100;
             if (percentageHealth < 33.3f)
                 maxRegenHealth = (baseHealth * 0.3f);
             if (percentageHealth < 66.6f)
@@ -102,7 +102,7 @@ public class Turret : MonoBehaviour {
                 foreach(Turret t in prerequisites) {
                     if(t == null)
                         prerequisites.Remove(t);
-                    else if (t.currentHealth <= 0f)
+                    else if (t.CurrentHealth <= 0f)
                         prerequisites.Remove(t);
                 }
             }
@@ -114,28 +114,24 @@ public class Turret : MonoBehaviour {
 
     [PunRPC]
     public void Heal(float amount) {
-        currentHealth = Mathf.Min(maxRegenHealth, currentHealth + amount);
-        healthImage.fillAmount = (currentHealth / baseHealth);
+        CurrentHealth = Mathf.Min(maxRegenHealth, CurrentHealth + amount);
+        healthImage.fillAmount = (CurrentHealth / baseHealth);
     }
 
     [PunRPC]
     public void Damage(float amount, PhotonPlayer shooter) {
-        currentHealth = Mathf.Max(0f, currentHealth - amount);
-        healthImage.fillAmount = (currentHealth / baseHealth);
-        if (currentHealth == 0f) {
+        CurrentHealth = Mathf.Max(0f, CurrentHealth - amount);
+        healthImage.fillAmount = (CurrentHealth / baseHealth);
+        if (CurrentHealth == 0f) {
             if (PhotonNetwork.player.GetTeam() == team)
                 GameUIHandler.Instance.MessageWithSound("Announcer/AllyTurretDestroyed", "Ally turret destroyed!");
             else
                 GameUIHandler.Instance.MessageWithSound("Announcer/EnemyTurretDestroyed", "Enemy turret destroyed!");
-            
-            if(PhotonNetwork.isMasterClient) {
 
-                // Tell other scripts that this turret has been destroyed
-                if (onTurretDestroyed != null)
-                    onTurretDestroyed(this);
-
-                PhotonNetwork.Destroy(gameObject);
-            }
+            // Tell other scripts that this turret has been destroyed
+            if (onTurretDestroyed != null)
+                onTurretDestroyed(this);
+            Destroy(gameObject);
         }
     }
 
@@ -158,7 +154,7 @@ public class Turret : MonoBehaviour {
     }
 
     IEnumerator TargetEnemies() {
-        while(currentHealth > 0f) {
+        while(CurrentHealth > 0f) {
             if(currentTarget == null || currentTarget.GetIsDead())
                 EnemyLeaveRadius(currentTarget);
             else {

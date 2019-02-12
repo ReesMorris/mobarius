@@ -93,13 +93,10 @@ public class Inhibitor : MonoBehaviour {
             else
                 GameUIHandler.Instance.MessageWithSound("Announcer/EnemyInhibitorDestroyed", "Enemy inhibitor destroyed!");
 
-            if (PhotonNetwork.isMasterClient) {
-                PhotonNetwork.Destroy(gameObject);
-
-                // Tell other scripts we're dead
-                if (onInhibitorDestroyed != null)
-                    onInhibitorDestroyed(this);
-            }
+            // Tell other scripts we're dead
+            if (onInhibitorDestroyed != null)
+                onInhibitorDestroyed(this);
+            Destroy(gameObject);
         }
     }
 

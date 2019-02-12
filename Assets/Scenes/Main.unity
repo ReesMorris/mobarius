@@ -17318,18 +17318,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136701807}
   m_CullTransparentMesh: 0
---- !u!114 &1137251902 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5570414461122430759, guid: 54f7da001fe8e2a4f898870e3febc713,
-    type: 3}
-  m_PrefabInstance: {fileID: 5537431655639765870}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd040d2e1cfd449e89d81f68009a1c58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1152306832
 GameObject:
   m_ObjectHideFlags: 0
@@ -26027,7 +26015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.0.92
+  currentVersion: 0.0.1.0
   versionCheckerUrl: https://rees.app/moba/i/version
   downloadUrl: https://rees.app/moba/download
   versionText: {fileID: 940210175}
@@ -33695,87 +33683,82 @@ PrefabInstance:
     - target: {fileID: 5566675162124332299, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: viewIdField
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5566675162124332299, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: instantiationId
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570682579311624235, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: viewIdField
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5570682579311624235, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
-      propertyPath: viewIdField
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5570682579311624235, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
       propertyPath: instantiationId
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5566675162409113477, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: viewIdField
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5566675162409113477, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: instantiationId
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570682580198068884, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: viewIdField
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5570682580198068884, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
-      propertyPath: viewIdField
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5570682580198068884, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
       propertyPath: instantiationId
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5537431656508518524, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: prerequisites.Array.data[0]
-      value: 
-      objectReference: {fileID: 1137251902}
-    - target: {fileID: 5537431656508518519, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: viewIdField
-      value: 9
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5537431656508518519, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: instantiationId
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 9116794144156488891, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: viewIdField
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9116794144156488891, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: instantiationId
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7298328444586617396, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: viewIdField
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7298328444586617396, guid: 54f7da001fe8e2a4f898870e3febc713,
-        type: 3}
-      propertyPath: instantiationId
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 4201554371416989768, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: viewIdField
       value: 13
       objectReference: {fileID: 0}
-    - target: {fileID: 4201554371416989768, guid: 54f7da001fe8e2a4f898870e3febc713,
+    - target: {fileID: 5537431656508518519, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
       propertyPath: instantiationId
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116794144156488891, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: viewIdField
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 9116794144156488891, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: instantiationId
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7298328444586617396, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: viewIdField
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7298328444586617396, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: instantiationId
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201554371416989768, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: viewIdField
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201554371416989768, guid: 54f7da001fe8e2a4f898870e3febc713,
+        type: 3}
+      propertyPath: instantiationId
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6377928085590681233, guid: 54f7da001fe8e2a4f898870e3febc713,
         type: 3}
