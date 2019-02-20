@@ -68,7 +68,7 @@ public class PlayerChampion : MonoBehaviour {
     void Spawn() {
         PhotonView = GetComponent<PhotonView>();
         gameObject.layer = LayerMask.NameToLayer("Targetable");
-        if(PhotonView.isMine) {
+        if (PhotonView.isMine) {
             GameHandler gameHandler = GameHandler.Instance;
             Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
             if (PhotonView.owner.GetTeam() == PunTeams.Team.red) {
@@ -173,36 +173,42 @@ public class PlayerChampion : MonoBehaviour {
     // Called when a champion is healed by a source
     [PunRPC]
     void Heal(float amount) {
-        Champion.health = Mathf.Min(Champion.health + amount, Champion.maxHealth);
+        if (Champion != null) {
+            // If the champion is the local player, update their UI to reflect the healing
+            Champion.health = Mathf.Min(Champion.health + amount, Champion.maxHealth);
 
-        // If the champion is the local player, update their UI to reflect the healing
-        if (PhotonView.isMine)
-            gameUIHandler.UpdateStats(Champion);
+            if (PhotonView.isMine)
+                gameUIHandler.UpdateStats(Champion);
 
-        // Tell other players that this player has been healed (to update the health bar)
-        PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.AllBuffered, new object[] { Champion.health, Champion.maxHealth });
+            // Tell other players that this player has been healed (to update the health bar)
+            PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.AllBuffered, new object[] { Champion.health, Champion.maxHealth });
+        }
     }
 
     // Called when a champion is being given mana
     [PunRPC]
     void GiveMana(float amount) {
-        Champion.mana = Mathf.Min(Champion.mana + amount, Champion.maxMana);
-        PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
+        if (Champion != null) {
+            Champion.mana = Mathf.Min(Champion.mana + amount, Champion.maxMana);
+            PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
 
-        // If the champion is the local player, update their UI to reflect the mana change
-        if (PhotonView.isMine)
-            gameUIHandler.UpdateStats(Champion);
+            // If the champion is the local player, update their UI to reflect the mana change
+            if (PhotonView.isMine)
+                gameUIHandler.UpdateStats(Champion);
+        }
     }
 
     // Called when a champion is using mana
     [PunRPC]
     void TakeMana(float amount) {
-        Champion.mana = Mathf.Max(Champion.mana - amount, 0f);
-        PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
+        if (Champion != null) {
+            Champion.mana = Mathf.Max(Champion.mana - amount, 0f);
+            PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
 
-        // If the champion is the local player, update their UI to reflect the mana change
-        if (PhotonView.isMine)
-            gameUIHandler.UpdateStats(Champion);
+            // If the champion is the local player, update their UI to reflect the mana change
+            if (PhotonView.isMine)
+                gameUIHandler.UpdateStats(Champion);
+        }
     }
 
     // Called to update the UI bar for player mana

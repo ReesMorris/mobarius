@@ -78,4 +78,6 @@ MonoBehaviour:
   - BecomeTargetable
   - OnVictory
   - GiveXP
+  - PlayAnimation
+  - Animate
   DisableAutoOpenWizard: 1

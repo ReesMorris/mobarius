@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour {
     NavMeshAgent navMeshAgent;
     Champion champion;
     PlayerChampion playerChampion;
+    PlayerAnimator playerAnimator;
     DefaultAttack defaultAttack;
 
     void Start() {
@@ -22,10 +23,13 @@ public class PlayerMovement : MonoBehaviour {
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerChampion = GetComponent<PlayerChampion>();
         defaultAttack = GetComponent<DefaultAttack>();
+        playerAnimator = GetComponent<PlayerAnimator>();
         champion = playerChampion.Champion;
     }
 
     public void StopMovement() {
+        if (!navMeshAgent.isStopped)
+            playerAnimator.PlayAnimation("Idle");
         defaultAttack.target = null;
         navMeshAgent.velocity = Vector3.zero;
         navMeshAgent.isStopped = true;
@@ -46,6 +50,8 @@ public class PlayerMovement : MonoBehaviour {
                         defaultAttack.target = hit.transform.gameObject;
                 } else if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
                     if(!AbilityHandler.Instance.Aiming) {
+                        if(navMeshAgent.isStopped)
+                            playerAnimator.PlayAnimation("Walking");
                         defaultAttack.target = null;
                         navMeshAgent.destination = hit.point;
                         navMeshAgent.isStopped = false;
@@ -54,6 +60,8 @@ public class PlayerMovement : MonoBehaviour {
                 }
             }
             if (navMeshAgent.remainingDistance <= 0.2f || playerChampion.IsDead) {
+                if (!navMeshAgent.isStopped)
+                    playerAnimator.PlayAnimation("Idle");
                 navMeshAgent.velocity = Vector3.zero;
                 navMeshAgent.isStopped = true;
             }

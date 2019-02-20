@@ -22,13 +22,9 @@ public class GameHandler : MonoBehaviour {
     }
 
     public void StartGame() {
-        SpawnAll();
+        photonView.RPC("InstantiatePlayers", PhotonTargets.All);
         GameUIHandler.Instance.StartGameTimer();
         photonView.RPC("Begin", PhotonTargets.All);
-    }
-
-    public void SpawnAll() {
-        photonView.RPC("InstantiatePlayers", PhotonTargets.All);
     }
 
     void OnPhotonPlayerConnected(PhotonPlayer other) {

@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b8dda4a9ff1648249ea0e5a16a43ba9, type: 3}
+  m_Name: Vampire
+  m_EditorClassIdentifier: 
+  isOwned: 1
+  isFree: 1
+  isAvailable: 1
+  abilities:
+  - name: Passive
+    abilityKey: 0
+    desc: 
+    icon: {fileID: 21300000, guid: aaa3d70d5d7b2c742ba3b861316b29bf, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: []
+  - name: Q
+    abilityKey: 1
+    desc: 
+    icon: {fileID: 21300000, guid: 433085dd54e2a0049aa25150b4ccd881, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: []
+  - name: W
+    abilityKey: 2
+    desc: 
+    icon: {fileID: 21300000, guid: 06fa274547dc760449243745481ef869, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: []
+  - name: E
+    abilityKey: 3
+    desc: 
+    icon: {fileID: 21300000, guid: af8a5c07ff548c54880186b0b584fa47, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: []
+  - name: R
+    abilityKey: 4
+    desc: 
+    icon: {fileID: 21300000, guid: 3a651113304b3b0488c8abc55c9a02e9, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 0
+    speed: 0
+    damage: []
+  championName: Alucard
+  icon: {fileID: 21300000, guid: 11a896fb5f947fb4a9d8381d76c9b9e3, type: 3}
+  maxHealth: 666.66
+  healthRegen: 6
+  maxMana: 0
+  manaRegen: 0
+  range: 6
+  attackDamage: 66
+  attackSpeed: 0.625
+  armour: 36
+  magicResist: 32.1
+  movementSpeed: 400
+  invincible: 0
+  health: 0
+  mana: 0
+  owner: 
+  physicalDamage: 0
+  magicDamage: 0
+  abilityPower: 0
+  damage: []

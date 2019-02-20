@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 114050048897203522}
   - component: {fileID: 782914181081537096}
   - component: {fileID: 3305865509341971546}
+  - component: {fileID: 65790661463590947}
   m_Layer: 10
   m_Name: Garen
   m_TagString: Untagged
@@ -556,6 +557,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29aae1b90efbcbe49a70e35906fafa4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &65790661463590947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1272804252154214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003a88ca57906ba46a0fe786212d4c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1298904836178048
