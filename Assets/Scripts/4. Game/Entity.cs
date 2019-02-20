@@ -9,6 +9,10 @@ public class Entity : MonoBehaviour {
     public bool useEntityBehaviour;
     public Image healthBarFill;
 
+    [Header("XP")]
+    public int XPOnDeath;
+    public float XPRadius;
+
     PhotonView photonView;
     [HideInInspector] public PunTeams.Team team;
     [HideInInspector] bool IsDead;
@@ -54,6 +58,20 @@ public class Entity : MonoBehaviour {
                 healthBarFill.fillAmount = health / maxHealth;
             if (health <= 0f) {
                 IsDead = true;
+
+                // Give XP to all enemy champions who are not in the area
+                if(PhotonNetwork.isMasterClient) {
+                    Collider[] hitColliders = Physics.OverlapSphere(transform.position, XPRadius);
+                    for(int i = 0; i < hitColliders.Length; i++) {
+                        PlayerChampion playerChampion = hitColliders[i].GetComponent<PlayerChampion>();
+                        if (playerChampion != null) {
+                            if(playerChampion.PhotonView.owner.GetTeam() != team) {
+                                ChampionXP championXP = playerChampion.GetComponent<ChampionXP>();
+                                championXP.photonView.RPC("GiveXP", PhotonTargets.All, XPOnDeath);
+                            }
+                        }
+                    }
+                }
 
                 // Last hit?
                 if(attacker != null) {

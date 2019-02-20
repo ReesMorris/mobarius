@@ -35,7 +35,7 @@ MonoBehaviour:
     speed: 22
     damage:
     - key: bullet
-      damage: 18000
+      damage: 180
       damageType: 0
   - name: W Ability
     abilityKey: 2

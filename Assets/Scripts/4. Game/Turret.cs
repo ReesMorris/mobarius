@@ -27,6 +27,9 @@ public class Turret : MonoBehaviour {
     public GameObject bulletPrefab;
     public GameObject radiusTrigger;
 
+    [Header("XP")]
+    public int XPOnDeath;
+
     List<Entity> enemies;
     float currentDamage;
     Entity currentTarget;

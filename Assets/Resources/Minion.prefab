@@ -503,6 +503,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useEntityBehaviour: 1
   healthBarFill: {fileID: 114751942423393032}
+  XPOnDeath: 29
+  XPRadius: 10
   team: 0
 --- !u!114 &114575083679333772
 MonoBehaviour:

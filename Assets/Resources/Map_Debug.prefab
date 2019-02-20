@@ -553,8 +553,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 0
-  instantiationId: -1
+  viewIdField: 5
+  instantiationId: 5
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!1 &5537431655955761257
@@ -1805,12 +1805,12 @@ PrefabInstance:
     - target: {fileID: 7773638123561369737, guid: 6dbf5fd4a51c72b439db6c872b4cbd81,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7773638123561369737, guid: 6dbf5fd4a51c72b439db6c872b4cbd81,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6dbf5fd4a51c72b439db6c872b4cbd81, type: 3}
@@ -1896,12 +1896,12 @@ PrefabInstance:
     - target: {fileID: 8665600622587219103, guid: a7a29d94156aeae4593cf675d12b7c03,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8665600622587219103, guid: a7a29d94156aeae4593cf675d12b7c03,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8665600622587219092, guid: a7a29d94156aeae4593cf675d12b7c03,
         type: 3}
@@ -1994,15 +1994,20 @@ PrefabInstance:
       propertyPath: m_Carve
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114476464113397056, guid: d59094a70b2144c8fa1a603f1da9976c,
+        type: 3}
+      propertyPath: XPOnDeath
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 114809398871881968, guid: d59094a70b2144c8fa1a603f1da9976c,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114809398871881968, guid: d59094a70b2144c8fa1a603f1da9976c,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d59094a70b2144c8fa1a603f1da9976c, type: 3}
@@ -2087,12 +2092,12 @@ PrefabInstance:
     - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 3}
@@ -2104,6 +2109,11 @@ PrefabInstance:
       propertyPath: prerequisites.Array.data[0]
       value: 
       objectReference: {fileID: 5570414461408083369}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 3}
+      propertyPath: XPOnDeath
+      value: 45
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 3}
 --- !u!114 &5570414461122430759 stripped
@@ -2187,12 +2197,17 @@ PrefabInstance:
     - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114882822721836858, guid: 7710cc87051b54fab9d836bf70bac2c8,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114558876366339350, guid: 7710cc87051b54fab9d836bf70bac2c8,
+        type: 3}
+      propertyPath: XPOnDeath
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7710cc87051b54fab9d836bf70bac2c8, type: 3}
@@ -2284,15 +2299,20 @@ PrefabInstance:
       propertyPath: prerequisites.Array.data[0]
       value: 
       objectReference: {fileID: 5570490378631825188}
+    - target: {fileID: 114476464113397056, guid: d59094a70b2144c8fa1a603f1da9976c,
+        type: 3}
+      propertyPath: XPOnDeath
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 114809398871881968, guid: d59094a70b2144c8fa1a603f1da9976c,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 114809398871881968, guid: d59094a70b2144c8fa1a603f1da9976c,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d59094a70b2144c8fa1a603f1da9976c, type: 3}
@@ -2389,12 +2409,12 @@ PrefabInstance:
     - target: {fileID: 3629253929559368120, guid: ad595d5094b7267498cac80ed3dee2c1,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3629253929559368120, guid: ad595d5094b7267498cac80ed3dee2c1,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad595d5094b7267498cac80ed3dee2c1, type: 3}
@@ -2492,12 +2512,12 @@ PrefabInstance:
     - target: {fileID: 5054030336087240839, guid: 1237d28018619ba49b09498fb737d57c,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5054030336087240839, guid: 1237d28018619ba49b09498fb737d57c,
         type: 3}
       propertyPath: instantiationId
-      value: -1
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 82451037612117358, guid: 1237d28018619ba49b09498fb737d57c,
         type: 3}
