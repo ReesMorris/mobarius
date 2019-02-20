@@ -147,6 +147,14 @@ public class PlayerChampion : MonoBehaviour {
             }
             ScoreHandler.Instance.IncreaseScore(killer.GetTeam());
 
+            // Give XP to the killer
+            if (PhotonNetwork.player == killer) {
+                ChampionXP championXP = GetComponent<ChampionXP>();
+                if (championXP != null) {
+                    championXP.photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
+                }
+            }
+
             // KDA scores
             if (PhotonView.isMine)
                 ScoreHandler.Instance.OnDeath();

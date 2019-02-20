@@ -13,7 +13,7 @@ public class ChampionXP : MonoBehaviour {
     int firstLevelXP = 280;
     int levelIncrement = 100;
 
-    public int currentXP = 0;
+    int currentXP = 0;
     int currentLevel = 1;
     int nextLevelXP;
     public PhotonView photonView { get; protected set; }
@@ -25,14 +25,10 @@ public class ChampionXP : MonoBehaviour {
         Turret.onTurretDestroyed += OnTurretDestroyed;
     }
 
-    // Called when a turret is destroyed
+    // Called when a turret is destroyed; give global XP to every player on the team who destroyed it
     void OnTurretDestroyed(Turret t) {
-        print("OnTurretDestroyed");
         if(photonView.isMine) {
-            print("PhotonViewIsMine");
             if (t.team != PhotonNetwork.player.GetTeam()) {
-                print("Team does not match");
-                print("t.XPOnDeath: " + t.XPOnDeath);
                 photonView.RPC("GiveXP", PhotonTargets.AllBuffered, t.XPOnDeath);
             }
         }
@@ -40,7 +36,6 @@ public class ChampionXP : MonoBehaviour {
 
     [PunRPC]
     public void GiveXP(int amount) {
-        print("Receiving " + amount + " XP");
         if(currentLevel < maxLevel) {
 
             // Give the XP and call the delegate to say we're awarding XP

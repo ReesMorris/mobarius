@@ -14,9 +14,6 @@ public class MinionHandler : MonoBehaviour {
     }
 
     void OnGameTimeUpdate(int newTime) {
-        if(newTime == 3) {
-            MinionWave();
-        }
         if (newTime == 35)
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions30", "Thirty seconds until minions spawn");
         else if(newTime == 65)
