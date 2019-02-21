@@ -1054,8 +1054,9 @@ GameObject:
   - component: {fileID: 1555}
   - component: {fileID: 1544}
   - component: {fileID: 1554}
+  - component: {fileID: 729611009}
   m_Layer: 0
-  m_Name: Vampire
+  m_Name: Alucard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1190,7 +1191,6 @@ MonoBehaviour:
   healthBarLine: {fileID: 1934397834742064, guid: 944e21922ccb544d1be0b0993670dc86,
     type: 3}
   manaBarFill: {fileID: 1534}
-  enemyHealthColour: {r: 0.9254902, g: 0.11764706, b: 0.11764706, a: 1}
 --- !u!114 &1540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1298,6 +1298,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb134105b26e8475fbdf404bb9332739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &729611009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae548a2b1d052eb4f9663ed0864f7d4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &289

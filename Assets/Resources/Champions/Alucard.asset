@@ -61,6 +61,24 @@ MonoBehaviour:
     cooldown: 0
     speed: 0
     damage: []
+  - name: Flash
+    abilityKey: 5
+    desc: Teleports your champion a short distance toward your cursor's location.
+    icon: {fileID: 21300000, guid: 731daf69d228b684b879f21f91697cb6, type: 3}
+    cost: 0
+    range: 8
+    cooldown: 300
+    speed: 0
+    damage: []
+  - name: Heal
+    abilityKey: 6
+    desc: Heals the caster while also granting movement speed by 30% for 1 second.
+    icon: {fileID: 21300000, guid: 0170dbf2dd05640e6afea11a960e9414, type: 3}
+    cost: 0
+    range: 0
+    cooldown: 240
+    speed: 0
+    damage: []
   championName: Alucard
   icon: {fileID: 21300000, guid: 11a896fb5f947fb4a9d8381d76c9b9e3, type: 3}
   maxHealth: 666.66

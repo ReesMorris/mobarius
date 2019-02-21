@@ -75,7 +75,9 @@ public class AbilityHandler : MonoBehaviour {
     // Called when an ability stops being cast
     public void StopCasting(GameObject indicator) {
         Aiming = false;
-        indicator.SetActive(false);
+        if (indicator != null) {
+            indicator.SetActive(false);
+        }
     }
 
     // Calls when an ability has been fired (after showing indicator)

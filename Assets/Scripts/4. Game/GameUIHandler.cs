@@ -27,6 +27,8 @@ public class GameUIHandler : MonoBehaviour {
     public AbilityIcon abilityW;
     public AbilityIcon abilityE;
     public AbilityIcon abilityR;
+    public AbilityIcon abilityD;
+    public AbilityIcon abilityF;
 
     [Header("Display Text")]
     public TMP_Text displayText;
@@ -51,12 +53,19 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownEDuration;
     float cooldownR;
     float cooldownRDuration;
+    float cooldownD;
+    float cooldownDDuration;
+    float cooldownF;
+    float cooldownFDuration;
     PhotonView photonView;
 
     bool gameEnded;
 
-    void Start() {
+    void Awake() {
         Instance = this;
+    }
+
+    void Start() {
         GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
         photonView = GetComponent<PhotonView>();
@@ -70,6 +79,8 @@ public class GameUIHandler : MonoBehaviour {
         abilityW.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.W), "W", champion);
         abilityE.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.E), "E", champion);
         abilityR.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.R), "R", champion);
+        abilityD.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.D), "D", champion);
+        abilityF.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.F), "F", champion);
     }
 
     public void UpdateStats(Champion champion) {
@@ -102,6 +113,10 @@ public class GameUIHandler : MonoBehaviour {
                 return cooldownE == 0f;
             case AbilityHandler.Abilities.R:
                 return cooldownR == 0f;
+            case AbilityHandler.Abilities.D:
+                return cooldownD == 0f;
+            case AbilityHandler.Abilities.F:
+                return cooldownF == 0f;
         }
         return false;
     }
@@ -119,6 +134,12 @@ public class GameUIHandler : MonoBehaviour {
                 break;
             case AbilityHandler.Abilities.R:
                 cooldownR = cooldownRDuration = cooldown;
+                break;
+            case AbilityHandler.Abilities.D:
+                cooldownD = cooldownDDuration = cooldown;
+                break;
+            case AbilityHandler.Abilities.F:
+                cooldownF = cooldownFDuration = cooldown;
                 break;
         }
     }
@@ -141,6 +162,14 @@ public class GameUIHandler : MonoBehaviour {
             if (cooldownR > 0f) {
                 cooldownR = Mathf.Max(0f, cooldownR - speed);
                 abilityR.SetCooldown(cooldownR, cooldownRDuration);
+            }
+            if (cooldownD > 0f) {
+                cooldownD = Mathf.Max(0f, cooldownD - speed);
+                abilityD.SetCooldown(cooldownD, cooldownDDuration);
+            }
+            if (cooldownF > 0f) {
+                cooldownF = Mathf.Max(0f, cooldownF - speed);
+                abilityF.SetCooldown(cooldownF, cooldownFDuration);
             }
             yield return new WaitForSeconds(speed);
         }
