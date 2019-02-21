@@ -41,7 +41,7 @@ public class ChampionLock : MonoBehaviour {
 
     [PunRPC]
     void Lock(string championName) {
-        image.sprite = Resources.Load<Sprite>("Champions/" + championName);
+        image.sprite = Resources.Load<Sprite>("Champions/Icons/" + championName);
         title.text = championName;
         championSelect.OnPlayerLock();
     }

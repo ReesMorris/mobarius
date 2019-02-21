@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,11 +15,12 @@ MonoBehaviour:
   isOwned: 0
   isFree: 0
   isAvailable: 0
+  abilities: []
   championName: Lux
   icon: {fileID: 21300000, guid: abd423843bc1a497c9178157c931cddf, type: 3}
-  health: 490
+  maxHealth: 0
   healthRegen: 5.5
-  mana: 480
+  maxMana: 0
   manaRegen: 8
   range: 550
   attackDamage: 53.5
@@ -26,3 +28,11 @@ MonoBehaviour:
   armour: 30
   magicResist: 0.625
   movementSpeed: 330
+  invincible: 0
+  health: 490
+  mana: 480
+  owner: 
+  physicalDamage: 0
+  magicDamage: 0
+  abilityPower: 0
+  damage: []

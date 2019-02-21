@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b8dda4a9ff1648249ea0e5a16a43ba9, type: 3}
-  m_Name: Vampire
+  m_Name: Alucard
   m_EditorClassIdentifier: 
   isOwned: 1
   isFree: 1

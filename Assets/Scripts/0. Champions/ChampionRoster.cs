@@ -4,13 +4,15 @@ using UnityEngine;
 public class ChampionRoster : MonoBehaviour {
 
     static public ChampionRoster Instance;
-    public Champion[] champions;
+
+    Champion[] champions;
 
     void Start() {
         Instance = this;
     }
 
     public Champion[] GetChampions() {
+        champions = Resources.FindObjectsOfTypeAll(typeof(Champion)) as Champion[];
         List<Champion> availableChampions = new List<Champion>();
         List<Champion> unownedChampions = new List<Champion>();
 

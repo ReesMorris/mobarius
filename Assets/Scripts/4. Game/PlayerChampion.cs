@@ -17,7 +17,6 @@ public class PlayerChampion : MonoBehaviour {
     public Transform hundredsContainer;
     public GameObject healthBarLine;
     public Image manaBarFill;
-    public Color enemyHealthColour;
 
     public Champion Champion { get; protected set; }
     public bool IsDead { get; protected set; }
@@ -236,7 +235,7 @@ public class PlayerChampion : MonoBehaviour {
 
         // Colour
         if (PhotonView.owner.GetTeam() != PhotonNetwork.player.GetTeam())
-            healthBarFill.color = enemyHealthColour;
+            healthBarFill.color = GameUIHandler.Instance.enemyHealthColour;
 
         oldHealth = health;
     }

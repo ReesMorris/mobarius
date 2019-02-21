@@ -4,7 +4,8 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -14,11 +15,12 @@ MonoBehaviour:
   isOwned: 0
   isFree: 0
   isAvailable: 0
+  abilities: []
   championName: Morgana
   icon: {fileID: 21300000, guid: 12cb612c0666d44749b11c760ce243c6, type: 3}
-  health: 559.5
+  maxHealth: 0
   healthRegen: 5.5
-  mana: 340.8
+  maxMana: 0
   manaRegen: 11
   range: 450
   attackDamage: 55.5
@@ -26,3 +28,11 @@ MonoBehaviour:
   armour: 25.4
   magicResist: 30
   movementSpeed: 335
+  invincible: 0
+  health: 559.5
+  mana: 340.8
+  owner: 
+  physicalDamage: 0
+  magicDamage: 0
+  abilityPower: 0
+  damage: []

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8dda4a9ff1648249ea0e5a16a43ba9, type: 3}
   m_Name: Garen
   m_EditorClassIdentifier: 
-  isOwned: 1
-  isFree: 1
+  isOwned: 0
+  isFree: 0
   isAvailable: 1
   abilities:
   - name: Passive Ability
