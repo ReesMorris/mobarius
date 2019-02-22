@@ -49,14 +49,14 @@ public class PlayerMovement : MonoBehaviour {
                     if (targetable == null || (targetable != null && targetable.allowTargetingBy == photonView.owner.GetTeam()))
                         defaultAttack.target = hit.transform.gameObject;
                 } else if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Floor"))) {
-                    if(!AbilityHandler.Instance.Aiming) {
+                    //if(!AbilityHandler.Instance.Aiming) {
                         if(navMeshAgent.isStopped)
                             playerAnimator.PlayAnimation("Walking");
                         defaultAttack.target = null;
                         navMeshAgent.destination = hit.point;
                         navMeshAgent.isStopped = false;
                         navMeshAgent.speed = (champion.movementSpeed / 120f);
-                    }
+                    //}
                 }
             }
             if (navMeshAgent.remainingDistance <= 0.2f || playerChampion.IsDead) {

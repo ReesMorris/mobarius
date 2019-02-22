@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class GarenQ : MonoBehaviour {
 
+    /*
+
     public AbilityHandler.Abilities abilityType;
     public GameObject bulletPrefab;
 
@@ -85,4 +87,6 @@ public class GarenQ : MonoBehaviour {
         b.Setup(damage, team, transform.position, ability.range, shooter);
         bullet.GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
+    
+    */
 }

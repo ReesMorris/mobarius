@@ -11,8 +11,10 @@ public class Ability {
     public Sprite icon;
 
     [Header("Configs")]
+    public AbilityHandler.AbilityTypes abilityType;
     public float cost;
     public float range;
+    public float damageRadius;
     public float cooldown;
     public float speed;
 

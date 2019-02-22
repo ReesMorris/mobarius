@@ -38,9 +38,9 @@ public class FlashAbility : MonoBehaviour {
             if (!playerChampion.IsDead) {
                 // Can we cast this ability?
                 if (GameUIHandler.Instance.CanCastAbility(abilityType, ability, playerChampion.Champion)) {
-                    transform.LookAt(abilityHandler.GetDirection(gameObject));
+                    transform.LookAt(abilityHandler.GetMousePosition(gameObject));
                     navMeshAgent.Move(transform.forward * ability.range);
-                    abilityHandler.OnAbilityCast(gameObject, null, abilityType, ability.cooldown, true);
+                    abilityHandler.OnAbilityCast(gameObject, abilityType, ability.cooldown, true);
                 }
             }
         }

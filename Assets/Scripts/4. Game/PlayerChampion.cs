@@ -43,6 +43,9 @@ public class PlayerChampion : MonoBehaviour {
             Champion.health = oldHealth = Champion.maxHealth;
             Champion.mana = Champion.maxMana;
 
+            // Set up ability indicators on this champion
+            AbilityHandler.Instance.SetupAbilityIndicators(gameObject);
+
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
                 gameUIHandler.UpdateAbilities(Champion);

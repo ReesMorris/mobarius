@@ -1055,6 +1055,7 @@ GameObject:
   - component: {fileID: 1544}
   - component: {fileID: 1554}
   - component: {fileID: 729611009}
+  - component: {fileID: 4760986780835875342}
   m_Layer: 0
   m_Name: Alucard
   m_TagString: Untagged
@@ -1310,6 +1311,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae548a2b1d052eb4f9663ed0864f7d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4760986780835875342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f0c75c94c832e04fb0fde15ac19a5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &289

@@ -12,6 +12,7 @@ public class ChampionRoster : MonoBehaviour {
     }
 
     public Champion[] GetChampions() {
+        print("GetChampions()");
         champions = Resources.FindObjectsOfTypeAll(typeof(Champion)) as Champion[];
         List<Champion> availableChampions = new List<Champion>();
         List<Champion> unownedChampions = new List<Champion>();
@@ -31,6 +32,8 @@ public class ChampionRoster : MonoBehaviour {
         foreach(Champion champion in unownedChampions) {
             availableChampions.Add(champion);
         }
+
+        print(availableChampions.Count);
 
         return availableChampions.ToArray();
     }
