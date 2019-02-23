@@ -5,14 +5,13 @@ using UnityEngine;
 public class DeathHandler : MonoBehaviour {
 
     public static DeathHandler Instance;
-    public GameObject deathOverlay;
 
 	void Start () {
         Instance = this;
 	}
 
     public void OnDeath(PlayerChampion playerChampion) {
-        deathOverlay.SetActive(true);
+        Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ColorCorrectionCurves>().saturation = 0;
         StartCoroutine(RespawnTimer(playerChampion));
     }
 
@@ -31,9 +30,9 @@ public class DeathHandler : MonoBehaviour {
             yield return new WaitForSeconds(reductionSpeed);
 
         }
-        deathOverlay.SetActive(false);
         playerChampion.PhotonView.RPC("Heal", PhotonTargets.All, playerChampion.Champion.maxHealth);
         playerChampion.PhotonView.RPC("GiveMana", PhotonTargets.All, playerChampion.Champion.maxMana);
+        Camera.main.GetComponent<UnityStandardAssets.ImageEffects.ColorCorrectionCurves>().saturation = 1;
         playerChampion.Respawn();
         GameUIHandler.Instance.deathBar.SetActive(false);
     }

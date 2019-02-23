@@ -52,6 +52,7 @@ public class PlayerChampion : MonoBehaviour {
 
                 gameUIHandler.UpdateAbilities(Champion);
                 gameUIHandler.UpdateStats(Champion);
+                gameUIHandler.SetCharacterIcon(Champion);
                 Respawn();
                 UIHandler.Instance.HideLobbyUI();
             }
@@ -111,6 +112,8 @@ public class PlayerChampion : MonoBehaviour {
                 // Does the player have any health left?
                 if (Champion.health <= 0f) {
                     IsDead = true;
+                    GetComponent<PlayerMovement>().StopMovement();
+                    GetComponent<PlayerAnimator>().PlayAnimation("Death");
                     PhotonView.RPC("OnDeath", PhotonTargets.All, Champion.GetKiller());
                     Champion.ResetDamage();
                     DeathHandler.Instance.OnDeath(this);

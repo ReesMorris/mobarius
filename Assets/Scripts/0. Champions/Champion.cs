@@ -15,20 +15,29 @@ public class Champion : ScriptableObject {
     public string championName;
     public Sprite icon;
     public float maxHealth;
+    public float healthIncrease;
     public float healthRegen;
+    public float healthRegenIncrease;
     public float maxMana;
+    public float manaIncrease;
     public float manaRegen;
+    public float manaRegenIncrease;
     public float range;
     public float attackDamage;
+    public float attackDamageIncrease;
     public float attackSpeed;
+    public float attackSpeedIncrease;
     public float armour;
+    public float armourIncrease;
     public float magicResist;
+    public float magicResistIncrease;
     public float movementSpeed;
-    public bool invincible;
+    public float movementSpeedIncrease;
 
     [HideInInspector] public float health;
     [HideInInspector] public float mana;
     [HideInInspector] public string owner;
+    [HideInInspector] public bool invincible;
 
     // Hidden stats
     [HideInInspector] public float physicalDamage;

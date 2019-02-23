@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ChampionXP : MonoBehaviour {
 
-    public delegate void OnChampionLevelUp(PhotonPlayer player);
+    public delegate void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level);
     public static OnChampionLevelUp onChampionLevelUp;
-    public delegate void OnChampionReceiveXP(PhotonPlayer player);
+    public delegate void OnChampionReceiveXP(PhotonPlayer player, float progress);
     public static OnChampionReceiveXP onChampionReceiveXP;
 
     int maxLevel = 18;
@@ -16,13 +16,24 @@ public class ChampionXP : MonoBehaviour {
     int currentXP = 0;
     int currentLevel = 1;
     int nextLevelXP;
+    Champion champion;
     public PhotonView photonView { get; protected set; }
 
     void Start() {
         photonView = GetComponent<PhotonView>();
         nextLevelXP = firstLevelXP;
+        champion = GetComponent<PlayerChampion>().Champion;
 
         Turret.onTurretDestroyed += OnTurretDestroyed;
+    }
+
+    void Update() {
+        if (photonView.isMine) {
+            if (Input.GetKeyDown(KeyCode.Z)) {
+                print("giving XP");
+                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
+            }
+        }
     }
 
     // Called when a turret is destroyed; give global XP to every player on the team who destroyed it
@@ -38,19 +49,23 @@ public class ChampionXP : MonoBehaviour {
     public void GiveXP(int amount) {
         if(currentLevel < maxLevel) {
 
-            // Give the XP and call the delegate to say we're awarding XP
+            // Give the XP
             currentXP += amount;
-            if (onChampionReceiveXP != null)
-                onChampionReceiveXP(photonView.owner);
 
             // Have we levelled up?
             while (currentXP > nextLevelXP) {
                 currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
                 nextLevelXP += levelIncrement;
 
-                if (onChampionLevelUp != null)
-                    onChampionLevelUp(photonView.owner);
+                if (onChampionLevelUp != null && photonView.isMine)
+                    onChampionLevelUp(champion, photonView.owner, currentLevel);
             }
+
+            // Make a call saying we've awarded XP (after checking level)
+            float progress = ((float)currentXP / (float)nextLevelXP);
+            if (currentLevel == maxLevel) progress = 1;
+            if (onChampionReceiveXP != null)
+                onChampionReceiveXP(photonView.owner, progress);
         }
     }
 }

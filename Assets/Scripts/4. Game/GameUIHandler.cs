@@ -30,6 +30,12 @@ public class GameUIHandler : MonoBehaviour {
     public AbilityIcon abilityD;
     public AbilityIcon abilityF;
 
+    [Header("Level")]
+    public Image characterIcon;
+    public TMP_Text levelText;
+    public Image levelFill;
+    public GameObject levelUpText;
+
     [Header("Display Text")]
     public TMP_Text displayText;
 
@@ -68,6 +74,8 @@ public class GameUIHandler : MonoBehaviour {
     void Start() {
         GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
+        ChampionXP.onChampionLevelUp += OnChampionLevelUp;
+        ChampionXP.onChampionReceiveXP += OnChampionReceiveXP;
         photonView = GetComponent<PhotonView>();
         StartCoroutine("HandleCooldowns");
     }
@@ -229,5 +237,30 @@ public class GameUIHandler : MonoBehaviour {
     void OnGameEnd() {
         StopCoroutine("Timer");
         gameEnded = true;
+    }
+
+    /* Set Character Icon */
+    public void SetCharacterIcon(Champion champion) {
+        characterIcon.sprite = champion.icon;
+    }
+
+    /* XP Systems */
+    void OnChampionReceiveXP(PhotonPlayer player, float progress) {
+        if (PhotonNetwork.player == player) {
+            levelFill.fillAmount = progress;
+        }
+    }
+
+    void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level) {
+        if(PhotonNetwork.player == player) {
+            levelText.text = level.ToString();
+            StartCoroutine(OnLevelUp());
+        }
+    }
+
+    IEnumerator OnLevelUp() {
+        levelUpText.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        levelUpText.SetActive(false);
     }
 }
