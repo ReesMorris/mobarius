@@ -50,8 +50,10 @@ public class ChampionXP : MonoBehaviour {
                 currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
                 nextLevelXP += levelIncrement;
 
-                if (onChampionLevelUp != null && photonView.isMine)
+                if (onChampionLevelUp != null && photonView.isMine) {
+                    champion.OnLevelUp();
                     onChampionLevelUp(champion, photonView.owner, currentLevel);
+                }
             }
 
             // Make a call saying we've awarded XP (after checking level)

@@ -53,15 +53,24 @@ public class Champion : ScriptableObject {
         championName = c.championName;
         icon = c.icon;
         maxHealth = c.maxHealth;
+        healthIncrease = c.healthIncrease;
         healthRegen = c.healthRegen;
+        healthRegenIncrease = c.healthRegenIncrease;
         maxMana = c.maxMana;
+        manaIncrease = c.manaIncrease;
         manaRegen = c.manaRegen;
+        manaRegenIncrease = c.manaRegenIncrease;
         range = c.range;
         attackDamage = c.attackDamage;
+        attackDamageIncrease = c.attackDamageIncrease;
         attackSpeed = c.attackSpeed;
+        attackSpeedIncrease = c.attackSpeedIncrease;
         armour = c.armour;
+        armourIncrease = c.armourIncrease;
         magicResist = c.magicResist;
+        magicResistIncrease = c.magicResistIncrease;
         movementSpeed = c.movementSpeed;
+        movementSpeedIncrease = c.movementSpeedIncrease;
         invincible = c.invincible;
 
         damage = new List<Damage>();
@@ -84,5 +93,18 @@ public class Champion : ScriptableObject {
                 return d.player.viewID;
         }
         return -1;
+    }
+    public void OnLevelUp() {
+        maxHealth += healthIncrease;
+        healthRegen += healthRegenIncrease;
+        maxMana += manaIncrease;
+        manaRegen += manaRegenIncrease;
+        attackDamage += attackDamageIncrease;
+        attackSpeed += attackSpeedIncrease;
+        armour += armourIncrease;
+        magicResist += magicResistIncrease;
+        movementSpeed += movementSpeedIncrease;
+        Debug.Log(maxHealth);
+        Debug.Log(healthIncrease);
     }
 }
