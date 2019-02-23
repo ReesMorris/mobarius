@@ -80,4 +80,10 @@ MonoBehaviour:
   - GiveXP
   - PlayAnimation
   - Animate
+  - PlayEffect
+  - OnRecallStart
+  - Play
+  - HideRPC
+  - InitRPC
+  - ShowRPC
   DisableAutoOpenWizard: 1

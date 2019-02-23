@@ -46,8 +46,9 @@ public class PlayerChampion : MonoBehaviour {
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
 
-                // Set up ability indicators on this champion
+                // Set up ability indicators and particle effects
                 AbilityHandler.Instance.SetupAbilityIndicators(gameObject);
+                EffectsHandler.Instance.SetupEffects(gameObject, PhotonView);
 
                 gameUIHandler.UpdateAbilities(Champion);
                 gameUIHandler.UpdateStats(Champion);

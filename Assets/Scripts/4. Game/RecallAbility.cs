@@ -12,6 +12,8 @@ public class RecallAbility : MonoBehaviour {
     bool isRecalling;
     bool gameEnded;
 
+    Effect recallEffect;
+
     void Start() {
         // Called whenever Garen is spawned
         abilityHandler = AbilityHandler.Instance;
@@ -42,10 +44,12 @@ public class RecallAbility : MonoBehaviour {
 
     // Recall if all conditions match
     void AttemptRecall() {
-        if(photonView.isMine && !gameEnded) {
-            if (!playerChampion.IsDead) {
-                if(!isRecalling) {
-                    StartChannel();
+        if (photonView.isMine) {
+            if (!gameEnded) {
+                if (!playerChampion.IsDead) {
+                    if(!isRecalling) {
+                        StartChannel();
+                    }
                 }
             }
         }
@@ -54,6 +58,11 @@ public class RecallAbility : MonoBehaviour {
     // Begin channeling from the start
     void StartChannel() {
         if (!gameEnded) {
+            if(recallEffect == null)
+                recallEffect = EffectsHandler.Instance.recallEffect;
+            if (recallEffect != null)
+                recallEffect.Show();
+
             playerMovement.StopMovement();
             isRecalling = true;
             StartCoroutine("Channel");
@@ -63,6 +72,8 @@ public class RecallAbility : MonoBehaviour {
     // Stop channeling for any reason
     void StopChannel() {
         if (this != null) {
+            if(recallEffect != null)
+                recallEffect.Hide();
             isRecalling = false;
             StopCoroutine("Channel");
             abilityHandler.recallContainer.SetActive(false);

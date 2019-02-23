@@ -104,7 +104,6 @@ public class AbilityHandler : MonoBehaviour {
     // Set up an AOE indicator for the caller (typically called on spawn)
     void SetupAOEIndicator(GameObject player) {
         if (!gameEnded) {
-            print("Setting up AOE indicator");
             aoeRangeIndicator = Instantiate(aoeRangePrefab, player.transform.position, Quaternion.identity);
             aoeRangeIndicator.name = "AOERange";
             aoeRangeIndicator.transform.parent = player.transform;
