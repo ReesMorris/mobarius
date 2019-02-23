@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(menuName="MOBA / Champion", order = 999)]
+//[CreateAssetMenu(menuName="MOBA / Champion", order = 999)]
 public class Champion : ScriptableObject {
 
     public bool isOwned;

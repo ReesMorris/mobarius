@@ -7,11 +7,8 @@ public class DeathHandler : MonoBehaviour {
     public static DeathHandler Instance;
     public GameObject deathOverlay;
 
-    PhotonView photonView;
-
 	void Start () {
         Instance = this;
-        photonView = GetComponent<PhotonView>();
 	}
 
     public void OnDeath(PlayerChampion playerChampion) {

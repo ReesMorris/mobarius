@@ -12,7 +12,6 @@ public class LocalisationManager : MonoBehaviour {
 
     private Dictionary<string, string> localisations;
     private string defaultIso;
-    private bool isReady;
 
     // Allows us to create instances
     void Awake() {
@@ -24,7 +23,6 @@ public class LocalisationManager : MonoBehaviour {
     }
 
     void Start () {
-        isReady = false;
         defaultIso = currentLanguage;
         localisations = new Dictionary<string, string>();
         SetLanguage(defaultIso);
@@ -48,7 +46,8 @@ public class LocalisationManager : MonoBehaviour {
                 string val = node.InnerText;
                 localisations.Add(key, val);
             }
-            isReady = true;
+
+            // isReady
         } else {
             SetLanguage(defaultIso);
         }

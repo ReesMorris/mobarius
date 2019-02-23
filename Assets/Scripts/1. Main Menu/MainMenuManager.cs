@@ -125,9 +125,10 @@ public class MainMenuManager : MonoBehaviour {
 
     // Called to grab the news icon from the specified URL; will call ready() once all are loaded
     IEnumerator SetIcon(int index, string url) {
-        WWW www = new WWW(url);
-        yield return www;
-        articles[index].image.sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+        Texture2D texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+        articles[index].image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
         articles[index].image.color = Color.white;
         imagesLeftToLoad--;
 

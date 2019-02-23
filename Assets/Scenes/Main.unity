@@ -26796,6 +26796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d51f9496cc14b0c96b2f6ced23227b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  champions:
+  - {fileID: 11400000, guid: 2fba1b13942c5432187512e5a3052632, type: 2}
+  - {fileID: 11400000, guid: 08a9d53c5a6f20744a27fcd567fb6e49, type: 2}
 --- !u!114 &1730177481
 MonoBehaviour:
   m_ObjectHideFlags: 0

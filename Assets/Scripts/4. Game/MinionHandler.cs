@@ -6,10 +6,7 @@ public class MinionHandler : MonoBehaviour {
 
     public GameObject minionPrefab;
 
-    PhotonView photonView;
-
     void Start() {
-        photonView = GetComponent<PhotonView>();
         GameUIHandler.onGameTimeUpdate += OnGameTimeUpdate;
     }
 

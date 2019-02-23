@@ -13,7 +13,6 @@ public class Minion : MonoBehaviour {
     public Entity Entity { get; protected set; }
 
     PhotonView photonView;
-    Vector3 trueLoc;
     Quaternion trueRot;
     NavMeshAgent navMeshAgent;
     Transform[] waypoints;
@@ -72,17 +71,5 @@ public class Minion : MonoBehaviour {
     public void GoToWaypoint() {
         navMeshAgent.destination = waypoints[waypointIndex].position;
         navMeshAgent.isStopped = false;
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.isReading) {
-            if (!photonView.isMine) {
-                this.trueLoc = (Vector3)stream.ReceiveNext();
-            }
-        } else {
-            if (photonView.isMine) {
-                stream.SendNext(transform.position);
-            }
-        }
     }
 }

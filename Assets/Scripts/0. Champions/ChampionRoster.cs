@@ -1,24 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class ChampionRoster : MonoBehaviour {
 
     static public ChampionRoster Instance;
+    public Champion[] champions;
 
-    int getChampionsAttempts;
-
-    Champion[] champions;
 
     void Start() {
         Instance = this;
     }
 
     public Champion[] GetChampions() {
-        champions = Resources.FindObjectsOfTypeAll(typeof(Champion)) as Champion[];
-        if(champions.Length == 0 && getChampionsAttempts < 10) {
-            Debug.LogWarning("No champions found; retrying attempt" + getChampionsAttempts++);
-            GetChampions();
-        }
         List<Champion> availableChampions = new List<Champion>();
         List<Champion> unownedChampions = new List<Champion>();
 

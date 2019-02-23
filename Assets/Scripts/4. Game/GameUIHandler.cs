@@ -73,7 +73,6 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     public void UpdateAbilities(Champion champion) {
-        Champion template = ChampionRoster.Instance.GetChampion(champion.championName);
         abilityPassive.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Passive), "", champion);
         abilityQ.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Q), "Q", champion);
         abilityW.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.W), "W", champion);

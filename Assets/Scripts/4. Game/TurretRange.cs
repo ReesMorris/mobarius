@@ -16,7 +16,6 @@ public class TurretRange : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         Entity entity = other.GetComponent<Entity>();
         if(entity != null) {
-            PhotonView photonView = entity.GetComponent<PhotonView>();
             if (entity.team != turret.team) {
                 turret.EnemyEnterRadius(entity);
             }
@@ -26,7 +25,6 @@ public class TurretRange : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         Entity entity = other.GetComponent<Entity>();
         if(entity != null) {
-            PhotonView photonView = entity.GetComponent<PhotonView>();
             turret.EnemyLeaveRadius(entity);
         }
     }
