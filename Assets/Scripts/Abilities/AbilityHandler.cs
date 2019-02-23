@@ -77,6 +77,7 @@ public class AbilityHandler : MonoBehaviour {
             float distance = Vector3.Distance(mousePos, player.transform.position);
             float maxDist = (ability.range / 2f) + ability.damageRadius / 2f;
 
+            // Source: https://answers.unity.com/questions/1309521/how-to-keep-an-object-within-a-circlesphere-radius.html [Accessed 22 February 2019]
             if (distance > maxDist) {
                 Vector3 fromOriginToObject = mousePos - player.transform.position;
                 fromOriginToObject *= maxDist / distance;

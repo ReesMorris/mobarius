@@ -44,8 +44,6 @@ public class ChampionSelect : MonoBehaviour {
         lobbyNetwork = GetComponent<LobbyNetwork>();
         photonView = GetComponent<PhotonView>();
         lockinButton.onClick.AddListener(LockChampion);
-
-        SetupChampions();
     }
 
     void Update() {
@@ -110,7 +108,8 @@ public class ChampionSelect : MonoBehaviour {
         playerState = PlayerStates.picking;
         playersReady = 0;
         waitingForTeams = true;
-        if(PhotonNetwork.isMasterClient) {
+        SetupChampions();
+        if (PhotonNetwork.isMasterClient) {
             AssignTeams();
             DisplayPlayers();
         }

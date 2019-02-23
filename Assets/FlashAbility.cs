@@ -41,6 +41,9 @@ public class FlashAbility : MonoBehaviour {
                     transform.LookAt(abilityHandler.GetMousePosition(gameObject));
                     navMeshAgent.Move(transform.forward * ability.range);
                     abilityHandler.OnAbilityCast(gameObject, abilityType, ability.cooldown, true);
+
+                    // Stop the player from moving because otherwise they'll likely walk backwards
+                    playerMovement.StopMovement();
                 }
             }
         }

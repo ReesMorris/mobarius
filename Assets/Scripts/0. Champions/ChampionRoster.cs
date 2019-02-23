@@ -5,6 +5,8 @@ public class ChampionRoster : MonoBehaviour {
 
     static public ChampionRoster Instance;
 
+    int getChampionsAttempts;
+
     Champion[] champions;
 
     void Start() {
@@ -12,8 +14,11 @@ public class ChampionRoster : MonoBehaviour {
     }
 
     public Champion[] GetChampions() {
-        print("GetChampions()");
         champions = Resources.FindObjectsOfTypeAll(typeof(Champion)) as Champion[];
+        if(champions.Length == 0 && getChampionsAttempts < 10) {
+            Debug.LogWarning("No champions found; retrying attempt" + getChampionsAttempts++);
+            GetChampions();
+        }
         List<Champion> availableChampions = new List<Champion>();
         List<Champion> unownedChampions = new List<Champion>();
 
@@ -32,8 +37,6 @@ public class ChampionRoster : MonoBehaviour {
         foreach(Champion champion in unownedChampions) {
             availableChampions.Add(champion);
         }
-
-        print(availableChampions.Count);
 
         return availableChampions.ToArray();
     }
