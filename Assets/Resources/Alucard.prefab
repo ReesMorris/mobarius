@@ -1185,6 +1185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea16a912b6df449cd91d83c312c85b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 299}
   usernameText: {fileID: 1543}
   healthBarFill: {fileID: 1558}
   damageIndicator: {fileID: 1542}

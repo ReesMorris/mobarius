@@ -32,7 +32,7 @@ public class MinionBehaviour : MonoBehaviour {
                     navMeshAgent.isStopped = true;
                     if(timeSinceLastShot + Minion.attackSpeed < Time.time) {
                         timeSinceLastShot = Time.time;
-                        photonView.RPC("Shoot", PhotonTargets.All, 100f, Minion.Entity.team, transform.position, Minion.attackDamage, target.GetComponent<PhotonView>().viewID, null);
+                        photonView.RPC("Shoot", PhotonTargets.All, 100f, Minion.Entity.team, transform.position, Minion.attackDamage, target.GetComponent<PhotonView>().viewID, photonView.viewID);
                     }
                 } else {
                     navMeshAgent.destination = target.transform.position;
@@ -76,7 +76,7 @@ public class MinionBehaviour : MonoBehaviour {
     }
 
     [PunRPC]
-    void Shoot(float speed, PunTeams.Team team, Vector3 spawnPos, float damage, int photonId, PhotonPlayer shooter) {
+    void Shoot(float speed, PunTeams.Team team, Vector3 spawnPos, float damage, int photonId, int shooter) {
         GameObject bullet = Instantiate(Minion.bulletPrefab, spawnPos, transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
         b.Setup(damage, team, transform.position, photonId, shooter);

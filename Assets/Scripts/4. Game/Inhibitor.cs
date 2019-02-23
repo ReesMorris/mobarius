@@ -84,7 +84,7 @@ public class Inhibitor : MonoBehaviour {
     }
 
     [PunRPC]
-    public void Damage(float amount, PhotonPlayer shooter) {
+    public void Damage(float amount, int shooterId) {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
         if (currentHealth == 0f) {

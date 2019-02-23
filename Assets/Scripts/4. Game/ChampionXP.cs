@@ -16,6 +16,7 @@ public class ChampionXP : MonoBehaviour {
     int currentXP = 0;
     int currentLevel = 1;
     int nextLevelXP;
+    int previousLevelXP = 0;
     Champion champion;
     public PhotonView photonView { get; protected set; }
 
@@ -25,15 +26,6 @@ public class ChampionXP : MonoBehaviour {
         champion = GetComponent<PlayerChampion>().Champion;
 
         Turret.onTurretDestroyed += OnTurretDestroyed;
-    }
-
-    void Update() {
-        if (photonView.isMine) {
-            if (Input.GetKeyDown(KeyCode.Z)) {
-                print("giving XP");
-                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
-            }
-        }
     }
 
     // Called when a turret is destroyed; give global XP to every player on the team who destroyed it
@@ -54,6 +46,7 @@ public class ChampionXP : MonoBehaviour {
 
             // Have we levelled up?
             while (currentXP > nextLevelXP) {
+                previousLevelXP = nextLevelXP;
                 currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
                 nextLevelXP += levelIncrement;
 
@@ -62,7 +55,7 @@ public class ChampionXP : MonoBehaviour {
             }
 
             // Make a call saying we've awarded XP (after checking level)
-            float progress = ((float)currentXP / (float)nextLevelXP);
+            float progress = ((float)(currentXP- previousLevelXP) / (float)(nextLevelXP-previousLevelXP));
             if (currentLevel == maxLevel) progress = 1;
             if (onChampionReceiveXP != null)
                 onChampionReceiveXP(photonView.owner, progress);

@@ -78,11 +78,11 @@ public class Champion : ScriptableObject {
     public void ResetDamage() {
         damage.Clear();
     }
-    public PhotonPlayer GetKiller() {
+    public int GetKiller() {
         foreach(Damage d in damage) {
-            if (d.player != null && d.timeInflicted + 10f >= GameUIHandler.Instance.TimeElapsed)
-                return d.player;
+            if (d.player != null && d.timeInflicted + 10f >= GameUIHandler.Instance.TimeElapsed && d.player.gameObject.GetComponent<PlayerChampion>() != null)
+                return d.player.viewID;
         }
-        return null;
+        return -1;
     }
 }

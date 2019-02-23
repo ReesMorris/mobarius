@@ -7,22 +7,22 @@ public class Bullet : MonoBehaviour {
     float damage;
     float range;
     Vector3 startingPos;
-    PhotonPlayer shooter;
+    int shooterId;
     GameObject target;
     PunTeams.Team team;
     CapsuleCollider capsuleCollider;
 
-    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, float _range, PhotonPlayer _shooter) {
+    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, float _range, int _shooterId) {
         ValidateSetup();
-        shooter = _shooter;
+        shooterId = _shooterId;
         team = _team;
         damage = _damage;
         startingPos = _startingPos;
         range = _range;
     }
-    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, int photonId, PhotonPlayer _shooter) {
+    public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, int photonId, int _shooterId) {
         ValidateSetup();
-        shooter = _shooter;
+        shooterId = _shooterId;
         team = _team;
         damage = _damage;
         startingPos = _startingPos;
@@ -66,30 +66,30 @@ public class Bullet : MonoBehaviour {
         if (playerChampion != null) {
             PhotonView photonView = playerChampion.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && photonView.owner.GetTeam() != team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooterId);
             }
         } else if (turret != null) {
             PhotonView photonView = turret.GetComponent<PhotonView>();
             Targetable targetable = turret.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooterId);
             }
         } else if (inhibitor != null) {
             PhotonView photonView = inhibitor.GetComponent<PhotonView>();
             Targetable targetable = inhibitor.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooterId);
             }
         } else if (nexus != null) {
             PhotonView photonView = nexus.GetComponent<PhotonView>();
             Targetable targetable = nexus.GetComponent<Targetable>();
             if (PhotonNetwork.isMasterClient && targetable.allowTargetingBy == team) {
-                photonView.RPC("Damage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("Damage", PhotonTargets.All, damage, shooterId);
             }
         } else if (entity != null) {
             PhotonView photonView = entity.GetComponent<PhotonView>();
             if (PhotonNetwork.isMasterClient && entity.team != team) {
-                photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooter);
+                photonView.RPC("EntityDamage", PhotonTargets.All, damage, shooterId);
             }
         }
 

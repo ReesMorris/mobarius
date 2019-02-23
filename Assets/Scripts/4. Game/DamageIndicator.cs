@@ -9,9 +9,13 @@ public class DamageIndicator : MonoBehaviour {
 
 	void Start () {
         image = GetComponent<Image>();
+        StartResize();
+	}
+
+    public void StartResize() {
         if (PhotonNetwork.player.IsLocal)
             StartCoroutine("Resize");
-	}
+    }
 
     IEnumerator Resize() {
         while(true) {

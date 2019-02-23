@@ -11,6 +11,7 @@ public class PlayerChampion : MonoBehaviour {
     public static OnPlayerDamaged onPlayerDamaged;
 
     [Header("UI")]
+    public GameObject canvas;
     public TMP_Text usernameText;
     public Image healthBarFill;
     public Image damageIndicator;
@@ -71,6 +72,11 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void Spawn() {
+
+        // Show the canvas for username/health/etc.
+        canvas.SetActive(true);
+        damageIndicator.GetComponent<DamageIndicator>().StartResize();
+
         PhotonView = GetComponent<PhotonView>();
         gameObject.layer = LayerMask.NameToLayer("Targetable");
         if (PhotonView.isMine) {
@@ -98,12 +104,13 @@ public class PlayerChampion : MonoBehaviour {
 
     // Called when a champion takes damage by a source
     [PunRPC]
-    void Damage(float amount, PhotonPlayer attacker) {
-        if(!Champion.invincible) {
+    void Damage(float amount, int attackerId) {
+        if(!Champion.invincible && !IsDead) {
             Champion.health = Mathf.Max(Champion.health - amount, 0f);
 
             // If the champion is the local player, update their UI to reflect the damage
             if (PhotonView.isMine) {
+                PhotonView attacker = PhotonView.Find(attackerId);
                 Champion.damage.Insert(0, new Damage(attacker, amount, gameUIHandler.TimeElapsed));
                 if(onPlayerDamaged != null)
                     onPlayerDamaged();
@@ -126,7 +133,12 @@ public class PlayerChampion : MonoBehaviour {
     }
 
     [PunRPC]
-    void OnDeath(PhotonPlayer killer) {
+    void OnDeath(int killerId) {
+        // Get the killer
+        PhotonView killer = PhotonView.Find(killerId);
+
+        // Hide the canvas for username/health/etc.
+        canvas.SetActive(false);
 
         // Kill messages
         if (killer == null) {
@@ -141,31 +153,28 @@ public class PlayerChampion : MonoBehaviour {
                     GameUIHandler.Instance.MessageWithSound("Announcer/SelfSlain", "You have been slain!");
                 } else {
                     // Ally player death
-                    GameUIHandler.Instance.MessageWithSound("Announcer/AllySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                    GameUIHandler.Instance.MessageWithSound("Announcer/AllySlain", killer.owner.NickName + " has slain " + PhotonView.owner.NickName);
                 }
             } else {
                 // Death was on enemy side
-                if(PhotonNetwork.player == killer) {
+                if(PhotonNetwork.player == killer.owner) {
                     GameUIHandler.Instance.MessageWithSound("Announcer/SelfKill", "You have slain " + PhotonView.owner.NickName);
                 } else {
                     // I didn't kill them
-                    GameUIHandler.Instance.MessageWithSound("Announcer/EnemySlain", killer.NickName + " has slain " + PhotonView.owner.NickName);
+                    GameUIHandler.Instance.MessageWithSound("Announcer/EnemySlain", killer.owner.NickName + " has slain " + PhotonView.owner.NickName);
                 }
             }
-            ScoreHandler.Instance.IncreaseScore(killer.GetTeam());
+            ScoreHandler.Instance.IncreaseScore(killer.owner.GetTeam());
 
             // Give XP to the killer
-            if (PhotonNetwork.player == killer) {
-                ChampionXP championXP = GetComponent<ChampionXP>();
-                if (championXP != null) {
-                    championXP.photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
-                }
+            if (PhotonNetwork.isMasterClient) {
+                killer.photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
             }
 
             // KDA scores
             if (PhotonView.isMine)
                 ScoreHandler.Instance.OnDeath();
-            if (PhotonNetwork.player == killer)
+            if (PhotonNetwork.player == killer.owner)
                 ScoreHandler.Instance.OnKill();
         }
 

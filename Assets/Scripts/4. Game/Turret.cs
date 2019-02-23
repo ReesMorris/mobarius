@@ -122,7 +122,7 @@ public class Turret : MonoBehaviour {
     }
 
     [PunRPC]
-    public void Damage(float amount, PhotonPlayer shooter) {
+    public void Damage(float amount, int shooterId) {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - amount);
         healthImage.fillAmount = (CurrentHealth / baseHealth);
         if (CurrentHealth == 0f) {
@@ -161,7 +161,7 @@ public class Turret : MonoBehaviour {
             if(currentTarget == null || currentTarget.GetIsDead())
                 EnemyLeaveRadius(currentTarget);
             else {
-                photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, null);
+                photonView.RPC("Shoot", PhotonTargets.All, 100f, bulletSpawn.position, currentDamage, currentTarget.GetComponent<PhotonView>().viewID, photonView.viewID);
                 currentDamage += baseDamage;
             }
             yield return new WaitForSeconds(0.833f);
@@ -169,7 +169,7 @@ public class Turret : MonoBehaviour {
     }
 
     [PunRPC]
-    void Shoot(float speed, Vector3 spawnPos, float damage, int photonId, PhotonPlayer shooter) {
+    void Shoot(float speed, Vector3 spawnPos, float damage, int photonId, int shooter) {
         GameObject bullet = Instantiate(bulletPrefab, spawnPos, transform.rotation);
         Bullet b = bullet.GetComponent<Bullet>();
         b.Setup(damage, team, transform.position, photonId, shooter);
