@@ -14,15 +14,19 @@ public class PlayerAnimator : MonoBehaviour {
     }
 
     public void PlayAnimation(string name) {
-        if (animator != null) {
-            CurrentAnimation = name;
-            photonView.RPC("Animate", PhotonTargets.All, name);
+        if (photonView.isMine) {
+            if (animator != null) {
+                CurrentAnimation = name;
+                photonView.RPC("Animate", PhotonTargets.All, name);
+            }
         }
     }
 
     void Update() {
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation))
-            PlayAnimation(CurrentAnimation);
+        if (photonView.isMine) {
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation))
+                PlayAnimation(CurrentAnimation);
+        }
     }
 
     [PunRPC]
