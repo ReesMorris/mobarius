@@ -34,3 +34,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Z Moba
+Assets/addons/Z!M.O.B.A Environment Art Pack/*
