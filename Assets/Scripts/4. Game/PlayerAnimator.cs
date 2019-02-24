@@ -24,7 +24,7 @@ public class PlayerAnimator : MonoBehaviour {
 
     void Update() {
         if (photonView.isMine) {
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation))
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation) && !CurrentAnimation.Contains("Ability"))
                 PlayAnimation(CurrentAnimation);
         }
     }

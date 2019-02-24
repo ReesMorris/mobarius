@@ -11,11 +11,17 @@ public class AlucardQ : MonoBehaviour {
     PhotonView photonView;
     PlayerChampion playerChampion;
     AbilityHandler abilityHandler;
+    PlayerAnimator playerAnimator;
+    PlayerMovement playerMovement;
     Ability ability;
+    bool sequenceActive;
 
     void Start() {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
+        playerAnimator = GetComponent<PlayerAnimator>();
+        playerMovement = GetComponent<PlayerMovement>();
+        PlayerMovement.onPlayerMove += OnPlayerMove;
         abilityHandler = AbilityHandler.Instance;
         ability = abilityHandler.GetChampionAbilities(playerChampion.Champion.championName, abilityKey);
         GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
@@ -48,19 +54,41 @@ public class AlucardQ : MonoBehaviour {
                 // Are we firing?
                 if (Input.GetMouseButtonDown(0)) {
                     if (abilityHandler.Aiming) {
-                        
-                        // Tell the AbilityHandler that we've used this ability
-                        abilityHandler.OnAbilityCast(gameObject, abilityKey, ability.cooldown, false);
-
-                        // Do ability stuff
-                        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, abilityHandler.GetAOEPosition(), Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
-                        e.Init(ability.damageRadius, ability, photonView.viewID);
-
-                        // Take mana from the player
-                        playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
+                        StartCoroutine("AbilitySequence");
                     }
                 }
             }
         }
+    }
+
+    public void OnPlayerMove() {
+        if(sequenceActive) {
+            StopCoroutine("AbilitySequence");
+        }
+    }
+
+    IEnumerator AbilitySequence() {
+
+        sequenceActive = true;
+
+        // Hide the placeholders
+        abilityHandler.StopCasting(gameObject);
+
+        // Play an animation
+        playerMovement.StopMovement();
+        playerAnimator.PlayAnimation("Ability01");
+
+        yield return new WaitForSeconds(0.6f);
+        sequenceActive = false;
+
+        // Tell the AbilityHandler that we've used this ability
+        abilityHandler.OnAbilityCast(gameObject, abilityKey, ability.cooldown, false);
+
+        // Do ability stuff
+        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, abilityHandler.GetAOEPosition(), Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
+        e.Init(ability.damageRadius, ability, photonView.viewID);
+
+        // Take mana from the player
+        playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);
     }
 }
