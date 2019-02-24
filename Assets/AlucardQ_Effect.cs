@@ -5,20 +5,16 @@ using UnityEngine;
 public class AlucardQ_Effect : MonoBehaviour {
 
     PhotonView photonView;
-    Ability ability;
-    PhotonPlayer attacker;
-    int attackerId;
 
-    public void Init(float radius, Ability _ability, int _attackerId) {
-        attacker = PhotonView.Find(_attackerId).owner;
-        ability = _ability;
-        attackerId = _attackerId;
+    public void Init(float radius, float damage, int attackerId) {
         photonView = GetComponent<PhotonView>();
-        photonView.RPC("InitRPC", PhotonTargets.AllBuffered, radius);
+        photonView.RPC("InitRPC", PhotonTargets.AllBuffered, radius, damage, attackerId);
     }
 
     [PunRPC]
-    void InitRPC(float radius) {
+    void InitRPC(float radius, float damage, int attackerId) {
+        PhotonPlayer attacker = PhotonView.Find(attackerId).owner;
+
         radius /= 2f;
         transform.position += Vector3.up * 0.3f;
         Transform[] allChildren = GetComponentsInChildren<Transform>();
@@ -35,9 +31,9 @@ public class AlucardQ_Effect : MonoBehaviour {
                     PhotonPlayer target = targetView.owner;
                     if (entity.team != attacker.GetTeam()) {
                         if (entity.GetComponent<PlayerChampion>() != null)
-                            targetView.RPC("Damage", PhotonTargets.AllBuffered, AbilityHandler.Instance.GetDamageFromAbility(ability, "damage"), attackerId);
+                            targetView.RPC("Damage", PhotonTargets.AllBuffered, damage, attackerId);
                         else if (entity.GetComponent<Minion>() != null)
-                            targetView.RPC("EntityDamage", PhotonTargets.AllBuffered, AbilityHandler.Instance.GetDamageFromAbility(ability, "damage"), attackerId);
+                            targetView.RPC("EntityDamage", PhotonTargets.AllBuffered, damage, attackerId);
                     }
                 }
             }

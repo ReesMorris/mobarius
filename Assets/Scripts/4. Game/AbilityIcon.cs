@@ -41,8 +41,8 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             string type = "";
             string colour = "#eee";
             float extraDamage;
-            for (int i = 1; i <= ad.maxLevel; i++) {
-                float damage = ad.GetDamageAtLevel(i);
+            for (int i = 1; i <= ability.maxLevel; i++) {
+                float damage = ability.GetDamage(ad.key, i);
 
                 // Set the colour for the ability
                 if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage) {
@@ -57,12 +57,12 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 }
 
                 // Show the text (1/2/3/4/5)
-                if (i == ad.Level) {
+                if (i == ability.Level) {
                     message += "<color="+colour+">" + damage + "</color>";
                 } else {
                     message += damage;
                 }
-                if (i != ad.maxLevel)
+                if (i != ability.maxLevel)
                     message += "/";
             }
 

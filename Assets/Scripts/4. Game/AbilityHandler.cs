@@ -152,15 +152,6 @@ public class AbilityHandler : MonoBehaviour {
         }
     }
 
-    // Returns the amount of damage a specific key in an ability will do
-    public float GetDamageFromAbility(Ability ability, string key) {
-        foreach(AbilityDamage abilityDamage in ability.damage) {
-            if (abilityDamage.key == key)
-                return abilityDamage.GetDamage();
-        }
-        return 0f;
-    }
-
     // Game Start and End functions
     void OnGameStart() {
         gameEnded = false;
