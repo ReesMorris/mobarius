@@ -52,7 +52,10 @@ public class Entity : MonoBehaviour {
     // Called when a champion takes damage by a source
     [PunRPC]
     void EntityDamage(float amount, int attackerId) {
-        PhotonPlayer attacker = PhotonView.Find(attackerId).owner;
+        PhotonView attackerView = PhotonView.Find(attackerId);
+        PhotonPlayer attacker = null;
+        if(attackerView != null)
+            attacker = attackerView.owner;
 
         if (useEntityBehaviour) {
             health = Mathf.Max(health - amount, 0f);

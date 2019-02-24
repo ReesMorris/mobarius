@@ -38,12 +38,36 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         string desc = ability.desc;
         foreach(AbilityDamage ad in ability.damage) {
             string message = "";
-            if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage)
-                message = ad.damage + " <color=#fa8a01>(+" + champion.physicalDamage + ")</color> physical damage";
-            else if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage)
-                message = ad.damage + " <color=#bd77ff>(+" + champion.magicDamage + ")</color> magic damage";
-            else
-                message = "undefined";
+            string type = "";
+            string colour = "#eee";
+            float extraDamage;
+            for (int i = 1; i <= ad.maxLevel; i++) {
+                float damage = ad.GetDamageAtLevel(i);
+
+                // Set the colour for the ability
+                if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage) {
+                    colour = "#fa8a01";
+                    type = "physical damage";
+                    extraDamage = champion.physicalDamage;
+                }
+                if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage) {
+                    colour = "#bd77ff";
+                    type = "magic damage";
+                    extraDamage = champion.magicDamage;
+                }
+
+                // Show the text (1/2/3/4/5)
+                if (i == ad.Level) {
+                    message += "<color="+colour+">" + damage + "</color>";
+                } else {
+                    message += damage;
+                }
+                if (i != ad.maxLevel)
+                    message += "/";
+            }
+
+            // Finish the message
+            message += "<color=" + colour + "> (+" + champion.physicalDamage + ")</color> " + type;
             desc = ReplaceFirst(desc, "{x}", message);
         }
 

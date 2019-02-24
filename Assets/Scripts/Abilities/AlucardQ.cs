@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class AlucardQ : MonoBehaviour {
 
+    public GameObject prefab;
+
     AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.Q;
     PhotonView photonView;
     PlayerChampion playerChampion;
@@ -51,7 +53,8 @@ public class AlucardQ : MonoBehaviour {
                         abilityHandler.OnAbilityCast(gameObject, abilityKey, ability.cooldown, false);
 
                         // Do ability stuff
-                        print("blam!");
+                        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, abilityHandler.GetAOEPosition(), Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
+                        e.Init(ability.damageRadius, ability, photonView.viewID);
 
                         // Take mana from the player
                         playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);

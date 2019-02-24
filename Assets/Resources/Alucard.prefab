@@ -796,11 +796,11 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -1135,8 +1135,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 807}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 15
-  instantiationId: 15
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!114 &1548
@@ -1326,6 +1326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f0c75c94c832e04fb0fde15ac19a5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab: {fileID: 3467100955168985283, guid: f3d8eb9f40c0535458fae34f56fcd74b, type: 3}
 --- !u!1 &293
 GameObject:
   m_ObjectHideFlags: 0

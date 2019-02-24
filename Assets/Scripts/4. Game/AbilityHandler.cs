@@ -156,7 +156,7 @@ public class AbilityHandler : MonoBehaviour {
     public float GetDamageFromAbility(Ability ability, string key) {
         foreach(AbilityDamage abilityDamage in ability.damage) {
             if (abilityDamage.key == key)
-                return abilityDamage.damage;
+                return abilityDamage.GetDamage();
         }
         return 0f;
     }
@@ -167,5 +167,10 @@ public class AbilityHandler : MonoBehaviour {
     }
     void OnGameEnd() {
         gameEnded = true;
+    }
+
+    // Positions
+    public Vector3 GetAOEPosition() {
+        return aoeIndicatorIndicator.transform.position;
     }
 }
