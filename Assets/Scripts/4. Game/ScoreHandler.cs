@@ -6,9 +6,12 @@ using TMPro;
 public class ScoreHandler : MonoBehaviour {
 
 	public static ScoreHandler Instance;
-    public TMP_Text scoreUI;
+    public TMP_Text scoreUI1;
+    public TMP_Text scoreUI2;
     public TMP_Text kdaUI;
     public TMP_Text minionKillsUI;
+    public string friendlyColour = "#00b1fd";
+    public string enemyColour = "#fd002a";
 
     PhotonView photonView;
     int blueScore;
@@ -45,7 +48,17 @@ public class ScoreHandler : MonoBehaviour {
     void UpdateScoreUI(int _redScore, int _blueScore) {
         redScore = _redScore;
         blueScore = _blueScore;
-        scoreUI.text = "<b><color=#00b1fd>" + blueScore + "</color></b>vs<b><color=#fd002a>" + redScore + "</color></b>";
+
+        // Now we have to depend on the teams here
+        // BLUE team always goes first, but the COLOUR of that score actually depends on whether the player is on the same team
+        // Therefore, BLUE score shows first but will be coloured RED if the player is on the RED team
+        if (PhotonNetwork.player.GetTeam() == PunTeams.Team.blue) {
+            scoreUI1.text = "<b><color=" + friendlyColour + ">" + blueScore + "</color></b>";
+            scoreUI2.text = "<b><color=" + enemyColour + ">" + redScore + "</color></b>";
+        } else {
+            scoreUI1.text = "<b><color=" + enemyColour + ">" + blueScore + "</color></b>";
+            scoreUI2.text = "<b><color=" + friendlyColour + ">" + redScore + "</color></b>";
+        }
     }
 
     public bool IsFirstBlood() {

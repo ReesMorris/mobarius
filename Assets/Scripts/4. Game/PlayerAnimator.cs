@@ -23,16 +23,15 @@ public class PlayerAnimator : MonoBehaviour {
     }
 
     void Update() {
-        if (photonView.isMine) {
-            if (!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation) && !CurrentAnimation.Contains("Ability"))
-                PlayAnimation(CurrentAnimation);
-        }
+        if (photonView.isMine)
+            if (animator != null && CurrentAnimation != null)
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName(CurrentAnimation) && !CurrentAnimation.Contains("Ability"))
+                    PlayAnimation(CurrentAnimation);
     }
 
     [PunRPC]
     void Animate(string name) {
-        if (animator != null) {
+        if (animator != null)
             animator.Play(name);
-        }
     }
 }
