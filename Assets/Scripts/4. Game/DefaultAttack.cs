@@ -10,6 +10,7 @@ public class DefaultAttack : MonoBehaviour {
 
     PhotonView photonView;
     PlayerChampion playerChampion;
+    PlayerMovement playerMovement;
     NavMeshAgent navMeshAgent;
     float lastShotTime;
     bool gameEnded;
@@ -19,6 +20,7 @@ public class DefaultAttack : MonoBehaviour {
     void Start() {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
+        playerMovement = GetComponent<PlayerMovement>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         GameHandler.onGameEnd += OnGameEnd;
     }
@@ -33,13 +35,19 @@ public class DefaultAttack : MonoBehaviour {
                 if(target != null) {
                     PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();
                     Entity targetEntity = target.GetComponent<Entity>();
+
+                    // Check to make sure the target is still alive
                     if (targetChampion != null)
                         if (targetChampion.IsDead)
                             target = null;
                     if (targetEntity != null)
                         if (targetEntity.GetIsDead())
                             target = null;
-                    if(target != null) {
+
+                    // Is the target stil alive?
+                    if (target == null)
+                        playerMovement.StopMovement();
+                    else {
                         if (target.GetComponent<PhotonView>() != photonView) {
                             if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
                                 if(Time.time >= (lastShotTime + cooldownTime)) {

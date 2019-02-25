@@ -37,6 +37,14 @@ public class ChampionXP : MonoBehaviour {
         }
     }
 
+    void Update() {
+        if(photonView.isMine) {
+            if(Input.GetKeyDown(KeyCode.Z)) {
+                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
+            }
+        }
+    }
+
     [PunRPC]
     public void GiveXP(int amount) {
         if(currentLevel < maxLevel) {

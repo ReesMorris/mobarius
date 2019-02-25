@@ -104,7 +104,5 @@ public class Champion : ScriptableObject {
         armour += armourIncrease;
         magicResist += magicResistIncrease;
         movementSpeed += movementSpeedIncrease;
-        Debug.Log(maxHealth);
-        Debug.Log(healthIncrease);
     }
 }

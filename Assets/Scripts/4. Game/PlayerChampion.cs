@@ -79,6 +79,7 @@ public class PlayerChampion : MonoBehaviour {
 
         PhotonView = GetComponent<PhotonView>();
         gameObject.layer = LayerMask.NameToLayer("Targetable");
+
         if (PhotonView.isMine) {
             GameHandler gameHandler = GameHandler.Instance;
             Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
@@ -93,8 +94,10 @@ public class PlayerChampion : MonoBehaviour {
             playerCamera.FocusOnPlayer(true);
             GetComponent<NavMeshAgent>().enabled = true;
             GetComponent<PlayerMovement>().enabled = true;
-            IsDead = false;
         }
+
+        // Update some variables
+        IsDead = false;
     }
 
     [PunRPC]
@@ -110,30 +113,39 @@ public class PlayerChampion : MonoBehaviour {
 
             // If the champion is the local player, update their UI to reflect the damage
             if (PhotonView.isMine) {
+
+                // Get the attacker and store their damage in the champion
                 PhotonView attacker = PhotonView.Find(attackerId);
                 Champion.damage.Insert(0, new Damage(attacker, amount, gameUIHandler.TimeElapsed));
+
+                // Call the delegate for when the player is damaged
                 if(onPlayerDamaged != null)
                     onPlayerDamaged();
+
+                // Update the local health bar UI
                 gameUIHandler.UpdateStats(Champion);
 
                 // Does the player have any health left?
                 if (Champion.health <= 0f) {
-                    IsDead = true;
                     GetComponent<PlayerMovement>().StopMovement();
                     GetComponent<PlayerAnimator>().PlayAnimation("Death");
                     PhotonView.RPC("OnDeath", PhotonTargets.All, Champion.GetKiller());
                     Champion.ResetDamage();
                     DeathHandler.Instance.OnDeath(this);
                 }
-            }
 
-            // Tell other players that this player has been damaged (to update the health bar)
-            PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, new object[] { Champion.health, Champion.maxHealth });
+                // Tell other players to update the UI which shows over the character's head
+                PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.All, Champion.health, Champion.maxHealth);
+            }
         }
     }
 
     [PunRPC]
     void OnDeath(int killerId) {
+
+        // Update some variables
+        IsDead = true;
+
         // Get the killer
         PhotonView killer = PhotonView.Find(killerId);
 
@@ -193,11 +205,14 @@ public class PlayerChampion : MonoBehaviour {
             // If the champion is the local player, update their UI to reflect the healing
             Champion.health = Mathf.Min(Champion.health + amount, Champion.maxHealth);
 
-            if (PhotonView.isMine)
+            if (PhotonView.isMine) {
+
+                // Update the local health bar UI
                 gameUIHandler.UpdateStats(Champion);
 
-            // Tell other players that this player has been healed (to update the health bar)
-            PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.AllBuffered, new object[] { Champion.health, Champion.maxHealth });
+                // Tell other players to update the UI which shows over the character's head
+                PhotonView.RPC("UpdatePlayerHealth", PhotonTargets.AllBuffered, Champion.health, Champion.maxHealth);
+            }
         }
     }
 
@@ -206,11 +221,16 @@ public class PlayerChampion : MonoBehaviour {
     void GiveMana(float amount) {
         if (Champion != null) {
             Champion.mana = Mathf.Min(Champion.mana + amount, Champion.maxMana);
-            PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
 
             // If the champion is the local player, update their UI to reflect the mana change
-            if (PhotonView.isMine)
+            if (PhotonView.isMine) {
+
+                // Update the local mana bar UI
                 gameUIHandler.UpdateStats(Champion);
+
+                // Tell other players to update the UI which shows over the character's head
+                PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, Champion.mana, Champion.maxMana);
+            }
         }
     }
 
@@ -219,11 +239,17 @@ public class PlayerChampion : MonoBehaviour {
     void TakeMana(float amount) {
         if (Champion != null) {
             Champion.mana = Mathf.Max(Champion.mana - amount, 0f);
-            PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, new object[] { Champion.mana, Champion.maxMana });
 
             // If the champion is the local player, update their UI to reflect the mana change
-            if (PhotonView.isMine)
+            if (PhotonView.isMine) {
+
+                // Update the local mana bar UI
                 gameUIHandler.UpdateStats(Champion);
+
+                // Tell other players to update the UI which shows over the character's head
+                PhotonView.RPC("UpdatePlayerMana", PhotonTargets.AllBuffered, Champion.mana, Champion.maxMana);
+
+            }
         }
     }
 

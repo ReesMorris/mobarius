@@ -8,17 +8,17 @@ public class DamageIndicator : MonoBehaviour {
     Image image;
 
 	void Start () {
-        image = GetComponent<Image>();
         StartResize();
 	}
 
     public void StartResize() {
+        image = GetComponent<Image>();
         if (PhotonNetwork.player.IsLocal)
             StartCoroutine("Resize");
     }
 
     IEnumerator Resize() {
-        while(true) {
+        while (true) {
             if (image.fillAmount > 0)
                 image.fillAmount -= 0.02f;
             yield return new WaitForSeconds(0.01f);
