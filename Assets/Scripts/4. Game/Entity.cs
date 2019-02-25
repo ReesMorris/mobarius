@@ -6,6 +6,9 @@ using UnityEngine.AI;
 
 public class Entity : MonoBehaviour {
 
+    public delegate void OnEntityDeath(int attackerId);
+    public static OnEntityDeath onEntityDeath;
+
     public bool useEntityBehaviour;
     public Image healthBarFill;
 
@@ -52,10 +55,6 @@ public class Entity : MonoBehaviour {
     // Called when a champion takes damage by a source
     [PunRPC]
     void EntityDamage(float amount, int attackerId) {
-        PhotonView attackerView = PhotonView.Find(attackerId);
-        PhotonPlayer attacker = null;
-        if(attackerView != null)
-            attacker = attackerView.owner;
 
         if (useEntityBehaviour) {
             health = Mathf.Max(health - amount, 0f);
@@ -78,16 +77,13 @@ public class Entity : MonoBehaviour {
                     }
                 }
 
-                // Last hit?
-                if(attacker != null) {
-                    if(attacker == PhotonNetwork.player) {
-                        ScoreHandler.Instance.OnMinionKill();
-                    }
-                }
+                // Tell other scripts we're dead
+                if (onEntityDeath != null)
+                    onEntityDeath(attackerId);
 
-                if (PhotonNetwork.isMasterClient) {
+                // Destroy the bullet
+                if (PhotonNetwork.isMasterClient)
                     PhotonNetwork.Destroy(gameObject);
-                }
             }
         }
     }

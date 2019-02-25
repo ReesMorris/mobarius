@@ -47,6 +47,8 @@ public class PlayerChampion : MonoBehaviour {
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
 
+                Entity.onEntityDeath += OnEntityDeath;
+
                 // Set up ability indicators and particle effects
                 AbilityHandler.Instance.SetupAbilityIndicators(gameObject);
                 EffectsHandler.Instance.SetupEffects(gameObject, PhotonView);
@@ -281,5 +283,11 @@ public class PlayerChampion : MonoBehaviour {
             healthBarFill.color = GameUIHandler.Instance.enemyHealthColour;
 
         oldHealth = health;
+    }
+    
+    // Called when an entity dies
+    void OnEntityDeath(int attackerId) {
+        if(attackerId == PhotonView.viewID)
+            ScoreHandler.Instance.OnMinionKill();
     }
 }
