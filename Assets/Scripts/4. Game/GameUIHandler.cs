@@ -34,7 +34,7 @@ public class GameUIHandler : MonoBehaviour {
     public Image characterIcon;
     public TMP_Text levelText;
     public Image levelFill;
-    public GameObject levelUpText;
+    public TMP_Text levelUpText;
 
     [Header("Display Text")]
     public TMP_Text displayText;
@@ -251,16 +251,15 @@ public class GameUIHandler : MonoBehaviour {
         }
     }
 
-    void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level) {
+    void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades) {
         if(PhotonNetwork.player == player) {
             levelText.text = level.ToString();
-            StartCoroutine(OnLevelUp());
+            ShowLevelUpText(unclaimedUpgrades);
         }
     }
 
-    IEnumerator OnLevelUp() {
-        levelUpText.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        levelUpText.SetActive(false);
+    void ShowLevelUpText(int unclaimedUpgrades) {
+        levelUpText.text = "LEVEL UP! +" + unclaimedUpgrades;
+        levelUpText.gameObject.SetActive(true);
     }
 }

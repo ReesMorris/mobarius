@@ -17,10 +17,16 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public TMP_Text tooltipText;
     public TMP_Text tooltipInfo;
 
+    Champion champion;
     Ability ability;
+    RectTransform rectTransform;
 
-    public void SetupIcon(Ability _ability, string keyCode, Champion champion) {
+    string cost;
+    string desc;
+
+    public void SetupIcon(Ability _ability, string keyCode, Champion _champion) {
         ability = _ability;
+        champion = _champion;
         icon.sprite = ability.icon;
         icon2.sprite = ability.icon;
         tooltip.SetActive(false);
@@ -29,59 +35,73 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             cooldown.text = "";
             hotkey.text = keyCode;
         }
+        UpdateTooltipText();
+    }
 
-        string cost = ability.cost + " Mana";
-        if (ability.cost == 0)
-            cost = "No Cost";
+    // Called when a champion levels up; so that it doesn't need to be done every single time
+    void UpdateTooltipText() {
+        if (champion != null) {
+            cost = ability.cost + " Mana";
+            if (ability.cost == 0)
+                cost = "No Cost";
 
-        // Replace string texts
-        string desc = ability.desc;
-        foreach(AbilityDamage ad in ability.damage) {
-            string message = "";
-            string type = "";
-            string colour = "#eee";
-            float extraDamage;
-            for (int i = 1; i <= ability.maxLevel; i++) {
-                float damage = ability.GetDamage(ad.key, i);
+            // Replace string texts
+            desc = ability.desc;
+            foreach (AbilityDamage ad in ability.damage) {
+                string message = "";
+                string type = "";
+                string colour = "#eee";
+                float extraDamage;
+                for (int i = 1; i <= ability.maxLevel; i++) {
+                    float damage = ability.GetDamage(ad.key, i);
 
-                // Set the colour for the ability
-                if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage) {
-                    colour = "#fa8a01";
-                    type = "physical damage";
-                    extraDamage = champion.physicalDamage;
+                    // Set the colour for the ability
+                    if (ad.damageType == AbilityHandler.DamageTypes.PhysicalDamage) {
+                        colour = "#fa8a01";
+                        type = "physical damage";
+                        extraDamage = champion.physicalDamage;
+                    }
+                    if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage) {
+                        colour = "#bd77ff";
+                        type = "magic damage";
+                        extraDamage = champion.magicDamage;
+                    }
+
+                    // Show the text (1/2/3/4/5)
+                    if (i == ability.Level) {
+                        message += "<color=" + colour + ">" + damage + "</color>";
+                    } else {
+                        message += damage;
+                    }
+                    if (i != ability.maxLevel)
+                        message += "/";
                 }
-                if (ad.damageType == AbilityHandler.DamageTypes.MagicDamage) {
-                    colour = "#bd77ff";
-                    type = "magic damage";
-                    extraDamage = champion.magicDamage;
-                }
 
-                // Show the text (1/2/3/4/5)
-                if (i == ability.Level) {
-                    message += "<color="+colour+">" + damage + "</color>";
-                } else {
-                    message += damage;
-                }
-                if (i != ability.maxLevel)
-                    message += "/";
+                // Finish the message
+                message += "<color=" + colour + "> (+" + champion.physicalDamage + ")</color> " + type;
+                desc = ReplaceFirst(desc, "{x}", message);
             }
-
-            // Finish the message
-            message += "<color=" + colour + "> (+" + champion.physicalDamage + ")</color> " + type;
-            desc = ReplaceFirst(desc, "{x}", message);
         }
+    }
 
-        tooltipText.text = 
-            "<color=#dfcf8f><size=18>" + ability.name + "</size></color>\n" + 
-            "<color=#b2b2b3><size=15>" + cost + "</size></color>\n\n" + 
-            "<color=#b2b2b3><size=15>" + desc + "</size></color>";
+    // Called when the tooltip is set to show for this ability
+    void SetTooltipText() {
+        tooltipText.text =
+                "<color=#dfcf8f><size=18>" + ability.name + "</size></color>\n" +
+                "<color=#b2b2b3><size=15>" + cost + "</size></color>\n\n" +
+                "<color=#b2b2b3><size=15>" + desc + "</size></color>";
         tooltipInfo.text =
             "<color=#dfcf8f><size=18>[" + ability.abilityKey + "]</size></color>\n" +
             "<color=#b2b2b3><size=15>" + ability.cooldown + "s Cooldown</size></color>";
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        if(tooltip != null) {
+        if(rectTransform == null)
+            rectTransform = GetComponent<RectTransform>();
+
+        if (tooltip != null) {
+            SetTooltipText();
+            tooltip.transform.position = new Vector2(transform.position.x - (rectTransform.rect.width / 4f), 3 + transform.position.y + (rectTransform.rect.height / 4f));
             tooltip.SetActive(true);
             tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(570, tooltipText.preferredHeight + 20f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
             tooltip.SetActive(false);

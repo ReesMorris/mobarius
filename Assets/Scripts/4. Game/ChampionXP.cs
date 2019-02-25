@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChampionXP : MonoBehaviour {
 
-    public delegate void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level);
+    public delegate void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades);
     public static OnChampionLevelUp onChampionLevelUp;
     public delegate void OnChampionReceiveXP(PhotonPlayer player, float progress);
     public static OnChampionReceiveXP onChampionReceiveXP;
@@ -16,7 +16,8 @@ public class ChampionXP : MonoBehaviour {
     int currentXP = 0;
     int currentLevel = 1;
     int nextLevelXP;
-    int previousLevelXP = 0;
+    int previousLevelXP;
+    int unclaimedUpgrades;
     Champion champion;
     public PhotonView photonView { get; protected set; }
 
@@ -57,10 +58,11 @@ public class ChampionXP : MonoBehaviour {
                 previousLevelXP = nextLevelXP;
                 currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
                 nextLevelXP += levelIncrement;
+                unclaimedUpgrades++;
 
                 if (onChampionLevelUp != null && photonView.isMine) {
                     champion.OnLevelUp();
-                    onChampionLevelUp(champion, photonView.owner, currentLevel);
+                    onChampionLevelUp(champion, photonView.owner, currentLevel, unclaimedUpgrades);
                 }
             }
 
