@@ -21,7 +21,8 @@ public class AlucardQ : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
         playerAnimator = GetComponent<PlayerAnimator>();
         playerMovement = GetComponent<PlayerMovement>();
-        PlayerMovement.onPlayerMove += OnPlayerMove;
+        PlayerMovement.onPlayerMove += StopSequence;
+        AbilityHandler.onAbilityActivated += OnAbilityActivated;
         abilityHandler = AbilityHandler.Instance;
         ability = abilityHandler.GetChampionAbilities(playerChampion.Champion.championName, abilityKey);
         GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
@@ -61,15 +62,21 @@ public class AlucardQ : MonoBehaviour {
         }
     }
 
-    public void OnPlayerMove() {
-        if(sequenceActive) {
+    void OnAbilityActivated(Ability _ability) {
+        if(_ability != ability)
+            StopSequence();
+    }
+
+    public void StopSequence() {
+        if(sequenceActive)
             StopCoroutine("AbilitySequence");
-        }
     }
 
     IEnumerator AbilitySequence() {
-
         sequenceActive = true;
+
+        // Send out an event to say that we're about to fire something
+        abilityHandler.AbilityActivated(ability);
 
         // Hide the placeholders
         abilityHandler.StopCasting(gameObject);

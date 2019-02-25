@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour {
     GameObject target;
     PunTeams.Team team;
     CapsuleCollider capsuleCollider;
+    bool hadTarget;
 
     public void Setup(float _damage, PunTeams.Team _team, Vector3 _startingPos, float _range, int _shooterId) {
         ValidateSetup();
@@ -28,6 +29,7 @@ public class Bullet : MonoBehaviour {
         startingPos = _startingPos;
         target = PhotonView.Find(photonId).gameObject;
         capsuleCollider.enabled = false;
+        hadTarget = true;
     }
 
     void ValidateSetup() {
@@ -46,7 +48,7 @@ public class Bullet : MonoBehaviour {
                 Destroy(gameObject);
             }
         } else {
-            if(Vector3.Distance(transform.position, startingPos) > range) {
+            if(hadTarget || Vector3.Distance(transform.position, startingPos) > range) {
                 Destroy(gameObject);
             }
         }

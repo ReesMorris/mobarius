@@ -27,6 +27,7 @@ public class RecallAbility : MonoBehaviour {
         GameHandler.onGameEnd += OnGameEnd;
         PlayerMovement.onPlayerMove += StopChannel;
         PlayerChampion.onPlayerDamaged += StopChannel;
+        AbilityHandler.onAbilityActivated += OnAbilityActivated;
     }
 
     void OnGameEnd() {
@@ -40,6 +41,11 @@ public class RecallAbility : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.B)) {
             AttemptRecall();
         }
+    }
+
+    // Called when an ability is called
+    void OnAbilityActivated(Ability ability) {
+        StopChannel();
     }
 
     // Recall if all conditions match

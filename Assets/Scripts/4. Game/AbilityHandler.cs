@@ -6,6 +6,9 @@ using TMPro;
 
 public class AbilityHandler : MonoBehaviour {
 
+    public delegate void OnAbilityActivated(Ability ability);
+    public static OnAbilityActivated onAbilityActivated;
+
     public GameObject projectileIndicatorPrefab;
     public GameObject aoeRangePrefab;
     public GameObject aoeIndicatorPrefab;
@@ -140,6 +143,12 @@ public class AbilityHandler : MonoBehaviour {
         directionalIndicator.SetActive(false);
         aoeRangeIndicator.SetActive(false);
         aoeIndicatorIndicator.SetActive(false);
+    }
+
+    // Calls when an ability has been activated, but not fired
+    public void AbilityActivated(Ability ability) {
+        if (onAbilityActivated != null)
+            onAbilityActivated(ability);
     }
 
     // Calls when an ability has been fired (after showing indicator)
