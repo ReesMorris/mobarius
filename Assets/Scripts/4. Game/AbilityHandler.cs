@@ -53,10 +53,9 @@ public class AbilityHandler : MonoBehaviour {
     }
 
     // Returns the ability associated with a champion
-    public Ability GetChampionAbilities(string championName, Abilities _ability) {
-        Champion champion = ChampionRoster.Instance.GetChampion(championName);
+    public Ability GetChampionAbility(Champion champion, Abilities abilityKey) {
         foreach(Ability ability in champion.abilities) {
-            if (ability.abilityKey == _ability)
+            if (ability.abilityKey == abilityKey)
                 return ability;
         }
         return null;
@@ -172,5 +171,19 @@ public class AbilityHandler : MonoBehaviour {
     // Positions
     public Vector3 GetAOEPosition() {
         return aoeIndicatorIndicator.transform.position;
+    }
+
+    public int GetAbilityLevel(Champion champion, Ability ability) {
+        switch (ability.abilityKey) {
+            case Abilities.Q:
+                return champion.qLevel;
+            case Abilities.W:
+                return champion.wLevel;
+            case Abilities.E:
+                return champion.eLevel;
+            case Abilities.R:
+                return champion.rLevel;
+        }
+        return 1;
     }
 }

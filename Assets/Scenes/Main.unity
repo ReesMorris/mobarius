@@ -10486,7 +10486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &686978198
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12668,6 +12668,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 0}
 --- !u!114 &834670009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17810,7 +17811,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1122843604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19589,7 +19590,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1246417484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21101,6 +21102,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 0}
 --- !u!114 &1319973622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24514,7 +24516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1586621689
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25269,6 +25271,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 0}
 --- !u!1 &1641156064
 GameObject:
   m_ObjectHideFlags: 0
@@ -27335,9 +27338,13 @@ MonoBehaviour:
   score: {fileID: 2125443920}
   abilityPassive: {fileID: 1636906040}
   abilityQ: {fileID: 1871013028}
+  abilityQUpgrade: {fileID: 1246417485}
   abilityW: {fileID: 2034465774}
+  abilityWUpgrade: {fileID: 686978199}
   abilityE: {fileID: 1839341777}
+  abilityEUpgrade: {fileID: 1122843605}
   abilityR: {fileID: 2042546400}
+  abilityRUpgrade: {fileID: 1586621690}
   abilityD: {fileID: 834670008}
   abilityF: {fileID: 1319973621}
   characterIcon: {fileID: 872079926}
@@ -29395,6 +29402,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 1122843605}
 --- !u!1 &1847736821
 GameObject:
   m_ObjectHideFlags: 0
@@ -29744,6 +29752,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 1246417485}
 --- !u!1 &1871579746
 GameObject:
   m_ObjectHideFlags: 0
@@ -32149,6 +32158,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 686978199}
 --- !u!1 &2042546395
 GameObject:
   m_ObjectHideFlags: 0
@@ -32289,6 +32299,7 @@ MonoBehaviour:
   tooltip: {fileID: 24909901}
   tooltipText: {fileID: 976330969}
   tooltipInfo: {fileID: 2034388169}
+  upgradeButton: {fileID: 1586621690}
 --- !u!1 &2047623511
 GameObject:
   m_ObjectHideFlags: 0

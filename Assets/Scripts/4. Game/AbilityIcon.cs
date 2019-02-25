@@ -16,6 +16,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public GameObject tooltip;
     public TMP_Text tooltipText;
     public TMP_Text tooltipInfo;
+    public Button upgradeButton;
 
     Champion champion;
     Ability ability;
@@ -23,18 +24,35 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     string cost;
     string desc;
+    int level;
 
     public void SetupIcon(Ability _ability, string keyCode, Champion _champion) {
+        level = AbilityHandler.Instance.GetAbilityLevel(_champion, _ability);
+        if (ability == null)
+            SetCooldown(0, 0);
+        if (level == 1 && iconBg != null)
+            iconBg.SetActive(false);
         ability = _ability;
         champion = _champion;
         icon.sprite = ability.icon;
         icon2.sprite = ability.icon;
         tooltip.SetActive(false);
+        print(keyCode + ": " + level);
         if (keyCode != "") {
-            iconBg.SetActive(false);
             cooldown.text = "";
             hotkey.text = keyCode;
         }
+
+        // Enable the upgrade button if not maxed out, and if is not special case (R ability)
+        if (upgradeButton != null) {
+            upgradeButton.interactable = true;
+            if (level == ability.maxLevel)
+                upgradeButton.interactable = false;
+            if (keyCode == "R")
+                if (champion.currentLevel < 6 || (champion.currentLevel < 11 && level == 1) || (champion.currentLevel < 16 && level == 2))
+                    upgradeButton.interactable = false;
+        }
+
         UpdateTooltipText();
     }
 
@@ -68,7 +86,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
 
                     // Show the text (1/2/3/4/5)
-                    if (i == ability.Level) {
+                    if (i == level) {
                         message += "<color=" + colour + ">" + damage + "</color>";
                     } else {
                         message += damage;
@@ -126,8 +144,12 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 cooldown.text =cooldownRemaining.ToString("F1");
 
         } else {
-            iconBg.SetActive(false);
-            cooldown.text = "";
+            if (iconBg != null) {
+                if (level == 0)
+                    icon2.fillAmount = 0;
+                iconBg.SetActive(level == 0);
+                cooldown.text = "";
+            }
         }
     }
 

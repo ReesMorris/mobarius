@@ -24,7 +24,7 @@ public class AlucardQ : MonoBehaviour {
         PlayerMovement.onPlayerMove += StopSequence;
         AbilityHandler.onAbilityActivated += OnAbilityActivated;
         abilityHandler = AbilityHandler.Instance;
-        ability = abilityHandler.GetChampionAbilities(playerChampion.Champion.championName, abilityKey);
+        ability = abilityHandler.GetChampionAbility(playerChampion.Champion, abilityKey);
         GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
     }
 
@@ -93,7 +93,7 @@ public class AlucardQ : MonoBehaviour {
 
         // Do ability stuff
         AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, abilityHandler.GetAOEPosition(), Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
-        e.Init(ability.damageRadius, ability.GetDamage("damage"), photonView.viewID);
+        e.Init(ability.damageRadius, ability.GetDamage(playerChampion.Champion, "damage"), photonView.viewID);
 
         // Take mana from the player
         playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);

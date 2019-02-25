@@ -18,20 +18,13 @@ public class Ability {
     public float cooldown;
     public float speed;
     public int maxLevel = 5;
-    int level = 1;
-    public int Level { get { return level; } }
 
     [Header("Damage")]
     public AbilityDamage[] damage;
 
-    // Called when levelling up this ability
-    public void LevelUp() {
-        level = Mathf.Min(level + 1, maxLevel);
-    }
-
     // Returns the amount of damage this ability does at its current level
-    public float GetDamage(string key) {
-        return GetDamage(key, level);
+    public float GetDamage(Champion champion, string key) {
+        return GetDamage(key, AbilityHandler.Instance.GetAbilityLevel(champion, this));
     }
 
     // Called by other scripts to get the amount of damage this ability does at a specific level

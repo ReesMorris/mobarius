@@ -26,6 +26,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 0
     speed: 0
+    maxLevel: 5
     damage: []
   - name: Death From Above
     abilityKey: 1
@@ -37,6 +38,7 @@ MonoBehaviour:
     damageRadius: 1.3
     cooldown: 4
     speed: 0
+    maxLevel: 5
     damage:
     - key: damage
       damageLevel1: 80
@@ -55,6 +57,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 0
     speed: 0
+    maxLevel: 5
     damage: []
   - name: E
     abilityKey: 3
@@ -66,6 +69,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 0
     speed: 0
+    maxLevel: 5
     damage: []
   - name: R
     abilityKey: 4
@@ -77,6 +81,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 0
     speed: 0
+    maxLevel: 3
     damage: []
   - name: Flash
     abilityKey: 5
@@ -88,6 +93,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 300
     speed: 0
+    maxLevel: 5
     damage: []
   - name: Heal
     abilityKey: 6
@@ -99,6 +105,7 @@ MonoBehaviour:
     damageRadius: 0
     cooldown: 240
     speed: 0
+    maxLevel: 5
     damage: []
   championName: Alucard
   icon: {fileID: 21300000, guid: 11a896fb5f947fb4a9d8381d76c9b9e3, type: 3}
@@ -125,6 +132,11 @@ MonoBehaviour:
   mana: 0
   owner: 
   invincible: 0
+  qLevel: 0
+  wLevel: 0
+  eLevel: 0
+  rLevel: 0
+  currentLevel: 0
   physicalDamage: 0
   magicDamage: 0
   abilityPower: 0

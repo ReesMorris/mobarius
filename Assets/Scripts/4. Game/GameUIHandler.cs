@@ -10,6 +10,8 @@ public class GameUIHandler : MonoBehaviour {
 
     public delegate void OnGameTimeUpdate(int timeElapsed);
     public static OnGameTimeUpdate onGameTimeUpdate;
+    public delegate void OnUpgradeButtonClicked(AbilityHandler.Abilities abilityKey);
+    public static OnUpgradeButtonClicked onUpgradeButtonClicked;
 
     [Header("Generic")]
     public Color allyHealthColour;
@@ -24,9 +26,13 @@ public class GameUIHandler : MonoBehaviour {
     [Header("Abilities")]
     public AbilityIcon abilityPassive;
     public AbilityIcon abilityQ;
+    public Button abilityQUpgrade;
     public AbilityIcon abilityW;
+    public Button abilityWUpgrade;
     public AbilityIcon abilityE;
+    public Button abilityEUpgrade;
     public AbilityIcon abilityR;
+    public Button abilityRUpgrade;
     public AbilityIcon abilityD;
     public AbilityIcon abilityF;
 
@@ -64,6 +70,7 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownF;
     float cooldownFDuration;
     PhotonView photonView;
+    AbilityHandler abilityHandler;
 
     bool gameEnded;
 
@@ -76,18 +83,33 @@ public class GameUIHandler : MonoBehaviour {
         GameHandler.onGameEnd += OnGameEnd;
         ChampionXP.onChampionLevelUp += OnChampionLevelUp;
         ChampionXP.onChampionReceiveXP += OnChampionReceiveXP;
+        ChampionXP.onChampionUpgradeAbility += OnChampionUpgradeAbility;
+        abilityHandler = GetComponent<AbilityHandler>();
+        SetupUpgradeListeners();
         photonView = GetComponent<PhotonView>();
         StartCoroutine("HandleCooldowns");
     }
 
+    void SetupUpgradeListeners() {
+        abilityQUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.Q); });
+        abilityWUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.W); });
+        abilityEUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.E); });
+        abilityRUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.R); });
+    }
+
     public void UpdateAbilities(Champion champion) {
-        abilityPassive.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Passive), "", champion);
-        abilityQ.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.Q), "Q", champion);
-        abilityW.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.W), "W", champion);
-        abilityE.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.E), "E", champion);
-        abilityR.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.R), "R", champion);
-        abilityD.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.D), "D", champion);
-        abilityF.SetupIcon(AbilityHandler.Instance.GetChampionAbilities(champion.championName, AbilityHandler.Abilities.F), "F", champion);
+        abilityPassive.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.Passive), "", champion);
+        abilityQ.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.Q), "Q", champion);
+        abilityW.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.W), "W", champion);
+        abilityE.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.E), "E", champion);
+        abilityR.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.R), "R", champion);
+        abilityD.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.D), "D", champion);
+        abilityF.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.F), "F", champion);
+    }
+
+    void UpgradeButtonClicked(AbilityHandler.Abilities abilityKey) {
+        if (onUpgradeButtonClicked != null)
+            onUpgradeButtonClicked(abilityKey);
     }
 
     public void UpdateStats(Champion champion) {
@@ -108,6 +130,8 @@ public class GameUIHandler : MonoBehaviour {
 
     public bool CanCastAbility(AbilityHandler.Abilities hotkey, Ability ability, Champion champion) {
         if (gameEnded)
+            return false;
+        if (abilityHandler.GetAbilityLevel(champion, ability) == 0)
             return false;
         if (champion.mana < ability.cost)
             return false;
@@ -251,15 +275,38 @@ public class GameUIHandler : MonoBehaviour {
         }
     }
 
-    void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades) {
-        if(PhotonNetwork.player == player) {
-            levelText.text = level.ToString();
-            ShowLevelUpText(unclaimedUpgrades);
+    void OnChampionUpgradeAbility(PhotonPlayer player, Champion champion, int unclaimedUpgrades) {
+        if (PhotonNetwork.player == player) {
+            SetLevelUpText(unclaimedUpgrades);
+            UpdateAbilities(champion);
         }
     }
 
-    void ShowLevelUpText(int unclaimedUpgrades) {
-        levelUpText.text = "LEVEL UP! +" + unclaimedUpgrades;
-        levelUpText.gameObject.SetActive(true);
+    void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades) {
+        if (PhotonNetwork.player == player) {
+            levelText.text = level.ToString();
+            SetLevelUpText(unclaimedUpgrades);
+            UpdateAbilities(champion);
+
+            if (unclaimedUpgrades > 0) {
+                abilityQUpgrade.gameObject.SetActive(true);
+                abilityWUpgrade.gameObject.SetActive(true);
+                abilityEUpgrade.gameObject.SetActive(true);
+                abilityRUpgrade.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    void SetLevelUpText(int unclaimedUpgrades) {
+        if (unclaimedUpgrades > 0) {
+            levelUpText.text = "LEVEL UP! +" + unclaimedUpgrades;
+            levelUpText.gameObject.SetActive(true);
+        } else {
+            levelUpText.gameObject.SetActive(false);
+            abilityQUpgrade.gameObject.SetActive(false);
+            abilityWUpgrade.gameObject.SetActive(false);
+            abilityEUpgrade.gameObject.SetActive(false);
+            abilityRUpgrade.gameObject.SetActive(false);
+        }
     }
 }

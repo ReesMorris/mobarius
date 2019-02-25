@@ -38,6 +38,11 @@ public class Champion : ScriptableObject {
     [HideInInspector] public float mana;
     [HideInInspector] public string owner;
     [HideInInspector] public bool invincible;
+    [HideInInspector] public int qLevel;
+    [HideInInspector] public int wLevel;
+    [HideInInspector] public int eLevel;
+    [HideInInspector] public int rLevel;
+    [HideInInspector] public int currentLevel;
 
     // Hidden stats
     [HideInInspector] public float physicalDamage;
@@ -47,6 +52,7 @@ public class Champion : ScriptableObject {
 
     public void Init(Champion c, string o) {
         owner = o;
+        abilities = c.abilities;
         isOwned = c.isOwned;
         isFree = c.isFree;
         isAvailable = c.isAvailable;
@@ -72,6 +78,11 @@ public class Champion : ScriptableObject {
         movementSpeed = c.movementSpeed;
         movementSpeedIncrease = c.movementSpeedIncrease;
         invincible = c.invincible;
+        qLevel = 0;
+        wLevel = 0;
+        eLevel = 0;
+        rLevel = 0;
+        currentLevel = 1;
 
         damage = new List<Damage>();
     }
@@ -104,5 +115,18 @@ public class Champion : ScriptableObject {
         armour += armourIncrease;
         magicResist += magicResistIncrease;
         movementSpeed += movementSpeedIncrease;
+    }
+
+    public void UpgradeAbility(AbilityHandler.Abilities abilityKey) {
+        switch (abilityKey) {
+            case AbilityHandler.Abilities.Q:
+                qLevel++; break;
+            case AbilityHandler.Abilities.W:
+                wLevel++; break;
+            case AbilityHandler.Abilities.E:
+                eLevel++; break;
+            case AbilityHandler.Abilities.R:
+                rLevel++; break;
+        }
     }
 }

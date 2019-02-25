@@ -22,7 +22,7 @@ public class FlashAbility : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
         playerMovement = GetComponent<PlayerMovement>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        ability = abilityHandler.GetChampionAbilities(playerChampion.Champion.championName, abilityType);
+        ability = abilityHandler.GetChampionAbility(playerChampion.Champion, abilityType);
     }
 
     void Update() {
