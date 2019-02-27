@@ -37,7 +37,6 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         icon.sprite = ability.icon;
         icon2.sprite = ability.icon;
         tooltip.SetActive(false);
-        print(keyCode + ": " + level);
         if (keyCode != "") {
             cooldown.text = "";
             hotkey.text = keyCode;

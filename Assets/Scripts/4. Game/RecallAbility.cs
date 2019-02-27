@@ -39,7 +39,9 @@ public class RecallAbility : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.B)) {
-            AttemptRecall();
+            if (!ChatHandler.Instance.inputField.gameObject.activeSelf) {
+                AttemptRecall();
+            }
         }
     }
 

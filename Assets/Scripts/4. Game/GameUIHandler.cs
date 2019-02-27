@@ -135,6 +135,8 @@ public class GameUIHandler : MonoBehaviour {
             return false;
         if (champion.mana < ability.cost)
             return false;
+        if (ChatHandler.Instance.inputField.gameObject.activeSelf)
+            return false;
         switch (hotkey) {
             case AbilityHandler.Abilities.Q:
                 return cooldownQ == 0f;

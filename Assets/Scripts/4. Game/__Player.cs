@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 // Add this to a new player champion to add all of the necessary files
 
+[RequireComponent(typeof(PlayerChat))]
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(ChampionXP))]
 [RequireComponent(typeof(NavMeshObstacle))]

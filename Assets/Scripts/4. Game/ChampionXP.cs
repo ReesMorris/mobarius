@@ -41,7 +41,6 @@ public class ChampionXP : MonoBehaviour {
         }
     }
 
-    /*
     void Update() {
         if(photonView.isMine) {
             if(Input.GetKeyDown(KeyCode.Z)) {
@@ -49,7 +48,6 @@ public class ChampionXP : MonoBehaviour {
             }
         }
     }
-    */
 
     [PunRPC]
     public void GiveXP(int amount) {

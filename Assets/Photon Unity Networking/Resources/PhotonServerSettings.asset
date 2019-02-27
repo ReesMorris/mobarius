@@ -86,4 +86,5 @@ MonoBehaviour:
   - HideRPC
   - InitRPC
   - ShowRPC
+  - AddChatMessage
   DisableAutoOpenWizard: 1

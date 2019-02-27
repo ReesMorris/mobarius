@@ -40,11 +40,13 @@ public class PlayerCamera : MonoBehaviour {
 
     // Recenter the camera on the player if input pressed
     void CheckForInput() {
-        if(Input.GetKey(KeyCode.Space)) {
-            CenterCamera();
-        }
-        if(Input.GetKeyDown(KeyCode.Y)) {
-            lockedToPlayer = !lockedToPlayer;
+        if (!ChatHandler.Instance.inputField.gameObject.activeSelf) {
+            if (Input.GetKey(KeyCode.Space)) {
+                CenterCamera();
+            }
+            if (Input.GetKeyDown(KeyCode.Y)) {
+                lockedToPlayer = !lockedToPlayer;
+            }
         }
     }
 
