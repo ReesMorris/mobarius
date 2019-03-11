@@ -19,4 +19,8 @@ public class MapManager : MonoBehaviour {
         }
         return null;
     }
+
+    public MapProperties GetMapProperties() {
+        return GameHandler.Instance.currentMap.properties;
+    }
 }

@@ -22,6 +22,7 @@ public class ChampionXP : MonoBehaviour {
     int totalUnclaimed;
     Champion champion;
     public PhotonView photonView { get; protected set; }
+    MapProperties mapProperties;
 
     void Start() {
         photonView = GetComponent<PhotonView>();
@@ -30,54 +31,62 @@ public class ChampionXP : MonoBehaviour {
         GameUIHandler.onUpgradeButtonClicked += OnUpgradeButtonClicked;
 
         Turret.onTurretDestroyed += OnTurretDestroyed;
+        OnGameStart();
+    }
+
+    void OnGameStart() {
+        mapProperties = MapManager.Instance.GetMapProperties();
+        GiveStartingXP();
+    }
+
+    // Based on MapProperties config
+    void GiveStartingXP() {
+        MapProperties properties = MapManager.Instance.GetMapProperties();
+        while(champion.currentLevel < properties.startingLevel)
+            photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 1, true);
+        photonView.RPC("Heal", PhotonTargets.AllBuffered, 999f);
     }
 
     // Called when a turret is destroyed; give global XP to every player on the team who destroyed it
     void OnTurretDestroyed(Turret t) {
         if(photonView.isMine) {
             if (t.team != PhotonNetwork.player.GetTeam()) {
-                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, t.XPOnDeath);
-            }
-        }
-    }
-
-    void Update() {
-        if(photonView.isMine) {
-            if(Input.GetKeyDown(KeyCode.Z)) {
-                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
+                photonView.RPC("GiveXP", PhotonTargets.AllBuffered, t.XPOnDeath, false);
             }
         }
     }
 
     [PunRPC]
-    public void GiveXP(int amount) {
-        if(champion.currentLevel < maxLevel) {
+    public void GiveXP(int amount, bool overrideDisabled) {
+        if (champion.currentLevel < maxLevel) {
+            if (mapProperties.XPEnabled || overrideDisabled) {
 
-            // Give the XP
-            currentXP += amount;
+                // Give the XP
+                currentXP += amount;
 
-            // Have we levelled up?
-            while (currentXP > nextLevelXP) {
-                previousLevelXP = nextLevelXP;
-                champion.currentLevel = Mathf.Min(champion.currentLevel + 1, maxLevel);
-                nextLevelXP += levelIncrement;
+                // Have we levelled up?
+                while (currentXP > nextLevelXP) {
+                    previousLevelXP = nextLevelXP;
+                    champion.currentLevel = Mathf.Min(champion.currentLevel + 1, maxLevel);
+                    nextLevelXP += levelIncrement;
 
-                if (totalUnclaimed < maxLevel) {
-                    unclaimedUpgrades++;
-                    totalUnclaimed++;
+                    if (totalUnclaimed < maxLevel) {
+                        unclaimedUpgrades++;
+                        totalUnclaimed++;
+                    }
+
+                    if (onChampionLevelUp != null && photonView.isMine) {
+                        champion.OnLevelUp();
+                        onChampionLevelUp(champion, photonView.owner, champion.currentLevel, unclaimedUpgrades);
+                    }
                 }
 
-                if (onChampionLevelUp != null && photonView.isMine) {
-                    champion.OnLevelUp();
-                    onChampionLevelUp(champion, photonView.owner, champion.currentLevel, unclaimedUpgrades);
-                }
+                // Make a call saying we've awarded XP (after checking level)
+                float progress = ((float)(currentXP - previousLevelXP) / (float)(nextLevelXP - previousLevelXP));
+                if (champion.currentLevel == maxLevel) progress = 1;
+                if (onChampionReceiveXP != null)
+                    onChampionReceiveXP(photonView.owner, progress);
             }
-
-            // Make a call saying we've awarded XP (after checking level)
-            float progress = ((float)(currentXP- previousLevelXP) / (float)(nextLevelXP-previousLevelXP));
-            if (champion.currentLevel == maxLevel) progress = 1;
-            if (onChampionReceiveXP != null)
-                onChampionReceiveXP(photonView.owner, progress);
         }
     }
 

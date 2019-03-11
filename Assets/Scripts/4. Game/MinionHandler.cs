@@ -6,17 +6,24 @@ public class MinionHandler : MonoBehaviour {
 
     public GameObject minionPrefab;
 
+    MapProperties mapProperties;
+
     void Start() {
         GameUIHandler.onGameTimeUpdate += OnGameTimeUpdate;
+        GameHandler.onGameStart += OnGameStart;
+    }
+
+    void OnGameStart() {
+        mapProperties = MapManager.Instance.GetMapProperties();
     }
 
     void OnGameTimeUpdate(int newTime) {
-        if (newTime == 35)
+        if (newTime == (mapProperties.minionSpawnTime - 30))
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions30", "Thirty seconds until minions spawn");
-        else if(newTime == 65)
+        else if(newTime == mapProperties.minionSpawnTime)
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions0", "Minions have spawned");
-        if(newTime >= 65) {
-            if(newTime % 30 == 5) {
+        if(newTime >= mapProperties.minionSpawnTime) {
+            if((newTime - mapProperties.minionSpawnTime) % mapProperties.minionSpawnDelay == 0) {
                 MinionWave();
             }
         }

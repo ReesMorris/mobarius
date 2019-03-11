@@ -182,7 +182,7 @@ public class PlayerChampion : MonoBehaviour {
 
             // Give XP to the killer
             if (PhotonNetwork.isMasterClient) {
-                killer.photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50);
+                killer.photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 50, false);
             }
 
             // KDA scores

@@ -14,6 +14,10 @@ public class PlayButton : MonoBehaviour {
         button = GetComponent<Button>();
         scaleOnHover = GetComponent<ScaleOnHover>();
         button.onClick.AddListener(OnClick);
+
+        // Disable if button not interactable
+        if (!button.interactable)
+            this.enabled = false;
     }
 
     void OnClick() {

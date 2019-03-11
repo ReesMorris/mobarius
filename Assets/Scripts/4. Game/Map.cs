@@ -12,4 +12,5 @@ public class Map {
     public GameObject[] blueSpawns;
     public MinionWaypoints[] redMinions;
     public MinionWaypoints[] blueMinions;
+    public MapProperties properties;
 }

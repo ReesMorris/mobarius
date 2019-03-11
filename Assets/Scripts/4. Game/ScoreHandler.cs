@@ -26,6 +26,19 @@ public class ScoreHandler : MonoBehaviour {
         photonView = GetComponent<PhotonView>();
         GameHandler.onGameStart += UpdateUI;
         GameHandler.onGameStart += UpdateKdaUI;
+        GameHandler.onGameStart += OnGameStart;
+    }
+
+    void OnGameStart() {
+        redScore = 0;
+        blueScore = 0;
+        kills = 0;
+        deaths = 0;
+        assists = 0;
+        minionKills = 0;
+        UpdateUI();
+        UpdateKdaUI();
+        minionKillsUI.text = "0";
     }
 
     public void IncreaseScore(PunTeams.Team team) {

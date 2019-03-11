@@ -17,6 +17,7 @@ public class Nexus : MonoBehaviour {
     bool canReheal = true;
     PhotonView photonView;
     bool ready;
+    MapProperties mapProperties;
 
     void Start() {
         GetComponent<Entity>().team = team;
@@ -43,6 +44,15 @@ public class Nexus : MonoBehaviour {
         // Health regen
         if (PhotonNetwork.isMasterClient)
             StartCoroutine(RegenHealth());
+
+        // Map Properties
+        mapProperties = MapManager.Instance.GetMapProperties();
+
+        // Damage over time
+        if (mapProperties.nexusDamagePerSec > 0)
+            if (PhotonNetwork.isMasterClient)
+                StartCoroutine(DamageOverTime());
+
         ready = true;
     }
 
@@ -51,6 +61,14 @@ public class Nexus : MonoBehaviour {
         while (canReheal) {
             yield return new WaitForSeconds(1f);
             photonView.RPC("Heal", PhotonTargets.AllBuffered, 15f);
+        }
+    }
+
+    // Damage over time
+    IEnumerator DamageOverTime() {
+        while (true) {
+            photonView.RPC("Damage", PhotonTargets.All, mapProperties.nexusDamagePerSec, null);
+            yield return new WaitForSeconds(1f);
         }
     }
 

@@ -15,6 +15,7 @@ public class GameHandler : MonoBehaviour {
     public Map currentMap {get; set;}
     Vector2 spawnIndexes;
     PhotonView photonView;
+    bool victory;
 
     void Start() {
         Instance = this;
@@ -39,6 +40,7 @@ public class GameHandler : MonoBehaviour {
 
     [PunRPC]
     void Begin() {
+        victory = false;
         if(onGameStart != null)
             onGameStart();
     }
@@ -55,17 +57,21 @@ public class GameHandler : MonoBehaviour {
     
     [PunRPC]
     void OnVictory(PunTeams.Team winningTeam) {
-        Transform losingNexus;
-        if(winningTeam == PunTeams.Team.blue)
-            losingNexus = GameObject.Find("Red Nexus").transform;
-        else
-            losingNexus = GameObject.Find("Blue Nexus").transform;
-        Vector3 pos = new Vector3(losingNexus.position.x, 15f, losingNexus.position.z - 15f);
-        Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos, 1f);
+        if (!victory) {
+            victory = true;
+            Transform losingNexus;
+            if (winningTeam == PunTeams.Team.blue)
+                losingNexus = GameObject.Find("Red Nexus").transform;
+            else
+                losingNexus = GameObject.Find("Blue Nexus").transform;
+            Vector3 pos = new Vector3(losingNexus.position.x, 15f, losingNexus.position.z - 15f);
+            Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos, 1f);
 
-        StartCoroutine(VictoryEnum(winningTeam));
-        if (onGameEnd != null)
-            onGameEnd();
+            StartCoroutine(VictoryEnum(winningTeam));
+            if (onGameEnd != null) {
+                onGameEnd();
+            }
+        }
     }
 
     IEnumerator VictoryEnum(PunTeams.Team winningTeam) {

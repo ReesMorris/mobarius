@@ -29,10 +29,12 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void StopMovement() {
-        playerAnimator.PlayAnimation("Idle");
-        defaultAttack.target = null;
-        navMeshAgent.velocity = Vector3.zero;
-        navMeshAgent.isStopped = true;
+        if (this != null) {
+            playerAnimator.PlayAnimation("Idle");
+            defaultAttack.target = null;
+            navMeshAgent.velocity = Vector3.zero;
+            navMeshAgent.isStopped = true;
+        }
     }
 
     void Update() {
@@ -93,6 +95,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void OnGameEnd() {
+        StopMovement();
         Destroy(this);
     }
 }

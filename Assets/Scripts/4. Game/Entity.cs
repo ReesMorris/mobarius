@@ -71,7 +71,7 @@ public class Entity : MonoBehaviour {
                         if (playerChampion != null) {
                             if(playerChampion.PhotonView.owner.GetTeam() != team) {
                                 ChampionXP championXP = playerChampion.GetComponent<ChampionXP>();
-                                championXP.photonView.RPC("GiveXP", PhotonTargets.All, XPOnDeath);
+                                championXP.photonView.RPC("GiveXP", PhotonTargets.All, XPOnDeath, false);
                             }
                         }
                     }

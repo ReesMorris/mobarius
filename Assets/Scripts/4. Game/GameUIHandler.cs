@@ -259,6 +259,8 @@ public class GameUIHandler : MonoBehaviour {
     /* Game Start and End */
     void OnGameStart() {
         gameEnded = false;
+        TimeElapsed = 0;
+        gameTimer.text = "00:00";
     }
     void OnGameEnd() {
         StopCoroutine("Timer");

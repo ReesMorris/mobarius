@@ -34,7 +34,8 @@ public class RecallAbility : MonoBehaviour {
         gameEnded = true;
         PlayerMovement.onPlayerMove -= StopChannel;
         PlayerChampion.onPlayerDamaged -= StopChannel;
-        StopAllCoroutines();
+        if (this != null)
+            StopAllCoroutines();
     }
 
     void Update() {
