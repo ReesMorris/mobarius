@@ -13,6 +13,8 @@ public class ScoreHandler : MonoBehaviour {
     public TMP_Text minionKillsUI;
     public Image pingImage;
     public Sprite[] pingStates;
+    public TMP_Text pingText;
+    public TMP_Text fpsText;
     public string friendlyColour = "#00b1fd";
     public string enemyColour = "#fd002a";
 
@@ -24,6 +26,11 @@ public class ScoreHandler : MonoBehaviour {
     int assists;
     int minionKills;
     bool started;
+
+    float updateInterval = 0.5F;
+    float accum = 0;
+    int frames = 0;
+    float timeleft;
 
     void Start() {
         Instance = this;
@@ -45,19 +52,31 @@ public class ScoreHandler : MonoBehaviour {
         UpdateUI();
         UpdateKdaUI();
         minionKillsUI.text = "0";
+        StartCoroutine(PingEnumerator());
     }
 
     void OnGameEnd() {
         started = false;
+        accum = 0;
+        frames = 0;
+        timeleft = 0;
     }
 
     void Update() {
-        if(started)
+        if (started)
+            UpdateFrames();
+    }
+
+    IEnumerator PingEnumerator() {
+        while (started) {
             UpdatePing();
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     void UpdatePing() {
         float ping = PhotonNetwork.networkingPeer.RoundTripTime;
+        pingText.text = ping + " ms";
         if (ping < 60)
             pingImage.sprite = pingStates[0];
         else if (ping < 120)
@@ -66,6 +85,20 @@ public class ScoreHandler : MonoBehaviour {
             pingImage.sprite = pingStates[2];
         else
             pingImage.sprite = pingStates[3];
+    }
+
+    // SRC: https://wiki.unity3d.com/index.php/FramesPerSecond [Accessed: 13 March 2019]
+    void UpdateFrames() {
+        timeleft -= Time.deltaTime;
+        accum += Time.timeScale / Time.deltaTime;
+        ++frames;
+        if (timeleft <= 0.0) {
+            float fps = accum / frames;
+            fpsText.text = "FPS: " + Mathf.Floor(fps);
+            timeleft = updateInterval;
+            accum = 0.0F;
+            frames = 0;
+        }
     }
 
     public void IncreaseScore(PunTeams.Team team) {
