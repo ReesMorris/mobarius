@@ -35,6 +35,7 @@ public class GameUIHandler : MonoBehaviour {
     public Button abilityRUpgrade;
     public AbilityIcon abilityD;
     public AbilityIcon abilityF;
+    public AbilityIcon abilityB;
 
     [Header("Level")]
     public Image characterIcon;
@@ -69,6 +70,8 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownDDuration;
     float cooldownF;
     float cooldownFDuration;
+    float cooldownB;
+    float cooldownBDuration;
     PhotonView photonView;
     AbilityHandler abilityHandler;
 
@@ -105,6 +108,7 @@ public class GameUIHandler : MonoBehaviour {
         abilityR.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.R), "R", champion);
         abilityD.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.D), "D", champion);
         abilityF.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.F), "F", champion);
+        abilityB.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.B), "B", champion);
     }
 
     void UpgradeButtonClicked(AbilityHandler.Abilities abilityKey) {
@@ -150,6 +154,8 @@ public class GameUIHandler : MonoBehaviour {
                 return cooldownD == 0f;
             case AbilityHandler.Abilities.F:
                 return cooldownF == 0f;
+            case AbilityHandler.Abilities.B:
+                return cooldownB == 0f;
         }
         return false;
     }
@@ -173,6 +179,9 @@ public class GameUIHandler : MonoBehaviour {
                 break;
             case AbilityHandler.Abilities.F:
                 cooldownF = cooldownFDuration = cooldown;
+                break;
+            case AbilityHandler.Abilities.B:
+                cooldownB = cooldownBDuration = cooldown;
                 break;
         }
     }
@@ -203,6 +212,10 @@ public class GameUIHandler : MonoBehaviour {
             if (cooldownF > 0f) {
                 cooldownF = Mathf.Max(0f, cooldownF - speed);
                 abilityF.SetCooldown(cooldownF, cooldownFDuration);
+            }
+            if (cooldownB > 0f) {
+                cooldownB = Mathf.Max(0f, cooldownB - speed);
+                abilityB.SetCooldown(cooldownB, cooldownBDuration);
             }
             yield return new WaitForSeconds(speed);
         }

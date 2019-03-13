@@ -16,6 +16,7 @@ public class Ability {
     public float range;
     public float damageRadius;
     public float cooldown;
+    public float duration;
     public float speed;
     public int maxLevel = 5;
 

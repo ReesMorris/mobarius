@@ -25,6 +25,7 @@ MonoBehaviour:
     range: 0
     damageRadius: 0
     cooldown: 0
+    duration: 0
     speed: 0
     maxLevel: 5
     damage: []
@@ -33,11 +34,12 @@ MonoBehaviour:
     desc: Alucard calls upon the skies to bring down a fireball of death. The fireball
       will deal {x} to any enemies within its range.
     icon: {fileID: 21300000, guid: 433085dd54e2a0049aa25150b4ccd881, type: 3}
-    abilityType: 1
+    abilityType: 2
     cost: 0
     range: 12.5
     damageRadius: 1.3
     cooldown: 4
+    duration: 0
     speed: 0
     maxLevel: 5
     damage:
@@ -57,6 +59,7 @@ MonoBehaviour:
     range: 0
     damageRadius: 0
     cooldown: 0
+    duration: 0
     speed: 0
     maxLevel: 5
     damage: []
@@ -69,6 +72,7 @@ MonoBehaviour:
     range: 0
     damageRadius: 0
     cooldown: 0
+    duration: 0
     speed: 0
     maxLevel: 5
     damage: []
@@ -81,6 +85,7 @@ MonoBehaviour:
     range: 0
     damageRadius: 0
     cooldown: 0
+    duration: 0
     speed: 0
     maxLevel: 3
     damage: []
@@ -93,6 +98,7 @@ MonoBehaviour:
     range: 8
     damageRadius: 0
     cooldown: 300
+    duration: 0
     speed: 0
     maxLevel: 5
     damage: []
@@ -105,8 +111,27 @@ MonoBehaviour:
     range: 0
     damageRadius: 0
     cooldown: 240
+    duration: 0
     speed: 0
     maxLevel: 5
+    damage: []
+  - name: Recall
+    abilityKey: 7
+    desc: 'Enter a hard channel state for {duration} seconds. If the channel is successfully
+      completed, the champion will be teleported to the team''s respawn point.
+
+
+      The channel will cancel if the champion is hit by any attack or spell, or by
+      moving or performing any action.'
+    icon: {fileID: 21300000, guid: 14a35df5eb2764a41b057e5217eb8a14, type: 3}
+    abilityType: 0
+    cost: 0
+    range: 0
+    damageRadius: 0
+    cooldown: 0
+    duration: 5
+    speed: 0
+    maxLevel: 0
     damage: []
   championName: Alucard
   icon: {fileID: 21300000, guid: 11a896fb5f947fb4a9d8381d76c9b9e3, type: 3}

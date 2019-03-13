@@ -66,6 +66,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
             // Replace string texts
             desc = ability.desc;
+            desc = desc.Replace("{duration}", ability.duration.ToString());
             foreach (AbilityDamage ad in ability.damage) {
                 string message = "";
                 string type = "";
@@ -104,6 +105,13 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     // Called when the tooltip is set to show for this ability
     void SetTooltipText() {
+        string key = ability.abilityKey.ToString();
+        if (ability.abilityKey != AbilityHandler.Abilities.Passive)
+            key = "[" + ability.abilityKey + "]";
+        string cooldown = ability.cooldown + "s Cooldown";
+        if (ability.cooldown == 0)
+            cooldown = "No Cooldown";
+
         abilityHandler.tooltipText.text =
             "<color=#dfcf8f><size=25>" + ability.name + "</size></color>\n" +
             "<size=5> </size>\n" +
@@ -111,9 +119,9 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             "<size=20> </size>\n" +
             "<color=#b2b2b3><size=23>" + desc + "</size></color>";
         abilityHandler.tooltipInfo.text =
-            "<color=#dfcf8f><size=25>[" + ability.abilityKey + "]</size></color>\n" +
+            "<color=#dfcf8f><size=25>" + key + "</size></color>\n" +
             "<size=5> </size>\n" +
-            "<color=#b2b2b3><size=23>" + ability.cooldown + "s Cooldown</size></color>";
+            "<color=#b2b2b3><size=23>" + cooldown + "</size></color>";
     }
 
     public void OnPointerEnter(PointerEventData eventData) {

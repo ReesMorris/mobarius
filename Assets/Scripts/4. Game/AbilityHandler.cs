@@ -13,8 +13,8 @@ public class AbilityHandler : MonoBehaviour {
     public GameObject aoeRangePrefab;
     public GameObject aoeIndicatorPrefab;
 
-    public enum Abilities { Passive, Q, W, E, R, D, F };
-    public enum AbilityTypes { Directional, AOE };
+    public enum Abilities { Passive, Q, W, E, R, D, F, B };
+    public enum AbilityTypes { Spell, Directional, AOE };
     public enum DamageTypes { PhysicalDamage, MagicDamage };
 
     [Header("Tooltip")]
@@ -24,7 +24,6 @@ public class AbilityHandler : MonoBehaviour {
 
     [Header("Recall")]
     public Button recallButton;
-    public float recallDuration;
     public GameObject recallContainer;
     public Image recallFill;
     public TMP_Text recallText;

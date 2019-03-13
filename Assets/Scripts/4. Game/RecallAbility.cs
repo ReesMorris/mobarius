@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RecallAbility : MonoBehaviour {
 
-	PhotonView photonView;
+    AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.B;
+    PhotonView photonView;
     AbilityHandler abilityHandler;
     PlayerChampion playerChampion;
     PlayerMovement playerMovement;
+    Ability ability;
     float recallTimeRemaining;
     bool isRecalling;
     bool gameEnded;
@@ -15,12 +18,11 @@ public class RecallAbility : MonoBehaviour {
     Effect recallEffect;
 
     void Start() {
-        // Called whenever Garen is spawned
         abilityHandler = AbilityHandler.Instance;
-        abilityHandler.recallButton.onClick.AddListener(AttemptRecall);
         photonView = GetComponent<PhotonView>();
         playerMovement = GetComponent<PlayerMovement>();
         playerChampion = GetComponent<PlayerChampion>();
+        ability = abilityHandler.GetChampionAbility(playerChampion.Champion, abilityKey);
         StopChannel();
 
         // Listeners
@@ -28,6 +30,7 @@ public class RecallAbility : MonoBehaviour {
         PlayerMovement.onPlayerMove += StopChannel;
         PlayerChampion.onPlayerDamaged += StopChannel;
         AbilityHandler.onAbilityActivated += OnAbilityActivated;
+        GameUIHandler.Instance.abilityB.GetComponent<Button>().onClick.AddListener(AttemptRecall);
     }
 
     void OnGameEnd() {
@@ -91,11 +94,11 @@ public class RecallAbility : MonoBehaviour {
 
     // Channel UI & Handler
     IEnumerator Channel() {
-        recallTimeRemaining = abilityHandler.recallDuration;
+        recallTimeRemaining = ability.duration;
         while (recallTimeRemaining > 0.1f) {
             yield return new WaitForSeconds(0.1f);
             recallTimeRemaining -= 0.1f;
-            abilityHandler.recallFill.fillAmount = (recallTimeRemaining / abilityHandler.recallDuration);
+            abilityHandler.recallFill.fillAmount = (recallTimeRemaining / ability.duration);
             abilityHandler.recallText.text = recallTimeRemaining.ToString("F1");
             abilityHandler.recallContainer.SetActive(true);
         }

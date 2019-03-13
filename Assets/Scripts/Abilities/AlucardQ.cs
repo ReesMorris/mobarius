@@ -43,21 +43,22 @@ public class AlucardQ : MonoBehaviour {
 
                 // Toggle the ability off/on
                 if (Input.GetKeyDown(KeyCode.Q) || buttonPressed) {
-                    if (!abilityHandler.Aiming) {
-                        if (GameUIHandler.Instance.CanCastAbility(abilityKey, ability, playerChampion.Champion)) {
-                            abilityHandler.StartCasting(gameObject, ability);
+                    if (!sequenceActive) {
+                        if (!abilityHandler.Aiming) {
+                            if (GameUIHandler.Instance.CanCastAbility(abilityKey, ability, playerChampion.Champion)) {
+                                abilityHandler.StartCasting(gameObject, ability);
+                            }
+                        } else {
+                            abilityHandler.StopCasting(gameObject);
                         }
-                    } else {
-                        abilityHandler.StopCasting(gameObject);
                     }
                 }
 
                 // Are we firing?
                 if (Input.GetMouseButtonDown(0)) {
                     if (abilityHandler.Aiming) {
-                        if (!sequenceActive) {
+                        if (!sequenceActive)
                             StartCoroutine("AbilitySequence");
-                        }
                     }
                 }
             }
@@ -70,12 +71,15 @@ public class AlucardQ : MonoBehaviour {
     }
 
     public void StopSequence() {
-        if(sequenceActive)
-            StopCoroutine("AbilitySequence");
+        StopCoroutine("AbilitySequence");
+        sequenceActive = false;
     }
 
     IEnumerator AbilitySequence() {
         sequenceActive = true;
+
+        // Save the AOE pos
+        Vector3 aoePos = abilityHandler.GetAOEPosition();
 
         // Send out an event to say that we're about to fire something
         abilityHandler.AbilityActivated(ability);
@@ -94,7 +98,7 @@ public class AlucardQ : MonoBehaviour {
         abilityHandler.OnAbilityCast(gameObject, abilityKey, ability.cooldown, false);
 
         // Do ability stuff
-        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, abilityHandler.GetAOEPosition(), Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
+        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, aoePos, Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
         e.Init(ability.damageRadius, ability.GetDamage(playerChampion.Champion, "damage"), photonView.viewID);
 
         // Take mana from the player
