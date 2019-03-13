@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ScoreHandler : MonoBehaviour {
@@ -10,6 +11,8 @@ public class ScoreHandler : MonoBehaviour {
     public TMP_Text scoreUI2;
     public TMP_Text kdaUI;
     public TMP_Text minionKillsUI;
+    public Image pingImage;
+    public Sprite[] pingStates;
     public string friendlyColour = "#00b1fd";
     public string enemyColour = "#fd002a";
 
@@ -20,6 +23,7 @@ public class ScoreHandler : MonoBehaviour {
     int deaths;
     int assists;
     int minionKills;
+    bool started;
 
     void Start() {
         Instance = this;
@@ -27,9 +31,11 @@ public class ScoreHandler : MonoBehaviour {
         GameHandler.onGameStart += UpdateUI;
         GameHandler.onGameStart += UpdateKdaUI;
         GameHandler.onGameStart += OnGameStart;
+        GameHandler.onGameEnd += OnGameEnd;
     }
 
     void OnGameStart() {
+        started = true;
         redScore = 0;
         blueScore = 0;
         kills = 0;
@@ -39,6 +45,27 @@ public class ScoreHandler : MonoBehaviour {
         UpdateUI();
         UpdateKdaUI();
         minionKillsUI.text = "0";
+    }
+
+    void OnGameEnd() {
+        started = false;
+    }
+
+    void Update() {
+        if(started)
+            UpdatePing();
+    }
+
+    void UpdatePing() {
+        float ping = PhotonNetwork.networkingPeer.RoundTripTime;
+        if (ping < 60)
+            pingImage.sprite = pingStates[0];
+        else if (ping < 120)
+            pingImage.sprite = pingStates[1];
+        else if (ping < 180)
+            pingImage.sprite = pingStates[2];
+        else
+            pingImage.sprite = pingStates[3];
     }
 
     public void IncreaseScore(PunTeams.Team team) {
