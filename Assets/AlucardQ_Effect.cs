@@ -23,7 +23,7 @@ public class AlucardQ_Effect : MonoBehaviour {
         }
 
         if(PhotonNetwork.isMasterClient) {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius * 2f);
             for (int i = 0; i < hitColliders.Length; i++) {
                 Entity entity = hitColliders[i].GetComponent<Entity>();
                 if (entity != null) {

@@ -17,6 +17,11 @@ public class AbilityHandler : MonoBehaviour {
     public enum AbilityTypes { Directional, AOE };
     public enum DamageTypes { PhysicalDamage, MagicDamage };
 
+    [Header("Tooltip")]
+    public GameObject tooltip;
+    public TMP_Text tooltipText;
+    public TMP_Text tooltipInfo;
+
     [Header("Recall")]
     public Button recallButton;
     public float recallDuration;

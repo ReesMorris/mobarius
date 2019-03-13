@@ -55,7 +55,9 @@ public class AlucardQ : MonoBehaviour {
                 // Are we firing?
                 if (Input.GetMouseButtonDown(0)) {
                     if (abilityHandler.Aiming) {
-                        StartCoroutine("AbilitySequence");
+                        if (!sequenceActive) {
+                            StartCoroutine("AbilitySequence");
+                        }
                     }
                 }
             }

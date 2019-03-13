@@ -30,7 +30,8 @@ MonoBehaviour:
     damage: []
   - name: Death From Above
     abilityKey: 1
-    desc: Fires death from above, dealing {x}.
+    desc: Alucard calls upon the skies to bring down a fireball of death. The fireball
+      will deal {x} to any enemies within its range.
     icon: {fileID: 21300000, guid: 433085dd54e2a0049aa25150b4ccd881, type: 3}
     abilityType: 1
     cost: 0

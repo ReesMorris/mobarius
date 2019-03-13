@@ -13,18 +13,20 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public GameObject iconBg;
     public TMP_Text hotkey;
     public TMP_Text cooldown;
-    public GameObject tooltip;
-    public TMP_Text tooltipText;
-    public TMP_Text tooltipInfo;
     public Button upgradeButton;
 
     Champion champion;
     Ability ability;
     RectTransform rectTransform;
+    AbilityHandler abilityHandler;
 
     string cost;
     string desc;
     int level;
+
+    void Start() {
+        abilityHandler = AbilityHandler.Instance;
+    }
 
     public void SetupIcon(Ability _ability, string keyCode, Champion _champion) {
         level = AbilityHandler.Instance.GetAbilityLevel(_champion, _ability);
@@ -36,7 +38,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         champion = _champion;
         icon.sprite = ability.icon;
         icon2.sprite = ability.icon;
-        tooltip.SetActive(false);
+        abilityHandler.tooltip.SetActive(false);
         if (keyCode != "") {
             cooldown.text = "";
             hotkey.text = keyCode;
@@ -85,11 +87,10 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
 
                     // Show the text (1/2/3/4/5)
-                    if (i == level) {
+                    if (i == level)
                         message += "<color=" + colour + ">" + damage + "</color>";
-                    } else {
-                        message += damage;
-                    }
+                    else
+                        message += "<color=#727272>" + damage + "</color>";
                     if (i != ability.maxLevel)
                         message += "/";
                 }
@@ -103,33 +104,35 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     // Called when the tooltip is set to show for this ability
     void SetTooltipText() {
-        tooltipText.text =
-                "<color=#dfcf8f><size=18>" + ability.name + "</size></color>\n" +
-                "<color=#b2b2b3><size=15>" + cost + "</size></color>\n\n" +
-                "<color=#b2b2b3><size=15>" + desc + "</size></color>";
-        tooltipInfo.text =
-            "<color=#dfcf8f><size=18>[" + ability.abilityKey + "]</size></color>\n" +
-            "<color=#b2b2b3><size=15>" + ability.cooldown + "s Cooldown</size></color>";
+        abilityHandler.tooltipText.text =
+            "<color=#dfcf8f><size=25>" + ability.name + "</size></color>\n" +
+            "<size=5> </size>\n" +
+            "<color=#b2b2b3><size=23>" + cost + "</size></color>\n\n" +
+            "<size=20> </size>\n" +
+            "<color=#b2b2b3><size=23>" + desc + "</size></color>";
+        abilityHandler.tooltipInfo.text =
+            "<color=#dfcf8f><size=25>[" + ability.abilityKey + "]</size></color>\n" +
+            "<size=5> </size>\n" +
+            "<color=#b2b2b3><size=23>" + ability.cooldown + "s Cooldown</size></color>";
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
         if(rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
 
-        if (tooltip != null) {
+        if (abilityHandler.tooltip != null) {
             SetTooltipText();
-            tooltip.transform.position = new Vector2(transform.position.x - (rectTransform.rect.width / 4f), 3 + transform.position.y + (rectTransform.rect.height / 4f));
-            tooltip.SetActive(true);
-            tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(570, tooltipText.preferredHeight + 20f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
-            tooltip.SetActive(false);
-            tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(570, tooltipText.preferredHeight + 20f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
-            tooltip.SetActive(true);
+            RectTransform rt = abilityHandler.tooltip.GetComponent<RectTransform>();
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, abilityHandler.tooltipText.preferredHeight + 35f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
+            abilityHandler.tooltip.SetActive(false);
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, abilityHandler.tooltipText.preferredHeight + 35f); // [src: https://forum.unity.com/threads/modify-the-width-and-height-of-recttransform.270993/]
+            abilityHandler.tooltip.SetActive(true);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
-        if(tooltip != null) {
-            tooltip.SetActive(false);
+        if(abilityHandler.tooltip != null) {
+            abilityHandler.tooltip.SetActive(false);
         }
     }
 
