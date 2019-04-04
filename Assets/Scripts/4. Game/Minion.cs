@@ -43,7 +43,6 @@ public class Minion : MonoBehaviour {
             transform.position = minionData.spawnPosition.position;
             waypoints = minionData.destinations;
             navMeshAgent.enabled = true;
-            navMeshAgent.speed = speed / 120f;
             GoToWaypoint();
         }
         GetComponent<Entity>().team = team;
@@ -65,6 +64,7 @@ public class Minion : MonoBehaviour {
                     }
                 }
             }
+            navMeshAgent.speed = speed / 120f;
         }
     }
 

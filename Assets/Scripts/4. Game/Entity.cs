@@ -16,7 +16,7 @@ public class Entity : MonoBehaviour {
     public int XPOnDeath;
     public float XPRadius;
 
-    PhotonView photonView;
+    public PhotonView photonView;
     [HideInInspector] public PunTeams.Team team;
     [HideInInspector] bool IsDead;
 
@@ -52,7 +52,7 @@ public class Entity : MonoBehaviour {
         health = maxHealth = _maxHealth;
     }
 
-    // Called when a champion takes damage by a source
+    // Called when an entity takes damage by a source
     [PunRPC]
     void EntityDamage(float amount, int attackerId) {
 
@@ -88,4 +88,24 @@ public class Entity : MonoBehaviour {
         }
     }
 
+    public float GetMovementSpeed() {
+        PlayerChampion champion = GetComponent<PlayerChampion>();
+        Minion minion = GetComponent<Minion>();
+        if (champion != null)
+            return champion.Champion.movementSpeed;
+        if (minion != null)
+            return minion.speed;
+        return 0;
+    }
+
+    // Called to reduce speed of an entity
+    [PunRPC]
+    public void SetMovementSpeed(float speed) {
+        PlayerChampion champion = GetComponent<PlayerChampion>();
+        Minion minion = GetComponent<Minion>();
+        if (champion != null)
+            champion.Champion.movementSpeed = speed;
+        if (minion != null)
+            minion.speed = speed;
+    }
 }

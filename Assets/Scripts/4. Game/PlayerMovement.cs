@@ -54,9 +54,9 @@ public class PlayerMovement : MonoBehaviour {
                     defaultAttack.target = null;
                     navMeshAgent.destination = hit.point;
                     navMeshAgent.isStopped = false;
-                    navMeshAgent.speed = (champion.movementSpeed / 120f);
                 }
             }
+            navMeshAgent.speed = (champion.movementSpeed / 120f);
 
             if (navMeshAgent.remainingDistance <= 0.2f || playerChampion.IsDead) {
                 if (!navMeshAgent.isStopped)
@@ -64,10 +64,6 @@ public class PlayerMovement : MonoBehaviour {
                 navMeshAgent.velocity = Vector3.zero;
                 navMeshAgent.isStopped = true;
             }
-
-            //print(" ");
-            //print("IsStopped:" + navMeshAgent.isStopped);
-            //print("CurrentAnimation: " + playerAnimator.CurrentAnimation);
 
             if (!navMeshAgent.isStopped && playerAnimator.CurrentAnimation != "Walking") {
                 playerAnimator.PlayAnimation("Walking");

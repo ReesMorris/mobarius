@@ -62,7 +62,6 @@ public class AlucardE : MonoBehaviour {
 
         // Heal the player
         for(int i = 0; i < ability.duration; i++) {
-            print("healing" + ability.GetDamage(playerChampion.Champion, "damage") / ability.duration);
             playerChampion.PhotonView.RPC("Heal", PhotonTargets.All, ability.GetDamage(playerChampion.Champion, "damage") / ability.duration);
             yield return new WaitForSeconds(1f);
         }

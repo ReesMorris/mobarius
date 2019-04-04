@@ -88,4 +88,6 @@ MonoBehaviour:
   - ShowRPC
   - AddChatMessage
   - SetPosition
+  - SetMovementSpeed
+  - SetAnimatorSpeed
   DisableAutoOpenWizard: 1

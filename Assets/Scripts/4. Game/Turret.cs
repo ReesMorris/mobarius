@@ -146,6 +146,8 @@ public class Turret : MonoBehaviour {
             if(enemies.Count > 0) {
                 // Smarter prioritising for which enemy to target; players will be targeted last
                 foreach(Entity e in enemies) {
+                    if (e == null)
+                        continue;
                     PlayerChampion c = e.GetComponent<PlayerChampion>();
                     if(c == null)
                         currentTarget = e;

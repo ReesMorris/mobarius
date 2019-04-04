@@ -133,6 +133,8 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     public bool CanCastAbility(AbilityHandler.Abilities hotkey, Ability ability, Champion champion) {
+        if (champion.movementSpeed == 0)
+            return false;
         if (gameEnded)
             return false;
         if (abilityHandler.GetAbilityLevel(champion, ability) == 0)

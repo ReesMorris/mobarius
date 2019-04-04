@@ -290,4 +290,9 @@ public class PlayerChampion : MonoBehaviour {
         if(attackerId == PhotonView.viewID)
             ScoreHandler.Instance.OnMinionKill();
     }
+
+    // Returns true if stunned
+    public bool IsStunned() {
+        return Champion.movementSpeed == 0f;
+    }
 }

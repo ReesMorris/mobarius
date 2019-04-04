@@ -28,14 +28,16 @@ public class MinionBehaviour : MonoBehaviour {
                 Minion.GoToWaypoint();
                 target = GetBestEnemy();
             } else {
-                if(Vector3.Distance(transform.position, target.transform.position) <= Minion.range / 12f) {
-                    navMeshAgent.isStopped = true;
-                    if(timeSinceLastShot + Minion.attackSpeed < Time.time) {
-                        timeSinceLastShot = Time.time;
-                        photonView.RPC("Shoot", PhotonTargets.All, 100f, Minion.Entity.team, transform.position, Minion.attackDamage, target.GetComponent<PhotonView>().viewID, photonView.viewID);
+                if (Minion.Entity.GetMovementSpeed() != 0f) {
+                    if (Vector3.Distance(transform.position, target.transform.position) <= Minion.range / 12f) {
+                        navMeshAgent.isStopped = true;
+                        if (timeSinceLastShot + Minion.attackSpeed < Time.time) {
+                            timeSinceLastShot = Time.time;
+                            photonView.RPC("Shoot", PhotonTargets.All, 100f, Minion.Entity.team, transform.position, Minion.attackDamage, target.GetComponent<PhotonView>().viewID, photonView.viewID);
+                        }
+                    } else {
+                        navMeshAgent.destination = target.transform.position;
                     }
-                } else {
-                    navMeshAgent.destination = target.transform.position;
                 }
             }
         }

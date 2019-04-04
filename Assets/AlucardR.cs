@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AlucardQ : MonoBehaviour {
-
+public class AlucardR : MonoBehaviour {
     public GameObject prefab;
 
-    AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.Q;
+    AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.R;
     PhotonView photonView;
     PlayerChampion playerChampion;
     AbilityHandler abilityHandler;
@@ -21,11 +20,9 @@ public class AlucardQ : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
         playerAnimator = GetComponent<PlayerAnimator>();
         playerMovement = GetComponent<PlayerMovement>();
-        PlayerMovement.onPlayerMove += StopSequence;
-        AbilityHandler.onAbilityActivated += OnAbilityActivated;
         abilityHandler = AbilityHandler.Instance;
         ability = abilityHandler.GetChampionAbility(playerChampion.Champion, abilityKey);
-        GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
+        GameUIHandler.Instance.abilityR.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
     }
 
     void Update() {
@@ -42,7 +39,7 @@ public class AlucardQ : MonoBehaviour {
                 }
 
                 // Toggle the ability off/on
-                if (Input.GetKeyDown(KeyCode.Q) || buttonPressed) {
+                if (Input.GetKeyDown(KeyCode.R) || buttonPressed) {
                     if (!sequenceActive) {
                         if (!abilityHandler.IsAiming(ability)) {
                             if (GameUIHandler.Instance.CanCastAbility(abilityKey, ability, playerChampion.Champion)) {
@@ -65,16 +62,6 @@ public class AlucardQ : MonoBehaviour {
         }
     }
 
-    void OnAbilityActivated(Ability _ability) {
-        if(_ability != ability)
-            StopSequence();
-    }
-
-    public void StopSequence() {
-        StopCoroutine("AbilitySequence");
-        sequenceActive = false;
-    }
-
     IEnumerator AbilitySequence() {
         sequenceActive = true;
 
@@ -92,7 +79,7 @@ public class AlucardQ : MonoBehaviour {
 
         // Play an animation
         playerMovement.StopMovement();
-        playerAnimator.PlayAnimation("Ability01");
+        playerAnimator.PlayAnimation("Ability03");
 
         yield return new WaitForSeconds(0.6f);
         sequenceActive = false;
@@ -101,8 +88,8 @@ public class AlucardQ : MonoBehaviour {
         abilityHandler.OnAbilityCast(gameObject, abilityKey, ability.cooldown, false);
 
         // Do ability stuff
-        AlucardQ_Effect e = PhotonNetwork.Instantiate(prefab.name, aoePos, Quaternion.identity, 0).GetComponent<AlucardQ_Effect>();
-        e.Init(ability.damageRadius, ability.GetDamage(playerChampion.Champion, "damage"), photonView.viewID);
+        AlucardR_Effect e = PhotonNetwork.Instantiate(prefab.name, aoePos, Quaternion.identity, 0).GetComponent<AlucardR_Effect>();
+        e.Init(ability.GetDamage(playerChampion.Champion, "damage"), ability.duration, photonView.viewID);
 
         // Take mana from the player
         playerChampion.PhotonView.RPC("TakeMana", PhotonTargets.All, ability.cost);

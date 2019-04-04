@@ -32,32 +32,34 @@ public class DefaultAttack : MonoBehaviour {
     void Update() {
         if(photonView.isMine && !gameEnded) {
             if (!playerChampion.IsDead) {
-                if(target != null) {
-                    PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();
-                    Entity targetEntity = target.GetComponent<Entity>();
+                if(!playerChampion.IsStunned()) {
+                    if(target != null) {
+                        PlayerChampion targetChampion = target.GetComponent<PlayerChampion>();
+                        Entity targetEntity = target.GetComponent<Entity>();
 
-                    // Check to make sure the target is still alive
-                    if (targetChampion != null)
-                        if (targetChampion.IsDead)
-                            target = null;
-                    if (targetEntity != null)
-                        if (targetEntity.GetIsDead())
-                            target = null;
+                        // Check to make sure the target is still alive
+                        if (targetChampion != null)
+                            if (targetChampion.IsDead)
+                                target = null;
+                        if (targetEntity != null)
+                            if (targetEntity.GetIsDead())
+                                target = null;
 
-                    // Is the target stil alive?
-                    if (target == null)
-                        playerMovement.StopMovement();
-                    else {
-                        if (target.GetComponent<PhotonView>() != photonView) {
-                            if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
-                                if(Time.time >= (lastShotTime + cooldownTime)) {
-                                    lastShotTime = Time.time;
-                                    photonView.RPC("Shoot", PhotonTargets.All, 100f, PhotonNetwork.player.GetTeam(), playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.viewID);
-                                    navMeshAgent.destination = transform.position;
+                        // Is the target stil alive?
+                        if (target == null)
+                            playerMovement.StopMovement();
+                        else {
+                            if (target.GetComponent<PhotonView>() != photonView) {
+                                if (Vector3.Distance(target.transform.position, transform.position) < playerChampion.Champion.range) {
+                                    if (Time.time >= (lastShotTime + cooldownTime)) {
+                                        lastShotTime = Time.time;
+                                        photonView.RPC("Shoot", PhotonTargets.All, 100f, PhotonNetwork.player.GetTeam(), playerChampion.Champion.attackDamage, target.transform.position, target.GetComponent<PhotonView>().viewID, photonView.viewID);
+                                        navMeshAgent.destination = transform.position;
+                                    }
+                                } else {
+                                    navMeshAgent.destination = target.transform.position;
+                                    navMeshAgent.isStopped = false;
                                 }
-                            } else {
-                                navMeshAgent.destination = target.transform.position;
-                                navMeshAgent.isStopped = false;
                             }
                         }
                     }
