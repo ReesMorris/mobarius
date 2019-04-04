@@ -71,7 +71,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 string message = "";
                 string type = "";
                 string colour = "#eee";
-                float extraDamage;
+                float extraDamage = 0;
                 for (int i = 1; i <= ability.maxLevel; i++) {
                     float damage = ability.GetDamage(ad.key, i);
 
@@ -86,6 +86,10 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                         type = "magic damage";
                         extraDamage = champion.magicDamage;
                     }
+                    if (ad.damageType == AbilityHandler.DamageTypes.Health) {
+                        colour = "#90ee90";
+                        type = "health";
+                    }
 
                     // Show the text (1/2/3/4/5)
                     if (i == level)
@@ -97,7 +101,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 }
 
                 // Finish the message
-                message += "<color=" + colour + "> (+" + champion.physicalDamage + ")</color> " + type;
+                message += "<color=" + colour + "> (+" + extraDamage + ")</color> " + type;
                 desc = ReplaceFirst(desc, "{x}", message);
             }
         }

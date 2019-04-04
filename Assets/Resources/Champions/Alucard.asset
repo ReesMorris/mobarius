@@ -71,19 +71,27 @@ MonoBehaviour:
       damageLevel4: 330
       damageLevel5: 420
       damageType: 0
-  - name: E
+  - name: Flash of Life
     abilityKey: 3
-    desc: 
+    desc: Alucard calls upon the God of Nature to heal him by {x} over {duration}
+      seconds.
     icon: {fileID: 21300000, guid: af8a5c07ff548c54880186b0b584fa47, type: 3}
     abilityType: 0
     cost: 0
     range: 0
     damageRadius: 0
-    cooldown: 0
-    duration: 0
+    cooldown: 7
+    duration: 4
     speed: 0
     maxLevel: 5
-    damage: []
+    damage:
+    - key: damage
+      damageLevel1: 40
+      damageLevel2: 80
+      damageLevel3: 150
+      damageLevel4: 250
+      damageLevel5: 400
+      damageType: 2
   - name: R
     abilityKey: 4
     desc: 

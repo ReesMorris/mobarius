@@ -16,7 +16,7 @@ public class AbilityHandler : MonoBehaviour {
 
     public enum Abilities { Passive, Q, W, E, R, D, F, B };
     public enum AbilityTypes { Spell, Directional, AOE, Scope };
-    public enum DamageTypes { PhysicalDamage, MagicDamage };
+    public enum DamageTypes { PhysicalDamage, MagicDamage, Health };
 
     [Header("Tooltip")]
     public GameObject tooltip;
