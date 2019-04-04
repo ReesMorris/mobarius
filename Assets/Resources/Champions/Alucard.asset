@@ -96,14 +96,14 @@ MonoBehaviour:
     abilityKey: 4
     desc: Alucard summons the Magic Circle for {duration} seconds. Enemies inside
       will have <color=#F5EE99>60% reduced movement speed</color>. Any enemies still
-      inside the Magic Circle after it vanishes will be stunned for 2 seconds and
+      inside the Magic Circle after it vanishes will be stunned for 2.5 seconds and
       take {x}.
     icon: {fileID: 21300000, guid: 3a651113304b3b0488c8abc55c9a02e9, type: 3}
     abilityType: 2
     cost: 0
     range: 12.5
     damageRadius: 4.6
-    cooldown: 2
+    cooldown: 35
     duration: 5.6
     speed: 0
     maxLevel: 3

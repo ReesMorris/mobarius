@@ -82,7 +82,7 @@ public class Champion : ScriptableObject {
         wLevel = 0;
         eLevel = 0;
         rLevel = 0;
-        currentLevel = 1;
+        currentLevel = 0;
 
         damage = new List<Damage>();
     }

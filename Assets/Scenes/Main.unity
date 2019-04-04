@@ -28725,7 +28725,7 @@ MonoBehaviour:
       destinations:
       - {fileID: 987513228}
     properties:
-      startingLevel: 18
+      startingLevel: 1
       XPEnabled: 1
       minionSpawnTime: 5
       minionSpawnDelay: 30

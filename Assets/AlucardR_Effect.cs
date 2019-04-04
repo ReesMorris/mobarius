@@ -77,7 +77,7 @@ public class AlucardR_Effect : MonoBehaviour {
         }
 
         // Wait 2s
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.5f);
 
         // Cancel stun
         foreach (KeyValuePair<Entity, float> dict in trapped) {
