@@ -144,7 +144,14 @@ public class Turret : MonoBehaviour {
             ResetDamage();
             currentTarget = null;
             if(enemies.Count > 0) {
-                currentTarget = enemies[0];
+                // Smarter prioritising for which enemy to target; players will be targeted last
+                foreach(Entity e in enemies) {
+                    PlayerChampion c = e.GetComponent<PlayerChampion>();
+                    if(c == null)
+                        currentTarget = e;
+                }
+                if (currentTarget == null)
+                    currentTarget = enemies[0];
             } else {
                 StopCoroutine("TargetEnemies");
                 started = false;

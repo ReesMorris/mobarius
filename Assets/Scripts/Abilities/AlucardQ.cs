@@ -37,14 +37,14 @@ public class AlucardQ : MonoBehaviour {
             if (!playerChampion.IsDead) {
 
                 // Update the aim position
-                if (abilityHandler.Aiming) {
+                if (abilityHandler.IsAiming(ability)) {
                     abilityHandler.UpdateIndicator(gameObject, ability);
                 }
 
                 // Toggle the ability off/on
                 if (Input.GetKeyDown(KeyCode.Q) || buttonPressed) {
                     if (!sequenceActive) {
-                        if (!abilityHandler.Aiming) {
+                        if (!abilityHandler.IsAiming(ability)) {
                             if (GameUIHandler.Instance.CanCastAbility(abilityKey, ability, playerChampion.Champion)) {
                                 abilityHandler.StartCasting(gameObject, ability);
                             }
@@ -56,7 +56,7 @@ public class AlucardQ : MonoBehaviour {
 
                 // Are we firing?
                 if (Input.GetMouseButtonDown(0)) {
-                    if (abilityHandler.Aiming) {
+                    if (abilityHandler.IsAiming(ability)) {
                         if (!sequenceActive)
                             StartCoroutine("AbilitySequence");
                     }

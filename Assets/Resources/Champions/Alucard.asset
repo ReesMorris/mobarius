@@ -32,13 +32,13 @@ MonoBehaviour:
   - name: Death From Above
     abilityKey: 1
     desc: Alucard calls upon the skies to bring down a fireball of death. The fireball
-      will deal {x} to any enemies within its range.
+      will deal {x} to any enemies within its range. Does not damage towers.
     icon: {fileID: 21300000, guid: 433085dd54e2a0049aa25150b4ccd881, type: 3}
     abilityType: 2
     cost: 0
     range: 12.5
     damageRadius: 1.3
-    cooldown: 4
+    cooldown: 3.3
     duration: 0
     speed: 0
     maxLevel: 5
@@ -50,19 +50,27 @@ MonoBehaviour:
       damageLevel4: 245
       damageLevel5: 300
       damageType: 0
-  - name: W
+  - name: Earthqake
     abilityKey: 2
-    desc: 
+    desc: Alucard slams into the ground causing shattering consequences. Any  enemies
+      within range will take {x}. Does not damage towers.
     icon: {fileID: 21300000, guid: 06fa274547dc760449243745481ef869, type: 3}
-    abilityType: 0
+    abilityType: 3
     cost: 0
     range: 0
     damageRadius: 0
-    cooldown: 0
+    cooldown: 5
     duration: 0
     speed: 0
     maxLevel: 5
-    damage: []
+    damage:
+    - key: damage
+      damageLevel1: 120
+      damageLevel2: 180
+      damageLevel3: 250
+      damageLevel4: 330
+      damageLevel5: 420
+      damageType: 0
   - name: E
     abilityKey: 3
     desc: 

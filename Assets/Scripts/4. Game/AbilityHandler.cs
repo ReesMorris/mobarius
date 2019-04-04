@@ -12,9 +12,10 @@ public class AbilityHandler : MonoBehaviour {
     public GameObject projectileIndicatorPrefab;
     public GameObject aoeRangePrefab;
     public GameObject aoeIndicatorPrefab;
+    public GameObject scopeIndicatorPrefab;
 
     public enum Abilities { Passive, Q, W, E, R, D, F, B };
-    public enum AbilityTypes { Spell, Directional, AOE };
+    public enum AbilityTypes { Spell, Directional, AOE, Scope };
     public enum DamageTypes { PhysicalDamage, MagicDamage };
 
     [Header("Tooltip")]
@@ -29,12 +30,13 @@ public class AbilityHandler : MonoBehaviour {
     public TMP_Text recallText;
 
     public static AbilityHandler Instance;
-    public bool Aiming { get; protected set; }
+    Ability aimingAbility;
 
     // Indicators
     GameObject directionalIndicator;
     GameObject aoeRangeIndicator;
     GameObject aoeIndicatorIndicator;
+    GameObject scopeIndicator;
 
     bool gameEnded;
 
@@ -45,6 +47,10 @@ public class AbilityHandler : MonoBehaviour {
     void Start () {
         GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
+    }
+
+    public bool IsAiming(Ability ability) {
+        return aimingAbility == ability;
     }
 
     // Returns the direction an indicator will need to be in relation to a player
@@ -69,6 +75,7 @@ public class AbilityHandler : MonoBehaviour {
         if (PhotonNetwork.player.IsLocal) {
             SetupDirectionalIndicator(player);
             SetupAOEIndicator(player);
+            SetupScopeIndicator(player);
         }
     }
 
@@ -93,6 +100,11 @@ public class AbilityHandler : MonoBehaviour {
             }
             aoeIndicatorIndicator.transform.position = mousePos;
             aoeRangeIndicator.transform.eulerAngles = Vector3.zero;
+        }
+
+        // Scope
+        if(ability.abilityType == AbilityTypes.Scope) {
+            scopeIndicator.transform.LookAt(GetMousePosition(player));
         }
     }
 
@@ -124,11 +136,23 @@ public class AbilityHandler : MonoBehaviour {
         }
     }
 
+    // Set up the Scope indicator for the caller (typically called on spawn)
+    void SetupScopeIndicator(GameObject player) {
+        scopeIndicator = Instantiate(scopeIndicatorPrefab, player.transform.position, Quaternion.identity);
+        scopeIndicator.name = "ScopeIndicator";
+        scopeIndicator.transform.parent = player.transform;
+        scopeIndicator.transform.localPosition = Vector3.zero;
+        scopeIndicator.SetActive(false);
+    }
+
     // Called when an ability begins to be cast (displays indicator)
     public void StartCasting(GameObject player, Ability ability) {
         if (!gameEnded) {
-            Aiming = true;
+            if (aimingAbility != ability)
+                StopCasting(player);
+            aimingAbility = ability;
             
+            // AOE Indicator
             if(ability.abilityType == AbilityTypes.AOE) {
                 if (aoeRangeIndicator != null && aoeIndicatorIndicator != null) {
                     aoeRangeIndicator.transform.localScale = new Vector3(ability.range, aoeRangeIndicator.transform.localScale.y, ability.range);
@@ -137,15 +161,23 @@ public class AbilityHandler : MonoBehaviour {
                     aoeIndicatorIndicator.SetActive(true);
                 }
             }
+
+            // Scope Indicator
+            if(ability.abilityType == AbilityTypes.Scope) {
+                if(scopeIndicator != null) {
+                    scopeIndicator.SetActive(true);
+                }
+            }
         }
     }
 
     // Called when an ability stops being cast
     public void StopCasting(GameObject player) {
-        Aiming = false;
+        aimingAbility = null;
         directionalIndicator.SetActive(false);
         aoeRangeIndicator.SetActive(false);
         aoeIndicatorIndicator.SetActive(false);
+        scopeIndicator.SetActive(false);
     }
 
     // Calls when an ability has been activated, but not fired
