@@ -445,8 +445,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 4519428862808860}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 16
-  instantiationId: 16
+  viewIdField: 0
+  instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
 --- !u!195 &195854914652497380
@@ -505,6 +505,7 @@ MonoBehaviour:
   healthBarFill: {fileID: 114751942423393032}
   XPOnDeath: 16
   XPRadius: 10
+  photonView: {fileID: 0}
   team: 0
 --- !u!114 &114575083679333772
 MonoBehaviour:

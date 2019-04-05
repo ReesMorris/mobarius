@@ -37,6 +37,12 @@ public class AlucardQ_Effect : MonoBehaviour {
                     }
                 }
             }
+            StartCoroutine("Delete");
         }
+    }
+
+    IEnumerator Delete() {
+        yield return new WaitForSeconds(1.5f);
+        PhotonNetwork.Destroy(gameObject);
     }
 }

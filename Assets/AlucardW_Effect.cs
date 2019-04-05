@@ -20,6 +20,9 @@ public class AlucardW_Effect : MonoBehaviour {
         attacker = PhotonView.Find(attackerId).owner;
         damageBase = damage;
         gameObject.transform.LookAt(direction);
+
+        if (PhotonNetwork.isMasterClient)
+            StartCoroutine("Delete");
     }
 
     // Called by AlucardW_Trigger by the Master Client
@@ -32,5 +35,10 @@ public class AlucardW_Effect : MonoBehaviour {
             else if (entity.GetComponent<Minion>() != null)
                 targetView.RPC("EntityDamage", PhotonTargets.AllBuffered, damageBase, attackerIdBase);
         }
+    }
+
+    IEnumerator Delete() {
+        yield return new WaitForSeconds(1.5f);
+        PhotonNetwork.Destroy(gameObject);
     }
 }
