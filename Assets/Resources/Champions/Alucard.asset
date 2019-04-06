@@ -16,9 +16,10 @@ MonoBehaviour:
   isFree: 1
   isAvailable: 1
   abilities:
-  - name: Passive
+  - name: Blood Thirst
     abilityKey: 0
-    desc: 
+    desc: Every time Alucard kills an enemy Champion or Minion, he will instantly
+      regenerate <color=#90ee90>7% base health</color>.
     icon: {fileID: 21300000, guid: aaa3d70d5d7b2c742ba3b861316b29bf, type: 3}
     abilityType: 0
     cost: 0
@@ -27,12 +28,12 @@ MonoBehaviour:
     cooldown: 0
     duration: 0
     speed: 0
-    maxLevel: 5
+    maxLevel: 0
     damage: []
   - name: Death From Above
     abilityKey: 1
     desc: Alucard calls upon the skies to bring down a fireball of death. The fireball
-      will deal {x} to any enemies within its range. Does not damage towers.
+      will deal {x} to any enemies within its range. Does not damage Towers.
     icon: {fileID: 21300000, guid: 433085dd54e2a0049aa25150b4ccd881, type: 3}
     abilityType: 2
     cost: 0
@@ -52,8 +53,8 @@ MonoBehaviour:
       damageType: 0
   - name: Right Foot Forward
     abilityKey: 2
-    desc: Alucard slams into the ground causing shattering consequences. Any  enemies
-      within range will take {x}. Does not damage towers.
+    desc: Alucard slams into the ground causing shattering consequences. Any enemies
+      within range will take {x}. Does not damage Towers.
     icon: {fileID: 21300000, guid: 06fa274547dc760449243745481ef869, type: 3}
     abilityType: 3
     cost: 0
