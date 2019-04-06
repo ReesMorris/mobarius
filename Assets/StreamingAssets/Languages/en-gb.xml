@@ -31,7 +31,8 @@
     <translation key="auth_register">Don't have an account?</translation>
     <translation key="auth_forgot_username">Forgotten your username?</translation>
     <translation key="auth_forgot_password">Forgotten your password?</translation>
-    <translation key="auth_verifying_version">Validating game version</translation> 
+    <translation key="auth_verifying_version">Validating game version</translation>
+    <translation key="auth_validation_skip">Skipping version validation</translation>
     <translation key="auth_version">Version {0}</translation>
     
     <!-- Quit Menu -->
