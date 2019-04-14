@@ -71,8 +71,10 @@ public class AlucardQ : MonoBehaviour {
     }
 
     public void StopSequence() {
-        StopCoroutine("AbilitySequence");
-        sequenceActive = false;
+        if(this != null) {
+            StopCoroutine("AbilitySequence");
+            sequenceActive = false;
+        }
     }
 
     IEnumerator AbilitySequence() {

@@ -24,11 +24,13 @@ public class PlayerChampion : MonoBehaviour {
     public PhotonView PhotonView { get; protected set; }
     float oldHealth;
     GameUIHandler gameUIHandler;
+    MapProperties mapProperties;
 
     /*  General Code  */
 
     void Start () {
         PhotonView = GetComponent<PhotonView>();
+        mapProperties = MapManager.Instance.GetMapProperties();
         if (PhotonNetwork.player.IsLocal) {
             GetComponent<Entity>().team = PhotonView.owner.GetTeam();
             gameUIHandler = GameObject.Find("GameManager").GetComponent<GameUIHandler>();
@@ -46,6 +48,10 @@ public class PlayerChampion : MonoBehaviour {
 
             // Update UI to show full health and mana, etc
             if (PhotonView.isMine) {
+
+                // Hide username/healthbar if in third person
+                if (mapProperties.display == PlayerCamera.CameraDisplays.ThirdPerson)
+                    canvas.SetActive(false);
 
                 Entity.onEntityDeath += OnEntityDeath;
 
@@ -74,8 +80,7 @@ public class PlayerChampion : MonoBehaviour {
 
     [PunRPC]
     void Spawn() {
-
-        // Show the canvas for username/health/etc.
+        // Show the canvas for username/health/etc if in topdown view.
         canvas.SetActive(true);
         damageIndicator.GetComponent<DamageIndicator>().StartResize();
 
@@ -83,10 +88,15 @@ public class PlayerChampion : MonoBehaviour {
         gameObject.layer = LayerMask.NameToLayer("Targetable");
 
         if (PhotonView.isMine) {
+            mapProperties = MapManager.Instance.GetMapProperties();
+            if (mapProperties.display == PlayerCamera.CameraDisplays.ThirdPerson)
+                canvas.SetActive(false);
             GameHandler gameHandler = GameHandler.Instance;
             Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
+            transform.rotation = gameHandler.currentMap.blueSpawns[0].transform.rotation;
             if (PhotonView.owner.GetTeam() == PunTeams.Team.red) {
                 position = gameHandler.currentMap.redSpawns[0].transform.position;
+                transform.rotation = gameHandler.currentMap.redSpawns[0].transform.rotation;
             }
             position += (Vector3.up * 3f);
             transform.position = position;

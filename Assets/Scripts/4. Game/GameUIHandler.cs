@@ -33,8 +33,8 @@ public class GameUIHandler : MonoBehaviour {
     public Button abilityEUpgrade;
     public AbilityIcon abilityR;
     public Button abilityRUpgrade;
-    public AbilityIcon abilityD;
     public AbilityIcon abilityF;
+    public AbilityIcon abilityG;
     public AbilityIcon abilityB;
 
     [Header("Level")]
@@ -66,10 +66,10 @@ public class GameUIHandler : MonoBehaviour {
     float cooldownEDuration;
     float cooldownR;
     float cooldownRDuration;
-    float cooldownD;
-    float cooldownDDuration;
     float cooldownF;
     float cooldownFDuration;
+    float cooldownG;
+    float cooldownGDuration;
     float cooldownB;
     float cooldownBDuration;
     PhotonView photonView;
@@ -106,8 +106,8 @@ public class GameUIHandler : MonoBehaviour {
         abilityW.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.W), "W", champion);
         abilityE.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.E), "E", champion);
         abilityR.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.R), "R", champion);
-        abilityD.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.D), "D", champion);
         abilityF.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.F), "F", champion);
+        abilityG.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.G), "G", champion);
         abilityB.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.B), "B", champion);
     }
 
@@ -152,10 +152,10 @@ public class GameUIHandler : MonoBehaviour {
                 return cooldownE == 0f;
             case AbilityHandler.Abilities.R:
                 return cooldownR == 0f;
-            case AbilityHandler.Abilities.D:
-                return cooldownD == 0f;
             case AbilityHandler.Abilities.F:
                 return cooldownF == 0f;
+            case AbilityHandler.Abilities.G:
+                return cooldownG == 0f;
             case AbilityHandler.Abilities.B:
                 return cooldownB == 0f;
         }
@@ -176,11 +176,11 @@ public class GameUIHandler : MonoBehaviour {
             case AbilityHandler.Abilities.R:
                 cooldownR = cooldownRDuration = cooldown;
                 break;
-            case AbilityHandler.Abilities.D:
-                cooldownD = cooldownDDuration = cooldown;
-                break;
             case AbilityHandler.Abilities.F:
                 cooldownF = cooldownFDuration = cooldown;
+                break;
+            case AbilityHandler.Abilities.G:
+                cooldownG = cooldownGDuration = cooldown;
                 break;
             case AbilityHandler.Abilities.B:
                 cooldownB = cooldownBDuration = cooldown;
@@ -207,13 +207,13 @@ public class GameUIHandler : MonoBehaviour {
                 cooldownR = Mathf.Max(0f, cooldownR - speed);
                 abilityR.SetCooldown(cooldownR, cooldownRDuration);
             }
-            if (cooldownD > 0f) {
-                cooldownD = Mathf.Max(0f, cooldownD - speed);
-                abilityD.SetCooldown(cooldownD, cooldownDDuration);
-            }
             if (cooldownF > 0f) {
                 cooldownF = Mathf.Max(0f, cooldownF - speed);
                 abilityF.SetCooldown(cooldownF, cooldownFDuration);
+            }
+            if (cooldownG > 0f) {
+                cooldownG = Mathf.Max(0f, cooldownG - speed);
+                abilityG.SetCooldown(cooldownG, cooldownGDuration);
             }
             if (cooldownB > 0f) {
                 cooldownB = Mathf.Max(0f, cooldownB - speed);

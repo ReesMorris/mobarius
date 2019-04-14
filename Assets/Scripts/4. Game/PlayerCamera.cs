@@ -9,31 +9,52 @@ public class PlayerCamera : MonoBehaviour {
     public Vector3 rotation;
     public float scrollSensitivity;
     public Vector2 minMaxFOV;
+    public enum CameraDisplays { TopDown, ThirdPerson };
 
     PhotonView photonView;
     float padding = 0.95f;
     float cameraSpeed = 0.17f;
     bool lockedToPlayer;
+    MapProperties mapProperties;
 
     Vector3 gameOverTarget = Vector3.zero;
     float smoothTime;
     Vector3 velocity = Vector3.zero;
 
+    // Necessary for playing another game after the first (otherwise Start does not get called again) Source: https://answers.unity.com/questions/762811/start-method-is-not-being-called-every-time-game-o.html [Accessed 15 April 2019]
+    void OnEnable() {
+        Start();
+    }
+
     void Start() {
         lockedToPlayer = true;
         photonView = target.GetComponent<PhotonView>();
+
+        // Map Properties
+        Debug.Log("PlayerCamera start");
+        mapProperties = MapManager.Instance.GetMapProperties();
+        if (mapProperties.display == CameraDisplays.ThirdPerson) {
+            transform.parent = target;
+            transform.localPosition = new Vector3(0, 0, 0);
+            transform.localEulerAngles = new Vector3(0, -90, 0);
+        }
     }
 
 	void Update () {
         if (photonView.isMine) {
             if (gameOverTarget != Vector3.zero) {
+                transform.parent = null;
                 transform.position = Vector3.SmoothDamp(transform.position, gameOverTarget, ref velocity, smoothTime); // Source: https://docs.unity3d.com/ScriptReference/Vector3.SmoothDamp.html [10 February 2019]
             } else {
                 SetFOV();
-                CheckForInput();
-                CheckForMouseOnCorner();
-                if (lockedToPlayer)
-                    CenterCamera();
+                if (mapProperties.display == CameraDisplays.TopDown) {
+                    CheckForInput();
+                    CheckForMouseOnCorner();
+                    if (lockedToPlayer)
+                        CenterCameraTopDown();
+                } else if(mapProperties.display == CameraDisplays.ThirdPerson) {
+                    CenterCameraThirdPerson();
+                }
             }
         }
 	}
@@ -41,12 +62,10 @@ public class PlayerCamera : MonoBehaviour {
     // Recenter the camera on the player if input pressed
     void CheckForInput() {
         if (!ChatHandler.Instance.inputField.gameObject.activeSelf) {
-            if (Input.GetKey(KeyCode.Space)) {
-                CenterCamera();
-            }
-            if (Input.GetKeyDown(KeyCode.Y)) {
+            if (Input.GetKey(KeyCode.Space))
+                CenterCameraTopDown();
+            else if (Input.GetKeyDown(KeyCode.Y))
                 lockedToPlayer = !lockedToPlayer;
-            }
         }
     }
 
@@ -54,7 +73,7 @@ public class PlayerCamera : MonoBehaviour {
     public void FocusOnPlayer(bool lockOn) {
         if(lockOn)
             lockedToPlayer = true;
-        CenterCamera();
+        CenterCameraTopDown();
     }
 
     // Set the field of view (Src: https://answers.unity.com/questions/218347/how-do-i-make-the-camera-zoom-in-and-out-with-the.html)
@@ -66,11 +85,17 @@ public class PlayerCamera : MonoBehaviour {
     }
 
     // Center the camera on the player
-    void CenterCamera() {
+    void CenterCameraTopDown() {
         if (target != null) {
             transform.localPosition = target.position + distance;
             transform.localEulerAngles = rotation;
         }
+    }
+
+    // Center the camera on the player
+    void CenterCameraThirdPerson() {
+        transform.localPosition = new Vector3(0, 2.85f, -3.14f);
+        transform.localEulerAngles = new Vector3(10, 0, 0);
     }
 
     // Check to see if the player is moving the screen
@@ -98,6 +123,7 @@ public class PlayerCamera : MonoBehaviour {
     // End of game target
     public void ClearEndOfGameTarget() {
         gameOverTarget = Vector3.zero;
+        this.enabled = false;
     }
     public void SetEndOfGameTarget(Vector3 target, float smoothingTime) {
         gameOverTarget = target;

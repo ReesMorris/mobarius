@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class FlashAbility : MonoBehaviour {
 
-    AbilityHandler.Abilities abilityType = AbilityHandler.Abilities.D;
+    AbilityHandler.Abilities abilityType = AbilityHandler.Abilities.F;
     PhotonView photonView;
     AbilityHandler abilityHandler;
     PlayerChampion playerChampion;
@@ -16,7 +16,7 @@ public class FlashAbility : MonoBehaviour {
     bool gameEnded;
 
     void Start() {
-        GameUIHandler.Instance.abilityD.GetComponent<Button>().onClick.AddListener(AttemptAbility);
+        GameUIHandler.Instance.abilityF.GetComponent<Button>().onClick.AddListener(AttemptAbility);
         abilityHandler = AbilityHandler.Instance;
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
@@ -26,7 +26,7 @@ public class FlashAbility : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.D)) {
+        if (Input.GetKeyDown(KeyCode.F)) {
             AttemptAbility();
         }
     }

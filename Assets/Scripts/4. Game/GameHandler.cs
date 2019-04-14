@@ -59,18 +59,22 @@ public class GameHandler : MonoBehaviour {
     void OnVictory(PunTeams.Team winningTeam) {
         if (!victory) {
             victory = true;
-            Transform losingNexus;
+            GameObject losingNexus;
             if (winningTeam == PunTeams.Team.blue)
-                losingNexus = GameObject.Find("Red Nexus").transform;
+                losingNexus = GameObject.Find("Red Nexus");
             else
-                losingNexus = GameObject.Find("Blue Nexus").transform;
-            Vector3 pos = new Vector3(losingNexus.position.x, 15f, losingNexus.position.z - 15f);
-            Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos, 1f);
+                losingNexus = GameObject.Find("Blue Nexus");
 
-            StartCoroutine(VictoryEnum(winningTeam));
-            if (onGameEnd != null) {
-                onGameEnd();
+            // Prevent errors in trying to move the camera to something that doesn't exist
+            if(losingNexus != null) {
+                Vector3 pos = new Vector3(losingNexus.transform.position.x, 15f, losingNexus.transform.position.z - 15f);
+                Camera.main.GetComponent<PlayerCamera>().SetEndOfGameTarget(pos, 1f);
             }
+
+            // End the game
+            StartCoroutine(VictoryEnum(winningTeam));
+            if (onGameEnd != null)
+                onGameEnd();
         }
     }
 
@@ -83,6 +87,7 @@ public class GameHandler : MonoBehaviour {
 
         yield return new WaitForSeconds(4f);
         Camera.main.GetComponent<PlayerCamera>().ClearEndOfGameTarget();
+        Camera.main.transform.parent = null;
         UIHandler.Instance.ShowLobbyUI();
         LobbyNetwork.Instance.StopPlay();
     }

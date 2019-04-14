@@ -15,4 +15,7 @@ public class MapProperties {
 
     [Header("Towers")]
     public float nexusDamagePerSec;
+
+    [Header("Display")]
+    public PlayerCamera.CameraDisplays display;
 }

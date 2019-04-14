@@ -14,7 +14,7 @@ public class AbilityHandler : MonoBehaviour {
     public GameObject aoeIndicatorPrefab;
     public GameObject scopeIndicatorPrefab;
 
-    public enum Abilities { Passive, Q, W, E, R, D, F, B };
+    public enum Abilities { Passive, Q, W, E, R, F, G, B };
     public enum AbilityTypes { Spell, Directional, AOE, Scope };
     public enum DamageTypes { PhysicalDamage, MagicDamage, Health };
 
@@ -31,6 +31,7 @@ public class AbilityHandler : MonoBehaviour {
 
     public static AbilityHandler Instance;
     Ability aimingAbility;
+    MapProperties mapProperties;
 
     // Indicators
     GameObject directionalIndicator;
@@ -83,7 +84,10 @@ public class AbilityHandler : MonoBehaviour {
 
         // Directional
         if (ability.abilityType == AbilityTypes.Directional) {
-            directionalIndicator.transform.LookAt(GetMousePosition(player));
+            if (mapProperties.display == PlayerCamera.CameraDisplays.TopDown)
+                directionalIndicator.transform.LookAt(GetMousePosition(player));
+            else
+                directionalIndicator.transform.localEulerAngles = Vector3.zero;
         }
 
         // AOE
@@ -104,7 +108,10 @@ public class AbilityHandler : MonoBehaviour {
 
         // Scope
         if(ability.abilityType == AbilityTypes.Scope) {
-            scopeIndicator.transform.LookAt(GetMousePosition(player));
+            if (mapProperties.display == PlayerCamera.CameraDisplays.TopDown)
+                scopeIndicator.transform.LookAt(GetMousePosition(player));
+            else
+                scopeIndicator.transform.localEulerAngles = Vector3.zero;
         }
     }
 
@@ -199,6 +206,7 @@ public class AbilityHandler : MonoBehaviour {
     // Game Start and End functions
     void OnGameStart() {
         gameEnded = false;
+        mapProperties = MapManager.Instance.GetMapProperties();
     }
     void OnGameEnd() {
         gameEnded = true;
