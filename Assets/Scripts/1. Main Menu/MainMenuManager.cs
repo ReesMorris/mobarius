@@ -146,26 +146,32 @@ public class MainMenuManager : MonoBehaviour {
     }
 
     /* XP and Level Systems */
+    // source: http://tritecode.wikidot.com/article:2008:09:16:runescape-exp [October 25 2018]
+
 
     void SetUserXP(int newXP) {
         level.text = XPToLevel(newXP).ToString();
         xp.fillAmount = ProgressToLevel(newXP) - 0.07f; // to factor in that a 0.93 is the filled amount
     }
+
     int Equate(float xp) {
         return (int)Mathf.Floor(xp + 300 * Mathf.Pow(2, xp / 7));
     }
+
     int LevelToXP(int level) {
         float xp = 0;
         for (int i = 1; i < level; i++)
             xp += Equate(i);
         return (int)Mathf.Floor(xp / 4f);
     }
+
     int XPToLevel(int xp) {
         int level = 1;
         while (LevelToXP(level) < xp)
             level++;
         return level - 1;
     }
+    
     float ProgressToLevel(float xp) {
         if (xp == 0)
             return 0;

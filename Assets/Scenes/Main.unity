@@ -28543,7 +28543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d74ef95e517c4d8cb6570141718ba87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVersion: 0.0.1.3
+  currentVersion: 0.0.1.4
   skipVersionChecking: 1
   versionCheckerUrl: https://rees.app/moba/i/version
   downloadUrl: https://rees.app/moba/download
