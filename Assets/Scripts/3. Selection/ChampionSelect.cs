@@ -4,8 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+/*
+    The script responsible for the champion selection UI
+*/
+/// <summary>
+/// The script responsible for the champion selection UI.
+/// </summary>
 public class ChampionSelect : MonoBehaviour {
 
+    // Public variables
     public int timeToPick;
     public int timeBeforeStart;
 
@@ -25,6 +33,7 @@ public class ChampionSelect : MonoBehaviour {
     public GameObject champButtonPrefab;
     public int championsPerRow;
 
+    // Private variables
     int timeRemaining;
     bool waitingForTeams;
     ChampionRoster championRoster;
@@ -38,6 +47,7 @@ public class ChampionSelect : MonoBehaviour {
     enum PlayerStates { picking, lockedIn, starting, started };
     PlayerStates playerState;
 
+    // Set references for private variables when the game starts
     void Start() {
         gameHandler = GetComponent<GameHandler>();
         championRoster = GetComponent<ChampionRoster>();
@@ -47,6 +57,7 @@ public class ChampionSelect : MonoBehaviour {
         SetupChampions();
     }
 
+    // Check every frame to see if all teams have been assigned (to display the UI)
     void Update() {
         if(waitingForTeams) {
             if(PhotonNetwork.playerList[PhotonNetwork.playerList.Length - 1].GetTeam() != PunTeams.Team.none) {
@@ -55,6 +66,10 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Called when a player locks in their character choice.
+    /// Commences the countdown timer if all players have locked in.
+    /// </summary>
     public void OnPlayerLock() {
         playersReady++;
 
@@ -69,9 +84,12 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    // Displays all available champions to be selected
     void SetupChampions() {
         int i = 0;
         GameObject panel = new GameObject();
+
+        // Loop through every champion available
         foreach(Champion champion in championRoster.GetChampions()) {
             if(i % championsPerRow == 0)
                 panel = Instantiate(champRowPrefab, scrollViewContainer);
@@ -79,12 +97,14 @@ public class ChampionSelect : MonoBehaviour {
             GameObject champ = Instantiate(champButtonPrefab, panel.transform);
             champ.name = champion.championName;
 
+            // Update the UI and add event listeners
             Image image = champ.GetComponent<Image>();
             Button button = champ.GetComponent<Button>();
             button.interactable = champion.IsOwned;
             button.onClick.AddListener(delegate{SelectChampion(champion);});
             image.sprite = champion.icon;
 
+            // Make unowned champions transparent
             if(!champion.IsOwned) {
                 image.color = new Color(1, 1, 1, 0.5f);
             }
@@ -93,6 +113,7 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    // The master client will assign teams to users
     void AssignTeams() {
         for (int i = 0; i < PhotonNetwork.playerList.Length; i++) {
             if(i % 2 == 0) {
@@ -104,6 +125,12 @@ public class ChampionSelect : MonoBehaviour {
         StartCoroutine("Countdown");
     }
 
+    /// <summary>
+    /// Resets variables and requests the master client to begin assigning teams.
+    /// </summary>
+    /// <remarks>
+    /// Called when all players are moved to the champion select screen.
+    /// </remarks>
     public void OnStart() {
         lockedIn = false;
         playerState = PlayerStates.picking;
@@ -117,6 +144,7 @@ public class ChampionSelect : MonoBehaviour {
         SetTimeRemaining(timeToPick);
     }
 
+    // Displays players on either the left or the right sidebar
     void DisplayPlayers() {
         foreach(PhotonPlayer player in PhotonNetwork.playerList) {
             GameObject container;
@@ -130,6 +158,12 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Hides the champion selection screen and resets the UI.
+    /// </summary>
+    /// <remarks>
+    /// Called when a user disconnects from the room.
+    /// </remarks>
     public void OnStop() {
         champSelectUI.SetActive(false);
         StopCoroutine("Countdown");
@@ -144,7 +178,7 @@ public class ChampionSelect : MonoBehaviour {
     }
 
     
-
+    // The countdown timer displayed for picking champions and waiting for a game to begin
     IEnumerator Countdown() {
         while(true) {
             yield return new WaitForSeconds(1f);
@@ -176,6 +210,7 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    // Called when the local player clicks on the button UI of a champion
     void SelectChampion(Champion champion) {
         if(!lockedIn) {
             Transform container = GetLocalPlayerContainer();
@@ -190,6 +225,7 @@ public class ChampionSelect : MonoBehaviour {
         }
     }
 
+    // Called when the local player clicks on the 'lock in' button
     void LockChampion() {
         playerState = PlayerStates.lockedIn;
         titleText.text = LocalisationManager.instance.GetValue("champ_select_title_waiting");
@@ -199,17 +235,20 @@ public class ChampionSelect : MonoBehaviour {
         container.GetComponent<ChampionLock>().LockIn(selectedChampion);
     }
 
+    // Returns the UI element transform of the container for the local player
     Transform GetLocalPlayerContainer() {
         if(PhotonNetwork.player.GetTeam() == PunTeams.Team.blue)
             return leftColumn.Find(PhotonNetwork.playerName);
         return rightColumn.Find(PhotonNetwork.playerName);
     }
 
+    // Updates the timer to the time remaining, set by the master client
     void SetTimeRemaining(int amount) {
         timeRemaining = amount;
         countdownTimer.text = timeRemaining.ToString();
     }
 
+    // Called to all clients by the master client when the game starts
     [PunRPC]
     void OnGameStart() {
         UIHandler.Instance.HideLobbyUI();

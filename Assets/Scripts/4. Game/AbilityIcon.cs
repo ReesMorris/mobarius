@@ -6,8 +6,15 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+    The script responsible for handling the ability icon UI interface
+*/
+/// <summary>
+/// The script responsible for handling the ability icon UI interface.
+/// </summary>
 public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
+    // Public variables
     public Image icon;
     public Image icon2;
     public GameObject iconBg;
@@ -15,6 +22,7 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public TMP_Text cooldown;
     public Button upgradeButton;
 
+    // Private variables
     Champion champion;
     Ability ability;
     RectTransform rectTransform;
@@ -24,10 +32,21 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     string desc;
     int level;
 
+    // Fetch instances on game start.
     void Start() {
         abilityHandler = AbilityHandler.Instance;
     }
 
+    /// <summary>
+    /// Initialises the class.
+    /// </summary>
+    /// <param name="_ability">The ability this UI represents</param>
+    /// <param name="keyCode">The key code this ability is activated with</param>
+    /// <param name="_champion">The champion who uses this ability</param>
+    /// <remarks>
+    /// Abilities that can not be upgraded should be pass in 'null' for the first parameter.
+    /// The passive ability should pass in '' for the keyCode parameter.
+    /// </remarks>
     public void SetupIcon(Ability _ability, string keyCode, Champion _champion) {
         level = AbilityHandler.Instance.GetAbilityLevel(_champion, _ability);
         if (ability == null)
@@ -128,6 +147,12 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             "<color=#b2b2b3><size=23>" + cooldown + "</size></color>";
     }
 
+    /// <summary>
+    /// Called when the mouse enters the UI element this script is attached to. Displays the tooltip relating to the ability this icon represents.
+    /// </summary>
+    /// <remarks>
+    /// The tooltip is automatically sized based on its content.
+    /// </remarks>
     public void OnPointerEnter(PointerEventData eventData) {
         if(rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
@@ -142,22 +167,40 @@ public class AbilityIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    /// <summary>
+    /// Called when the mouse leaves the UI element this script is attached to. Hides any tooltips.
+    /// </summary>
     public void OnPointerExit(PointerEventData eventData) {
         if(abilityHandler.tooltip != null) {
             abilityHandler.tooltip.SetActive(false);
         }
     }
 
+    /// <summary>
+    /// Sets the cooldown text to display for this ability.
+    /// Usually called every 0.1 seconds from another function after an ability has been casted.
+    /// </summary>
+    /// <param name="cooldownRemaining">The number of seconds remaining on the cooldown</param>
+    /// <param name="cooldownDuration">The total number of seconds the cooldown will last</param>
+    /// <remarks>
+    /// Does not control whether the user can activate the ability or not; this is a purely cosmetic function.
+    /// </remarks>
     public void SetCooldown(float cooldownRemaining, float cooldownDuration) {
+
+        // If the cooldown is ongoing
         if (cooldownRemaining > 0f) {
+
+            // Set the overlay image on the cooldown icon to slowly fill over time
             iconBg.SetActive(true);
             icon2.fillAmount = 1 - (cooldownRemaining / cooldownDuration);
             if(cooldownRemaining > 1f)
                 cooldown.text = Mathf.Ceil(cooldownRemaining).ToString();
             else
-                cooldown.text =cooldownRemaining.ToString("F1");
-
-        } else {
+                cooldown.text = cooldownRemaining.ToString("F1");
+        }
+        
+        // If the cooldown has ended, make the icon as clear as possible
+        else {
             if (iconBg != null) {
                 if (level == 0)
                     icon2.fillAmount = 0;

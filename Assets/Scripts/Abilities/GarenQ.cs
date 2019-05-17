@@ -8,6 +8,8 @@ public class GarenQ : MonoBehaviour {
 
     /*
 
+    Unused
+
     public AbilityHandler.Abilities abilityType;
     public GameObject bulletPrefab;
 

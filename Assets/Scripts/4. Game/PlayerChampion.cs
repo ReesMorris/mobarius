@@ -5,8 +5,15 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
+/*
+    This script contains functions related to the player champion
+*/
+/// <summary>
+/// This script contains functions related to the player champion.
+/// </summary>
 public class PlayerChampion : MonoBehaviour {
 
+    // Public variables
     public delegate void OnPlayerDamaged();
     public static OnPlayerDamaged onPlayerDamaged;
 
@@ -22,6 +29,8 @@ public class PlayerChampion : MonoBehaviour {
     public Champion Champion { get; protected set; }
     public bool IsDead { get; protected set; }
     public PhotonView PhotonView { get; protected set; }
+
+    // Private variables
     float oldHealth;
     GameUIHandler gameUIHandler;
     MapProperties mapProperties;
@@ -73,6 +82,9 @@ public class PlayerChampion : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Respawns the player character on the network.
+    /// </summary>
     public void Respawn() {
         PhotonView = GetComponent<PhotonView>();
         PhotonView.RPC("Spawn", PhotonTargets.All);
@@ -91,6 +103,8 @@ public class PlayerChampion : MonoBehaviour {
             mapProperties = MapManager.Instance.GetMapProperties();
             if (mapProperties.display == PlayerCamera.CameraDisplays.ThirdPerson)
                 canvas.SetActive(false);
+
+            // Set the spawn position depending on team
             GameHandler gameHandler = GameHandler.Instance;
             Vector3 position = gameHandler.currentMap.blueSpawns[0].transform.position;
             transform.rotation = gameHandler.currentMap.blueSpawns[0].transform.rotation;
@@ -98,6 +112,8 @@ public class PlayerChampion : MonoBehaviour {
                 position = gameHandler.currentMap.redSpawns[0].transform.position;
                 transform.rotation = gameHandler.currentMap.redSpawns[0].transform.rotation;
             }
+
+            // Re-set the camera and move the player to the spawn point
             position += (Vector3.up * 3f);
             transform.position = position;
             PlayerCamera playerCamera = Camera.main.GetComponent<PlayerCamera>();
@@ -112,6 +128,7 @@ public class PlayerChampion : MonoBehaviour {
         IsDead = false;
     }
 
+    // Rename the local character's GameObject across the network
     [PunRPC]
     void Rename(string newName) {
         gameObject.name = newName;
@@ -152,6 +169,7 @@ public class PlayerChampion : MonoBehaviour {
         }
     }
 
+    // Called when a player dies
     [PunRPC]
     void OnDeath(int killerId) {
 
@@ -301,7 +319,9 @@ public class PlayerChampion : MonoBehaviour {
             ScoreHandler.Instance.OnMinionKill();
     }
 
-    // Returns true if stunned
+    /// <summary>
+    /// Returns true if the local champion is stunned (and cannot move).
+    /// </summary>
     public bool IsStunned() {
         return Champion.movementSpeed == 0f;
     }

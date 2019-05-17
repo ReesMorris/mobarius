@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    This script handles Alucard's Q ability
+*/
+/// <summary>
+/// This script handles Alucard's Q ability.
+/// </summary>
 public class AlucardQ : MonoBehaviour {
 
+    // Public variables
     public GameObject prefab;
 
+    // Private variables
     AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.Q;
     PhotonView photonView;
     PlayerChampion playerChampion;
@@ -16,6 +24,7 @@ public class AlucardQ : MonoBehaviour {
     Ability ability;
     bool sequenceActive;
 
+    // Set up references and event listeners when the game begins.
     void Start() {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
@@ -28,10 +37,15 @@ public class AlucardQ : MonoBehaviour {
         GameUIHandler.Instance.abilityQ.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
     }
 
+    // Every frame, check to see if the user is trying to perform an ability.
     void Update() {
         AttemptAbility(false);
     }
 
+    /// <summary>
+    /// Attempts to cast the ability sequence.
+    /// </summary>
+    /// <param name="buttonPressed">True if the UI icon is clicked to activate the ability</param>
     public void AttemptAbility(bool buttonPressed) {
         if (photonView.isMine) {
             if (!playerChampion.IsDead) {
@@ -65,11 +79,13 @@ public class AlucardQ : MonoBehaviour {
         }
     }
 
+    // If another ability is activated, stop this one
     void OnAbilityActivated(Ability _ability) {
         if(_ability != ability)
             StopSequence();
     }
 
+    // Stop the ability sequence
     public void StopSequence() {
         if(this != null) {
             StopCoroutine("AbilitySequence");
@@ -77,6 +93,7 @@ public class AlucardQ : MonoBehaviour {
         }
     }
 
+    // The sequence of this ability
     IEnumerator AbilitySequence() {
         sequenceActive = true;
 

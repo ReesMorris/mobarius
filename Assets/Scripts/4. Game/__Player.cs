@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-// Add this to a new player champion to add all of the necessary files
+/*
+    This script is to ensure that no core scripts are missed when adding a new player.
+    Simply attach this script to a new player and run the game once.
+*/
 
 [RequireComponent(typeof(PlayerChat))]
 [RequireComponent(typeof(PlayerAnimator))]

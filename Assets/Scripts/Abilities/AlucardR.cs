@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    This script handles Alucard's R ability
+*/
+/// <summary>
+/// This script handles Alucard's R ability.
+/// </summary>
 public class AlucardR : MonoBehaviour {
+
+    // Public variables
     public GameObject prefab;
 
+    // Private variables
     AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.R;
     PhotonView photonView;
     PlayerChampion playerChampion;
@@ -15,6 +24,7 @@ public class AlucardR : MonoBehaviour {
     Ability ability;
     bool sequenceActive;
 
+    // Set up references and event listeners when the game begins.
     void Start() {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
@@ -25,10 +35,15 @@ public class AlucardR : MonoBehaviour {
         GameUIHandler.Instance.abilityR.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
     }
 
+    // Every frame, check to see if the user is trying to perform an ability.
     void Update() {
         AttemptAbility(false);
     }
 
+    /// <summary>
+    /// Attempts to cast the ability sequence.
+    /// </summary>
+    /// <param name="buttonPressed">True if the UI icon is clicked to activate the ability</param>
     public void AttemptAbility(bool buttonPressed) {
         if (photonView.isMine) {
             if (!playerChampion.IsDead) {
@@ -62,6 +77,7 @@ public class AlucardR : MonoBehaviour {
         }
     }
 
+    // The sequence of this ability
     IEnumerator AbilitySequence() {
         sequenceActive = true;
 

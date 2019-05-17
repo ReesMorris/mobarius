@@ -4,8 +4,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+/*
+    This script handles Alucard's Flash ability
+*/
+/// <summary>
+/// This script handles Alucard's Flash ability.
+/// </summary>
 public class FlashAbility : MonoBehaviour {
 
+    // Private variables
     AbilityHandler.Abilities abilityType = AbilityHandler.Abilities.F;
     PhotonView photonView;
     AbilityHandler abilityHandler;
@@ -15,6 +22,7 @@ public class FlashAbility : MonoBehaviour {
     Ability ability;
     bool gameEnded;
 
+    // Assign listeners and references to other scripts when the game starts.
     void Start() {
         GameUIHandler.Instance.abilityF.GetComponent<Button>().onClick.AddListener(AttemptAbility);
         abilityHandler = AbilityHandler.Instance;
@@ -25,12 +33,14 @@ public class FlashAbility : MonoBehaviour {
         ability = abilityHandler.GetChampionAbility(playerChampion.Champion, abilityType);
     }
 
+    // Attempt to cast the ability every frame
     void Update() {
         if (Input.GetKeyDown(KeyCode.F)) {
             AttemptAbility();
         }
     }
 
+    // The steps for the ability to work
     void AttemptAbility() {
         // Are we the player doing this?
         if (photonView.isMine) {

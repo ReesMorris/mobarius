@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This script focuses on handling player stat regeneration
+*/
+/// <summary>
+/// This script focuses on handling player stat regeneration.
+/// </summary>
 public class StatRegeneration : MonoBehaviour {
 
+    // Private variables
     Champion champion;
     PlayerChampion playerChampion;
     PhotonView photonView;
 
+    // Start the heal coroutines if the player is local
     void Start() {
         photonView = GetComponent<PhotonView>();
 

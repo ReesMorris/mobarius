@@ -6,8 +6,15 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System;
 
+/*
+    The script handling the in-game chat interface
+*/
+/// <summary>
+/// The script handling the in-game chat interface.
+/// </summary>
 public class ChatHandler : MonoBehaviour {
 
+    // Public variables
     public static ChatHandler Instance;
 
     public float autoHideInterval;
@@ -17,27 +24,38 @@ public class ChatHandler : MonoBehaviour {
     public ScrollRect scrollRect;
     public TMP_InputField inputField;
 
+    // Private variables
     float height;
     RectTransform chatPanelRectTransform;
     float lastMessageReceived;
     PhotonView photonView;
 
+    // Allow other scripts to use this script when the game starts.
     void Awake() {
         Instance = this;
     }
 
+    // Set references when the game starts.
     void Start() {
         photonView = GetComponent<PhotonView>();
         chatPanelRectTransform = chatPanel.GetComponent<RectTransform>();
     }
 
+    /// <summary>
+    /// Sends a chat message through the network.
+    /// </summary>
+    /// <param name="playerId">The viewID of the player sending the message</param>
+    /// <param name="message">The message string</param>
     public void SendChatMessage(int playerId, string message) {
         inputField.text = "";
         FocusOnInput();
         photonView.RPC("AddChatMessage", PhotonTargets.All, playerId, message);
     }
 
-    // Called once per frame by PlayerChat.cs
+    /// <summary>
+    /// Shows and hides the chat interface for the local user depending on a number of conditions.
+    /// </summary>
+    /// <param name="playerId">The viewID of the player receiving the message</param>
     public void CustomUpdate(int playerId) {
         // Show the textarea when pressing enter (if it's hidden)
         if (!inputField.gameObject.activeSelf) {
@@ -68,11 +86,13 @@ public class ChatHandler : MonoBehaviour {
         }
     }
 
+    // Focus on the input field for the chat box
     void FocusOnInput() {
         EventSystem.current.SetSelectedGameObject(inputField.gameObject, null);
         inputField.OnPointerClick(new PointerEventData(EventSystem.current));
     }
 
+    // Sends a chat message across the network
     [PunRPC]
     void AddChatMessage(int playerId, string message) {
 

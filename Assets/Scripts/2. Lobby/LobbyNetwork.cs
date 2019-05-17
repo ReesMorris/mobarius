@@ -5,12 +5,20 @@ using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable; // Source = http://forum.photonengine.com/discussion/3320/hashtable-tutorial ; accessed 3 January 2019
 using UnityEngine.Networking;
 
+/*
+    The main script used to handle connections to and from the lobby
+*/
+/// <summary>
+/// The main script used to handle connections to and from the lobby.
+/// </summary>
 public class LobbyNetwork : MonoBehaviour {
 
+    // Public variables
     public static LobbyNetwork Instance;
     public string setGameIdURL;
     public Button cancelButton;
 
+    // Private variables
     private ChampionSelect championSelect;
     public enum LobbyStates { none, searching, championSelect, inGame };
     public LobbyStates lobbyState;
@@ -22,6 +30,7 @@ public class LobbyNetwork : MonoBehaviour {
     private bool shouldAttemptRejoin;
     private bool isRejoined;
 
+    // Set listeners and assign private variables when the game starts.
     void Start() {
         shouldAttemptRejoin = true;
         Instance = this;
@@ -35,7 +44,12 @@ public class LobbyNetwork : MonoBehaviour {
 
     /* Photon Networking */
 
-    // Called in the MainMenuManager Prepare() function once user is authenticated
+    /// <summary>
+    /// Attempts to connect the user to the Photon Network.
+    /// </summary>
+    /// <remarks>
+    /// Called in the MainMenuManager Prepare() function once user is authenticated.
+    /// </remarks>
     public void ConnectToNetwork () {
         PhotonNetwork.AuthValues = new AuthenticationValues(UserManager.Instance.account.id); // https://forum.photonengine.com/discussion/11264/user-id-not-set ; accessed 3 January 2019
         mainMenuManager.Preparing();
@@ -43,12 +57,14 @@ public class LobbyNetwork : MonoBehaviour {
         PhotonNetwork.ConnectUsingSettings("0.0.0");
 
     }
+
     // Called when connected to the server, allowing us to define player information
     void OnConnectedToMaster() {
         print("Connected to server");
         PhotonNetwork.player.NickName = UserManager.Instance.account.username;
         PhotonNetwork.JoinLobby();
     }
+
     // Will tell the MainMenuManager that this process is ready to go
     void OnJoinedLobby() {
         mainMenuManager.Ready();
@@ -57,23 +73,29 @@ public class LobbyNetwork : MonoBehaviour {
     }
 
     // Will attempt to rejoin the server last played on
+    // This method is OBSOLETE
     void AttemptRejoin() {
         if (shouldAttemptRejoin) {
             shouldAttemptRejoin = false;
             isRejoined = true;
-            print("attempting join");
             PhotonNetwork.ReJoinRoom(UserManager.Instance.account.lastGameID);
         }
     }
 
-    // Called by UI buttons; will queue the player based on map name
+    /// <summary>
+    /// Called by UI buttons; will queue the player based on the given map name
+    /// </summary>
+    /// <param name="mapName">The name of the map to put the player in</param>
     public void Play(string mapName) {
         gameHandler.currentMap = mapManager.GetMap(mapName);
+
         // Check to see if we are on the network and not already in a room
         if (PhotonNetwork.connected && PhotonNetwork.room == null) {
+
             // Find a room to join
             lobbyState = LobbyStates.searching;
 
+            // Set room properties so that we can be found by other players looking for the same game (equivalent to matchmaking)
             Hashtable expectedCustomRoomProperties = new ExitGames.Client.Photon.Hashtable() {
                 { "m", gameHandler.currentMap.name }
             };
@@ -84,7 +106,6 @@ public class LobbyNetwork : MonoBehaviour {
     // Called if a reconnection attempt failed
     void OnPhotonJoinRoomFailed() {
         isRejoined = false;
-        print("OnPhotonJoinRoomFailed");
     }
 
     // Called if a room could not be found; will create a new one with the searching player as the host
@@ -104,7 +125,9 @@ public class LobbyNetwork : MonoBehaviour {
         PhotonNetwork.CreateRoom(PhotonNetwork.player.NickName + System.DateTime.Now, roomOptions, null);
     }
 
-    // Called by UI to stop searching for a room to join
+    /// <summary>
+    /// Called by UI to stop searching for a room to join
+    /// </summary>
     public void StopPlay() {
         if (PhotonNetwork.connected && PhotonNetwork.room != null) {
             lobbyState = LobbyStates.none;
@@ -114,27 +137,32 @@ public class LobbyNetwork : MonoBehaviour {
         }
     }
 
+    // Called by Photon when the user joins a room
     void OnJoinedRoom() {
         searchingLabel = SearchingLabel.Instance;
         searchingLabel.OnSearchingStart();
 
+        // Obsolete: disconnect and reconnect handling
         if(isRejoined) {
             GameHandler.Instance.currentMap = MapManager.Instance.GetMap((string)PhotonNetwork.room.CustomProperties["m"]);
             isRejoined = false;
         }
     }
 
-    private void Update() {
+    // Called every frame; checks to see whether a room is full
+    void Update() {
         if(PhotonNetwork.connected) {
             if(PhotonNetwork.room != null) {
-
                 if (lobbyState == LobbyStates.searching) {
+                    
                     // Wait for players
                     if (PhotonNetwork.room.PlayerCount == PhotonNetwork.room.MaxPlayers) {
                         searchingLabel.OnSearchingPause();
                         championSelect.OnStart();
                         lobbyState = LobbyStates.championSelect;
                         StartCoroutine(UpdateGameID());
+
+                        // Host player to instantiate the map for all players in the room
                         if(PhotonNetwork.isMasterClient) {
                             PhotonNetwork.room.IsVisible = false;
                             PhotonNetwork.Instantiate(gameHandler.currentMap.map.name, gameHandler.currentMap.map.transform.position, gameHandler.currentMap.map.transform.rotation, 0);
@@ -154,10 +182,15 @@ public class LobbyNetwork : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Sets the local player's current state in the lobby
+    /// </summary>
+    /// <param name="lobbyStates">The state to set the value to</param>
     public void SetLobbyState(LobbyStates lobbyStates) {
         lobbyState = lobbyStates;
     }
 
+    // Sends a POST request to the database, updating the last game ID (redundant until match rejoining is fixed)
     IEnumerator UpdateGameID() {
         WWWForm form = new WWWForm();
         form.AddField("token", UserManager.Instance.account.sessionToken);

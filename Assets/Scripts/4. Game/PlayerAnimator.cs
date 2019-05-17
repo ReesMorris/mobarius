@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+    This script contains functions relating to player character animations
+*/
+/// <summary>
+/// This script contains functions relating to player character animations.
+/// </summary>
 public class PlayerAnimator : MonoBehaviour {
 
+    // Private variables
     Animator animator;
     PhotonView photonView;
     public string CurrentAnimation { get; protected set; }
     NavMeshAgent navMeshAgent;
     PlayerChampion playerChampion;
 
+    // Set up the references to other scripts when the game starts
     void Start() {
         animator = GetComponent<Animator>();
         photonView = GetComponent<PhotonView>();
@@ -18,6 +26,10 @@ public class PlayerAnimator : MonoBehaviour {
         playerChampion = GetComponent<PlayerChampion>();
     }
 
+    /// <summary>
+    /// Plays an animation for the local player across the network.
+    /// <param name="name">The name of the animation</param>
+    /// </summary>
     public void PlayAnimation(string name) {
         if (photonView.isMine) {
             if (animator != null) {
@@ -27,6 +39,7 @@ public class PlayerAnimator : MonoBehaviour {
         }
     }
 
+    // Constantly attempts to play the latest animation for the player character in the event that it is skipped for a frame
     void Update() {
         if (photonView.isMine) {
             if (animator != null && CurrentAnimation != null)
@@ -36,6 +49,7 @@ public class PlayerAnimator : MonoBehaviour {
         }
     }
 
+    // Play an animation across the network
     [PunRPC]
     void Animate(string name) {
         if (animator != null) {
@@ -44,6 +58,7 @@ public class PlayerAnimator : MonoBehaviour {
         }
     }
 
+    // Set the animation speed for player animations across the network
     [PunRPC]
     void SetAnimatorSpeed() {
         if (CurrentAnimation == "Walking")

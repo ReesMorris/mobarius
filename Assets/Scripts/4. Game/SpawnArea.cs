@@ -2,10 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This script handles spawn areas for both teams
+*/
+/// <summary>
+/// This script handles spawn areas for both teams.
+/// </summary>
 public class SpawnArea : MonoBehaviour {
 
+    // Public variables
     public PunTeams.Team team;
 
+    // Private variables
     float regenAmount = 100f;
 
     // Will increase the player's health regen if they are on the team of this side

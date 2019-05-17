@@ -4,23 +4,37 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+/*
+    The script responsible for displaying text to the local user regarding the status of matchmaking
+*/
+/// <summary>
+/// The script responsible for displaying text to the local user regarding the status of matchmaking.
+/// </summary>
 public class SearchingLabel : MonoBehaviour {
 
+    // Public variables
     public static SearchingLabel Instance;
 
     public TMP_Text titleText;
     public TMP_Text timer;
     public Button cancelButton;
 
+    // Private variables
     int timeElapsed;
     string searching;
     bool isSearching;
 
+    // Allow other scripts to reference this when the game starts
     void Start() {
         Instance = this;
     }
 
-    // Called when a player begins searching for a game
+    /// <summary>
+    /// Displays the 'searching' text and timer.
+    /// </summary>
+    /// <remarks>
+    /// Called when a player begins searching for a game.
+    /// </remarks>
     public void OnSearchingStart() {
         isSearching = true;
         timer.gameObject.SetActive(true);
@@ -30,7 +44,12 @@ public class SearchingLabel : MonoBehaviour {
         StartCoroutine("SearchingText");
     }
 
-    // Called when a player stops searching for a game (searching cancelled)
+    /// <summary>
+    /// Stops displaying the 'searching' text and resets the timer
+    /// </summary>
+    /// <remarks>
+    /// Called when a player stops searching for a game (searching cancelled)
+    /// </remarks>
     public void OnSearchingStop() {
         isSearching = false;
         timeElapsed = 0;
@@ -45,7 +64,12 @@ public class SearchingLabel : MonoBehaviour {
             GetComponent<ScaleOnHover>().enabled = true;
     }
 
-    // Called to pause searching for a game; does not reset timer
+    /// <summary>
+    /// Pauses the searching text and timer; does not reset their values
+    /// </summary>
+    /// <remarks>
+    /// Called to pause searching for a game
+    /// </remarks>
     public void OnSearchingPause() {
         isSearching = false;
         StopCoroutine("RunTimer");

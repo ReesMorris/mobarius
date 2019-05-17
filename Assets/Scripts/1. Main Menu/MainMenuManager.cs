@@ -6,8 +6,15 @@ using SimpleJSON;
 using UnityEngine.Networking;
 using TMPro;
 
+/*
+    Handles the main menu and lobby bridging; implements networking
+*/
+/// <summary>
+/// Handles the main menu and lobby bridging; implements networking.
+/// </summary>
 public class MainMenuManager : MonoBehaviour {
 
+    // Public variables
     [Header("UI")]
     public GameObject mainMenuUI;
 
@@ -26,6 +33,7 @@ public class MainMenuManager : MonoBehaviour {
     public Article[] articles;
     public GameObject newsSection2;
 
+    // Private variables
     private int imagesLeftToLoad;
     private int thingsBeforeReady;
     private UserManager userManager;
@@ -34,6 +42,7 @@ public class MainMenuManager : MonoBehaviour {
     private EventSystem system;
     private UIHandler UIHandler;
 
+    // Assign listeners and get references to other scripts once the game begins
     void Start() {
         UserManager.onXPChanged += SetUserXP;
         system = EventSystem.current;
@@ -45,8 +54,9 @@ public class MainMenuManager : MonoBehaviour {
         authenticationManager.loginUsername.Select();
     }
 
+    // Every frame, check to see whether the user is pressing on 'tab' to cycle through the authenticaton login screen
     void Update() {
-        // Allow tab cycling between fields (src: https://forum.unity.com/threads/tab-between-input-fields.263779/#post-2234066)
+        // (src: https://forum.unity.com/threads/tab-between-input-fields.263779/#post-2234066)
         if (Input.GetKeyDown(KeyCode.Tab)) {
             Selectable next = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ?
             system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp() :
@@ -84,19 +94,25 @@ public class MainMenuManager : MonoBehaviour {
         newsSection2.SetActive(!newsSection2.activeSelf);
     }
 
-    // Called once a user has authenticated logging in
+    /// <summary>
+    /// Called once a user has authenticated themselves; connects to the Photon Network and begins to fetch the news.
+    /// </summary>
     public void Prepare() {
         StartCoroutine("FetchNews");
         lobbyNetwork.ConnectToNetwork();
         SetupUser(userManager.account);
     }
 
-    // Called by all processes that need to do something before the user can move to the lobby
+    /// <summary>
+    /// Called by all processes that need to do something before the user can move to the lobby.
+    /// </summary>
     public void Preparing() {
         thingsBeforeReady++;
     }
 
-    // Called when a process is ready; preparation will be complete when all processes are ready
+    /// <summary>
+    /// Called when a process is ready; preparation will be complete when all processes are ready.
+    /// </summary>
     public void Ready() {
         thingsBeforeReady--;
         if (thingsBeforeReady == 0) {
@@ -149,15 +165,18 @@ public class MainMenuManager : MonoBehaviour {
     // source: http://tritecode.wikidot.com/article:2008:09:16:runescape-exp [October 25 2018]
 
 
+    // Set the user XP to the new amount
     void SetUserXP(int newXP) {
         level.text = XPToLevel(newXP).ToString();
         xp.fillAmount = ProgressToLevel(newXP) - 0.07f; // to factor in that a 0.93 is the filled amount
     }
 
+    // Return the equivalent level based on XP
     int Equate(float xp) {
         return (int)Mathf.Floor(xp + 300 * Mathf.Pow(2, xp / 7));
     }
 
+    // Convert from a level to the minimum XP required for this level
     int LevelToXP(int level) {
         float xp = 0;
         for (int i = 1; i < level; i++)
@@ -165,6 +184,7 @@ public class MainMenuManager : MonoBehaviour {
         return (int)Mathf.Floor(xp / 4f);
     }
 
+    // Convert from XP to the corresponding level
     int XPToLevel(int xp) {
         int level = 1;
         while (LevelToXP(level) < xp)
@@ -172,6 +192,7 @@ public class MainMenuManager : MonoBehaviour {
         return level - 1;
     }
     
+    // Returns the progress to the next level as a percentage
     float ProgressToLevel(float xp) {
         if (xp == 0)
             return 0;

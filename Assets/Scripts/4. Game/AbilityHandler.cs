@@ -4,7 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+    The script responsible for handling ability UI and indicator prefabs
+*/
+/// <summary>
+/// The script responsible for handling ability UI and indicator prefabs.
+/// </summary>
 public class AbilityHandler : MonoBehaviour {
+
+    // Public variables
+    public static AbilityHandler Instance;
 
     public delegate void OnAbilityActivated(Ability ability);
     public static OnAbilityActivated onAbilityActivated;
@@ -29,7 +38,7 @@ public class AbilityHandler : MonoBehaviour {
     public Image recallFill;
     public TMP_Text recallText;
 
-    public static AbilityHandler Instance;
+    // Private variables
     Ability aimingAbility;
     MapProperties mapProperties;
 
@@ -41,20 +50,41 @@ public class AbilityHandler : MonoBehaviour {
 
     bool gameEnded;
 
+    // Allow other scripts to reference this on the game start.
     void Awake() {
         Instance = this;
     }
 
+    // Add event listeners on the game start
     void Start () {
         GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
     }
 
+    /// <summary>
+    /// Checks to see if an ability is being aimed.
+    /// </summary>
+    /// <param name="ability">The ability to be checked</param>
+    /// <remarks>
+    /// Only one ability can be aimed at any time.
+    /// </remarks>
+    /// <returns>
+    /// True if the parameter ability is being aimed; false if not.
+    /// </returns>
     public bool IsAiming(Ability ability) {
         return aimingAbility == ability;
     }
 
-    // Returns the direction an indicator will need to be in relation to a player
+    /// <summary>
+    /// Fires a Raycast from the mouse position to the Floor layer.
+    /// </summary>
+    /// <param name="player">The player GameObject the call is in reference to</param>
+    /// <remarks>
+    /// The Y position returned will be the same as the Y position of player parameter.
+    /// </remarks>
+    /// <returns>
+    /// The 3D coordinates of the mouse position if the raycast hits; a zero vector if not.
+    /// </returns>
     public Vector3 GetMousePosition(GameObject player) {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -63,7 +93,14 @@ public class AbilityHandler : MonoBehaviour {
         return Vector3.zero;
     }
 
-    // Returns the ability associated with a champion
+    /// <summary>
+    /// Searches a Champion's abilities to find the one corresponding with the keyboard shortcut.
+    /// </summary>
+    /// <param name="champion">The Champion class</param>
+    /// <param name="abilityKey">The default key the ability uses</param>
+    /// <returns>
+    /// The ability associated with a champion if it exists; null if not.
+    /// </returns>
     public Ability GetChampionAbility(Champion champion, Abilities abilityKey) {
         foreach(Ability ability in champion.abilities) {
             if (ability.abilityKey == abilityKey)
@@ -72,6 +109,10 @@ public class AbilityHandler : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Sets up the ability indicators for the local player
+    /// </summary>
+    /// <param name="player">The GameObject to instantiate the indicators on</param>
     public void SetupAbilityIndicators(GameObject player) {
         if (PhotonNetwork.player.IsLocal) {
             SetupDirectionalIndicator(player);
@@ -80,6 +121,11 @@ public class AbilityHandler : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Updates the orientation of the ability indicators for the local player
+    /// </summary>
+    /// <param name="player">The GameObject with the indicators as children</param>
+    /// <param name="ability">The Ability to update the indicator for</param>
     public void UpdateIndicator(GameObject player, Ability ability) {
 
         // Directional
@@ -129,12 +175,14 @@ public class AbilityHandler : MonoBehaviour {
     // Set up an AOE indicator for the caller (typically called on spawn)
     void SetupAOEIndicator(GameObject player) {
         if (!gameEnded) {
+            // The larger circle indicating the maximum range
             aoeRangeIndicator = Instantiate(aoeRangePrefab, player.transform.position, Quaternion.identity);
             aoeRangeIndicator.name = "AOERange";
             aoeRangeIndicator.transform.parent = player.transform;
             aoeRangeIndicator.transform.localPosition = Vector3.zero;
             aoeRangeIndicator.SetActive(false);
 
+            // The smaller circle following the user's mouse position
             aoeIndicatorIndicator = Instantiate(aoeIndicatorPrefab, player.transform.position, Quaternion.identity);
             aoeIndicatorIndicator.name = "AOEIndicator";
             aoeIndicatorIndicator.transform.parent = player.transform;
@@ -152,11 +200,19 @@ public class AbilityHandler : MonoBehaviour {
         scopeIndicator.SetActive(false);
     }
 
-    // Called when an ability begins to be cast (displays indicator)
+    /// <summary>
+    /// Called when an ability begins to be cast, displaying the corresponding indicator.
+    /// </summary>
+    /// <param name="player">The GameObject casting the ability</param>
+    /// <param name="ability">The Ability being cast</param>
     public void StartCasting(GameObject player, Ability ability) {
         if (!gameEnded) {
+
+            // If now casting a new ability, stop the previous
             if (aimingAbility != ability)
                 StopCasting(player);
+
+            // Update which ability is being aimed
             aimingAbility = ability;
             
             // AOE Indicator
@@ -178,7 +234,10 @@ public class AbilityHandler : MonoBehaviour {
         }
     }
 
-    // Called when an ability stops being cast
+    /// <summary>
+    /// Called when an ability stops being cast, hides all attack indicators.
+    /// </summary>
+    /// <param name="player">The GameObject casting the ability</param>
     public void StopCasting(GameObject player) {
         aimingAbility = null;
         directionalIndicator.SetActive(false);
@@ -187,13 +246,22 @@ public class AbilityHandler : MonoBehaviour {
         scopeIndicator.SetActive(false);
     }
 
-    // Calls when an ability has been activated, but not fired
+    /// <summary>
+    /// Called when an ability has been activated, but not fired.
+    /// </summary>
+    /// <param name="ability">The Ability which was activated</param>
     public void AbilityActivated(Ability ability) {
         if (onAbilityActivated != null)
             onAbilityActivated(ability);
     }
 
-    // Calls when an ability has been fired (after showing indicator)
+    /// <summary>
+    /// Called when an ability has been fired (after showing indicator).
+    /// </summary>
+    /// <param name="player">The GameObject casting the ability</param>
+    /// <param name="ability">The Ability which was fired</param>
+    /// <param name="cooldown">The cooldown time for the ability</param>
+    /// <param name="lookAtMouse">True if the player should look at the 3D mouse position</param>
     public void OnAbilityCast(GameObject player, Abilities ability, float cooldown, bool lookAtMouse) {
         if (!gameEnded) {
             StopCasting(player);
@@ -213,10 +281,24 @@ public class AbilityHandler : MonoBehaviour {
     }
 
     // Positions
+    /// <summary>
+    /// Used to get the world position of the AOE attack indicator.
+    /// </summary>
+    /// <returns>
+    /// The world position of the AOE attack indicator.
+    /// </returns>
     public Vector3 GetAOEPosition() {
         return aoeIndicatorIndicator.transform.position;
     }
 
+    /// <summary>
+    /// Finds the level of a Champion's specified ability.
+    /// </summary>
+    /// <param name="champion">The Champion with the ability</param>
+    /// <param name="ability">The Ability to find the level of</param>
+    /// <returns>
+    /// The level of a Champion's specific ability if it can be found; fallback return value is 1.
+    /// </returns>
     public int GetAbilityLevel(Champion champion, Ability ability) {
         switch (ability.abilityKey) {
             case Abilities.Q:

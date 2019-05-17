@@ -4,8 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+    This script handles all upper-right UI elements
+*/
+/// <summary>
+/// This script handles all upper-right UI elements.
+/// </summary>
 public class ScoreHandler : MonoBehaviour {
 
+    // Public variables
 	public static ScoreHandler Instance;
     public TMP_Text scoreUI1;
     public TMP_Text scoreUI2;
@@ -18,6 +25,7 @@ public class ScoreHandler : MonoBehaviour {
     public string friendlyColour = "#00b1fd";
     public string enemyColour = "#fd002a";
 
+    // Private variables
     PhotonView photonView;
     int blueScore;
     int redScore;
@@ -32,6 +40,7 @@ public class ScoreHandler : MonoBehaviour {
     int frames = 0;
     float timeleft;
 
+    // Assign event listeners when the game starts.
     void Start() {
         Instance = this;
         photonView = GetComponent<PhotonView>();
@@ -41,6 +50,7 @@ public class ScoreHandler : MonoBehaviour {
         GameHandler.onGameEnd += OnGameEnd;
     }
 
+    // When the game begins, reset all variables (which may be from previous games)
     void OnGameStart() {
         started = true;
         redScore = 0;
@@ -55,6 +65,7 @@ public class ScoreHandler : MonoBehaviour {
         StartCoroutine(PingEnumerator());
     }
 
+    // When the game ends, clear some variables
     void OnGameEnd() {
         started = false;
         accum = 0;
@@ -62,11 +73,13 @@ public class ScoreHandler : MonoBehaviour {
         timeleft = 0;
     }
 
+    // Update frame rate whilst the game is running
     void Update() {
         if (started)
             UpdateFrames();
     }
 
+    // Update the player ping measurement every 2 seconds
     IEnumerator PingEnumerator() {
         while (started) {
             UpdatePing();
@@ -74,6 +87,7 @@ public class ScoreHandler : MonoBehaviour {
         }
     }
 
+    // Updates the player's ping UI
     void UpdatePing() {
         float ping = PhotonNetwork.networkingPeer.RoundTripTime;
         pingText.text = ping + " ms";
@@ -88,6 +102,7 @@ public class ScoreHandler : MonoBehaviour {
     }
 
     // SRC: https://wiki.unity3d.com/index.php/FramesPerSecond [Accessed: 13 March 2019]
+    // Updates the frame rate UI
     void UpdateFrames() {
         timeleft -= Time.deltaTime;
         accum += Time.timeScale / Time.deltaTime;
@@ -101,6 +116,10 @@ public class ScoreHandler : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Increases the score for a specified team.
+    /// </summary>
+    /// <param name="team">The team to increase the score for</param>
     public void IncreaseScore(PunTeams.Team team) {
         if(PhotonNetwork.isMasterClient) {
             if (team == PunTeams.Team.red)
@@ -111,12 +130,14 @@ public class ScoreHandler : MonoBehaviour {
         }
     }
 
+    // Updates the UI across the network
     void UpdateUI() {
         if(PhotonNetwork.isMasterClient) {
             photonView.RPC("UpdateScoreUI", PhotonTargets.All, redScore, blueScore);
         }
     }
 
+    // Updates the UI across the network
     [PunRPC]
     void UpdateScoreUI(int _redScore, int _blueScore) {
         redScore = _redScore;
@@ -134,27 +155,49 @@ public class ScoreHandler : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns true if no kills have happened yet, false if not.
+    /// </summary>
     public bool IsFirstBlood() {
         return blueScore == 0 && redScore == 0;
     }
 
     /* KDA */
 
+    /// <summary>
+    /// Increases amount of local player kills by 1.
+    /// </summary>
     public void OnKill() {
         kills++;
         UpdateKdaUI();
     }
+
+    /// <summary>
+    /// Increases amount of local player deaths by 1.
+    /// </summary>
     public void OnDeath() {
         deaths++;
         UpdateKdaUI();
     }
+
+    /// <summary>
+    /// Increases amount of local player assists by 1.
+    /// </summary>
     public void OnAssist() {
         assists++;
         UpdateKdaUI();
     }
+
+    /// <summary>
+    /// Updates local player KDA UI.
+    /// </summary>
     public void UpdateKdaUI() {
         kdaUI.text = kills + "/" + deaths + "/" + assists;
     }
+
+    /// <summary>
+    /// Increases amount of local player minion kills by 1.
+    /// </summary>
     public void OnMinionKill() {
         minionKills++;
         minionKillsUI.text = minionKills.ToString();

@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class Turret : MonoBehaviour {
 
+    // Delegates
+    public delegate void OnTurretDestroyed(Turret turret);
+    public static OnTurretDestroyed onTurretDestroyed;
+
+    // Public variables
     [Header("Damage")]
     public float baseDamage;
     public float incDamage;
@@ -30,6 +35,7 @@ public class Turret : MonoBehaviour {
     [Header("XP")]
     public int XPOnDeath;
 
+    // Private variables
     List<Entity> enemies;
     float currentDamage;
     Entity currentTarget;
@@ -39,9 +45,7 @@ public class Turret : MonoBehaviour {
     float maxRegenHealth;
     bool ready;
 
-    public delegate void OnTurretDestroyed(Turret turret);
-    public static OnTurretDestroyed onTurretDestroyed;
-
+    // Set up variables when the tower is spawned.
     void Start() {
         photonView = GetComponent<PhotonView>();
         ResetDamage();
@@ -52,6 +56,7 @@ public class Turret : MonoBehaviour {
         GetComponent<Entity>().team = team;
     }
 
+    // Update tower health bar colour and start some scripts when the game is actually started.
     void OnGameStart() {
         // Set health bar colours
         healthImage.color = GameUIHandler.Instance.enemyHealthColour;
@@ -66,6 +71,10 @@ public class Turret : MonoBehaviour {
         ready = true;
     }
 
+    /// <summary>
+    /// Adds the enemy to a list of enemies for the turret to shoot at.
+    /// <param name="enemy">The entity who entered the radius</param>
+    /// </summary>
     public void EnemyEnterRadius(Entity enemy) {
         if(!enemy.GetComponent<Entity>().GetIsDead()) {
             enemies.Add(enemy);
@@ -77,14 +86,18 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    // Wait for the tower to be ready first
     void Update() {
         if (healthImage != null && !ready)
             OnGameStart();
         CheckInvincibility();
     }
 
+    // Master client will regenerate the tower health over the network
     IEnumerator RegenerateHealth() {
         while(CurrentHealth > 0f) {
+
+            // Algorithm for regeneration amount
             float percentageHealth = (CurrentHealth / baseHealth) * 100;
             if (percentageHealth < 33.3f)
                 maxRegenHealth = (baseHealth * 0.3f);
@@ -93,6 +106,7 @@ public class Turret : MonoBehaviour {
             else
                 maxRegenHealth = baseHealth;
 
+            // Network heal request
             photonView.RPC("Heal", PhotonTargets.AllBuffered, healthRegenAmount);
             yield return new WaitForSeconds(healthRegenDelay);
         }
@@ -115,12 +129,21 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Applies health to the building.
+    /// </summary>
+    /// <param name="amount">The amount of health to regenerate</param>
     [PunRPC]
     public void Heal(float amount) {
         CurrentHealth = Mathf.Min(maxRegenHealth, CurrentHealth + amount);
         healthImage.fillAmount = (CurrentHealth / baseHealth);
     }
 
+    /// <summary>
+    /// Applies damage to the building.
+    /// </summary>
+    /// <param name="amount">The amount of damage to take</param>
+    /// <param name="shooterId">The viewID of the attacker</param>
     [PunRPC]
     public void Damage(float amount, int shooterId) {
         CurrentHealth = Mathf.Max(0f, CurrentHealth - amount);
@@ -138,6 +161,10 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Removes the enemy from the list of enemies within range.
+    /// <param name="enemy">The entity who exited the radius</param>
+    /// </summary>
     public void EnemyLeaveRadius(Entity enemy) {
         enemies.Remove(enemy);
         if (!enemies.Contains(currentTarget)) {
@@ -161,10 +188,12 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    // Prevent incremental base damage on a new enemy
     void ResetDamage() {
         currentDamage = baseDamage;
     }
 
+    // Find new enemies to target and attack if one exists
     IEnumerator TargetEnemies() {
         while(CurrentHealth > 0f) {
             if(currentTarget == null || currentTarget.GetIsDead())
@@ -177,6 +206,7 @@ public class Turret : MonoBehaviour {
         }
     }
 
+    // Shoot the bullet across the network
     [PunRPC]
     void Shoot(float speed, Vector3 spawnPos, float damage, int photonId, int shooter) {
         GameObject bullet = Instantiate(bulletPrefab, spawnPos, transform.rotation);

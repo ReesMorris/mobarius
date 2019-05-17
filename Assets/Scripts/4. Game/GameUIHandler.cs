@@ -4,8 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+    The script responsible for handling game UI elements (mainly for abilities)
+*/
+/// <summary>
+/// The script responsible for handling game UI elements (mainly for abilities).
+/// </summary>
 public class GameUIHandler : MonoBehaviour {
 
+    // Public variables
     public static GameUIHandler Instance;
 
     public delegate void OnGameTimeUpdate(int timeElapsed);
@@ -58,6 +65,7 @@ public class GameUIHandler : MonoBehaviour {
 
     public int TimeElapsed { get; protected set; }
 
+    // Private variables
     float cooldownQ;
     float cooldownQDuration;
     float cooldownW;
@@ -77,10 +85,12 @@ public class GameUIHandler : MonoBehaviour {
 
     bool gameEnded;
 
+    // Allows the script to be accessed by other players, called at the start of the game.
     void Awake() {
         Instance = this;
     }
 
+    // Set up listeners and references at the start of the game.
     void Start() {
         GameHandler.onGameStart += OnGameStart;
         GameHandler.onGameEnd += OnGameEnd;
@@ -93,6 +103,7 @@ public class GameUIHandler : MonoBehaviour {
         StartCoroutine("HandleCooldowns");
     }
 
+    // Set up listeners to listen for ability upgrade buttons being clicked
     void SetupUpgradeListeners() {
         abilityQUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.Q); });
         abilityWUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.W); });
@@ -100,6 +111,10 @@ public class GameUIHandler : MonoBehaviour {
         abilityRUpgrade.onClick.AddListener(delegate { UpgradeButtonClicked(AbilityHandler.Abilities.R); });
     }
 
+    /// <summary>
+    /// Called when a champion's abilities are upgraded to update the tooltip UI.
+    /// </summary>
+    /// <param name="champion">The Champion of the player.</param>
     public void UpdateAbilities(Champion champion) {
         abilityPassive.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.Passive), "", champion);
         abilityQ.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.Q), "Q", champion);
@@ -111,11 +126,16 @@ public class GameUIHandler : MonoBehaviour {
         abilityB.SetupIcon(abilityHandler.GetChampionAbility(champion, AbilityHandler.Abilities.B), "B", champion);
     }
 
+    // Called when the upgrade button for an ability is clicked
     void UpgradeButtonClicked(AbilityHandler.Abilities abilityKey) {
         if (onUpgradeButtonClicked != null)
             onUpgradeButtonClicked(abilityKey);
     }
 
+    /// <summary>
+    /// Updates the health bar and mana bar UI elements above the character.
+    /// </summary>
+    /// <param name="champion">The Champion of the player.</param>
     public void UpdateStats(Champion champion) {
         // Health
         healthRegenText.text = "";
@@ -132,7 +152,18 @@ public class GameUIHandler : MonoBehaviour {
             manaRegenText.text = "+" + champion.manaRegen.ToString("F1");
     }
 
+    /// <summary>
+    /// Called when a champion's abilities are upgraded to update the tooltip UI.
+    /// </summary>
+    /// <param name="hotkey">The keycode for the ability (Q,W,E..)</param>
+    /// <param name="ability">The Ability attempting to be cast</param>
+    /// <param name="champion">The Champion attempting to cast the ability</param>
+    /// <returns>
+    /// True if the user can cast a specific ability; false if not.
+    /// </returns>
     public bool CanCastAbility(AbilityHandler.Abilities hotkey, Ability ability, Champion champion) {
+
+        // Conditions in which the return is instantly false
         if (champion.movementSpeed == 0)
             return false;
         if (gameEnded)
@@ -143,6 +174,8 @@ public class GameUIHandler : MonoBehaviour {
             return false;
         if (ChatHandler.Instance.inputField.gameObject.activeSelf)
             return false;
+
+        // Return whether the cooldown for the ability has ended
         switch (hotkey) {
             case AbilityHandler.Abilities.Q:
                 return cooldownQ == 0f;
@@ -159,9 +192,16 @@ public class GameUIHandler : MonoBehaviour {
             case AbilityHandler.Abilities.B:
                 return cooldownB == 0f;
         }
+
+        // Something went wrong, don't cast whatever it is
         return false;
     }
 
+    /// <summary>
+    /// Called when an ability has just been cast by the local player's Champion.
+    /// </summary>
+    /// <param name="ability">The Ability that was just cast</param>
+    /// <param name="cooldown">The cooldown of the ability</param>
     public void OnAbilityCasted(AbilityHandler.Abilities ability, float cooldown) {
         switch (ability) {
             case AbilityHandler.Abilities.Q:
@@ -188,6 +228,7 @@ public class GameUIHandler : MonoBehaviour {
         }
     }
 
+    // Runs every 0.1 seconds to update cooldown timer text
     IEnumerator HandleCooldowns() {
         float speed = 0.1f;
         while(true) {
@@ -225,10 +266,15 @@ public class GameUIHandler : MonoBehaviour {
 
     /* Game Timer */
 
+    /// <summary>
+    /// The master client starts the countdown timer to be synced across the network.
+    /// </summary>
     public void StartGameTimer() {
         if (PhotonNetwork.isMasterClient)
             StartCoroutine("Timer");
     }
+
+    // The master client updating the game timer every 1 second
     IEnumerator Timer() {
         while(true) {
             yield return new WaitForSeconds(1f);
@@ -236,12 +282,15 @@ public class GameUIHandler : MonoBehaviour {
             photonView.RPC("UpdateGameTimer", PhotonTargets.All, TimeElapsed);
         }
     }
+
+    // The network call to update the game timer for all clients in sync
     [PunRPC]
     public void UpdateGameTimer(int timeElapsed) {
         float mins = Mathf.Floor(timeElapsed / 60f);
         float secs = timeElapsed % 60;
         gameTimer.text = mins.ToString("00") + ":" + secs.ToString("00");
 
+        // Play a sound effect after 15 seconds
         if (mins == 0f && secs == 15f) {
             SoundManager.Instance.PlaySound("Announcer/WelcomeToSummonersRift");
             ShowPlayerText("Welcome to Summoners Rift");
@@ -251,10 +300,18 @@ public class GameUIHandler : MonoBehaviour {
 
     /* Display Text */
 
+    /// <summary>
+    /// Displays a message to the local player for 3 seconds.
+    /// </summary>
+    /// <param name="message">The message shown to the player</param>
+    /// <remarks>
+    /// The message is not localised.
+    /// </remarks>
     public void ShowPlayerText(string message) {
         StartCoroutine(ShowText(message));
     }
 
+    // The timer to show the message to the player
     IEnumerator ShowText(string message) {
         displayText.text = message;
         yield return new WaitForSeconds(3f);
@@ -262,10 +319,28 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     /* Text & Sound & Kill Message */
+
+    /// <summary>
+    /// Displays a kill message to the local player and plays a sound effect.
+    /// </summary>
+    /// <param name="sound">The sound played globally</param>
+    /// <param name="displayText">The message shown to the player</param>
+    /// <remarks>
+    /// The message is not localised.
+    /// </remarks>
     public void KillMessageWithSound(string sound, string displayText) {
         SoundManager.Instance.PlaySound(sound);
         ShowPlayerText(displayText);
     }
+
+    /// <summary>
+    /// Displays a message to the local player and plays a sound effect.
+    /// </summary>
+    /// <param name="sound">The sound played globally</param>
+    /// <param name="displayText">The message shown to the player</param>
+    /// <remarks>
+    /// The message is not localised.
+    /// </remarks>
     public void MessageWithSound(string sound, string displayText) {
         SoundManager.Instance.PlaySound(sound);
         ShowPlayerText(displayText);
@@ -283,17 +358,25 @@ public class GameUIHandler : MonoBehaviour {
     }
 
     /* Set Character Icon */
+
+    /// <summary>
+    /// Sets the character icon sprite of the Champion.
+    /// </summary>
+    /// <param name="champion">The Champion the sprite will be obtained from</param>
     public void SetCharacterIcon(Champion champion) {
         characterIcon.sprite = champion.icon;
     }
 
     /* XP Systems */
+
+    // Listener for when a champion receives XP
     void OnChampionReceiveXP(PhotonPlayer player, float progress) {
         if (PhotonNetwork.player == player) {
             levelFill.fillAmount = progress;
         }
     }
 
+    // Listener for when a champion upgrades an ability
     void OnChampionUpgradeAbility(PhotonPlayer player, Champion champion, int unclaimedUpgrades) {
         if (PhotonNetwork.player == player) {
             SetLevelUpText(unclaimedUpgrades);
@@ -301,6 +384,7 @@ public class GameUIHandler : MonoBehaviour {
         }
     }
 
+    // Listener for when a champion levels up
     void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades) {
         if (PhotonNetwork.player == player) {
             levelText.text = level.ToString();
@@ -316,6 +400,7 @@ public class GameUIHandler : MonoBehaviour {
         }
     }
 
+    // Updates the 'level up' text on the local player's XP bar
     void SetLevelUpText(int unclaimedUpgrades) {
         if (unclaimedUpgrades > 0) {
             levelUpText.text = "LEVEL UP! +" + unclaimedUpgrades;

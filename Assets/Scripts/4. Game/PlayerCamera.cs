@@ -2,8 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+    This script contains functions for how the player camera works
+*/
+/// <summary>
+/// This script contains functions for how the player camera works.
+/// </summary>
 public class PlayerCamera : MonoBehaviour {
 
+    // Public variables
     public Transform target;
     public Vector3 distance;
     public Vector3 rotation;
@@ -11,6 +19,7 @@ public class PlayerCamera : MonoBehaviour {
     public Vector2 minMaxFOV;
     public enum CameraDisplays { TopDown, ThirdPerson };
 
+    // Private variables
     PhotonView photonView;
     float padding = 0.95f;
     float cameraSpeed = 0.17f;
@@ -26,11 +35,12 @@ public class PlayerCamera : MonoBehaviour {
         Start();
     }
 
+    // Set up initial variables when the game starts
     void Start() {
         lockedToPlayer = true;
         photonView = target.GetComponent<PhotonView>();
 
-        // Map Properties
+        // Map Properties to determine whether this is third person or top-down
         mapProperties = MapManager.Instance.GetMapProperties();
         if (mapProperties.display == CameraDisplays.ThirdPerson) {
             transform.parent = target;
@@ -39,12 +49,18 @@ public class PlayerCamera : MonoBehaviour {
         }
     }
 
+    // Move the camera every frame in relation to the display
 	void Update () {
         if (photonView.isMine) {
+
+            // If a nexus has been destroyed, pan over to that instead
             if (gameOverTarget != Vector3.zero) {
                 transform.parent = null;
                 transform.position = Vector3.SmoothDamp(transform.position, gameOverTarget, ref velocity, smoothTime); // Source: https://docs.unity3d.com/ScriptReference/Vector3.SmoothDamp.html [10 February 2019]
-            } else {
+            }
+            
+            // If the game is still playing...
+            else {
                 SetFOV();
                 if (mapProperties.display == CameraDisplays.TopDown) {
                     CheckForInput();
@@ -68,7 +84,10 @@ public class PlayerCamera : MonoBehaviour {
         }
     }
 
-    // Lock the camera to the player
+    /// <summary>
+    /// Moves the camera to re-center itself on the local player character.
+    /// <param name="lockOn">If true, will remain locked on the player even when the button is released</param>
+    /// </summary>
     public void FocusOnPlayer(bool lockOn) {
         if(lockOn)
             lockedToPlayer = true;
@@ -119,13 +138,19 @@ public class PlayerCamera : MonoBehaviour {
         }
     }
 
-    // End of game target
-    public void ClearEndOfGameTarget() {
-        gameOverTarget = Vector3.zero;
-        this.enabled = false;
-    }
+    /// <summary>
+    /// Sets the end of game target (destroyed nexus), removing control from the player.
+    /// </summary>
     public void SetEndOfGameTarget(Vector3 target, float smoothingTime) {
         gameOverTarget = target;
         smoothTime = smoothingTime;
+    }
+
+    /// <summary>
+    /// Clears the end of game target (nexus) so the camera will focus on the player character.
+    /// </summary>
+    public void ClearEndOfGameTarget() {
+        gameOverTarget = Vector3.zero;
+        this.enabled = false;
     }
 }

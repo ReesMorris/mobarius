@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    The class handling how champion XP is managed and stored
+*/
+/// <summary>
+/// The class handling how champion XP is managed and stored.
+/// </summary>
 public class ChampionXP : MonoBehaviour {
 
+    // Delegates
     public delegate void OnChampionLevelUp(Champion champion, PhotonPlayer player, int level, int unclaimedUpgrades);
     public static OnChampionLevelUp onChampionLevelUp;
     public delegate void OnChampionReceiveXP(PhotonPlayer player, float progress);
@@ -11,10 +18,12 @@ public class ChampionXP : MonoBehaviour {
     public delegate void OnChampionUpgradeAbility(PhotonPlayer player, Champion champion, int unclaimedUpgrades);
     public static OnChampionUpgradeAbility onChampionUpgradeAbility;
 
+    // Private variables (soft-coded)
     int maxLevel = 18;
     int firstLevelXP = 280;
     int levelIncrement = 100;
 
+    // Private variables
     int currentXP = 0;
     int nextLevelXP;
     int previousLevelXP;
@@ -24,6 +33,7 @@ public class ChampionXP : MonoBehaviour {
     public PhotonView photonView { get; protected set; }
     MapProperties mapProperties;
 
+    // Assign variables and event listeners on game start.
     void Start() {
         photonView = GetComponent<PhotonView>();
         nextLevelXP = firstLevelXP;
@@ -34,17 +44,18 @@ public class ChampionXP : MonoBehaviour {
         OnGameStart();
     }
 
+    // When the game officially starts (called by master client), give starting XP
     void OnGameStart() {
         mapProperties = MapManager.Instance.GetMapProperties();
         GiveStartingXP();
     }
 
-    // Based on MapProperties config
+    // Based on MapProperties config, will give a player XP at the start of the game
     void GiveStartingXP() {
         MapProperties properties = MapManager.Instance.GetMapProperties();
         while(champion.currentLevel < properties.startingLevel)
             photonView.RPC("GiveXP", PhotonTargets.AllBuffered, 1, true);
-        photonView.RPC("Heal", PhotonTargets.AllBuffered, 999f);
+        photonView.RPC("Heal", PhotonTargets.AllBuffered, 999f); // resolves a bug where levelling up will reduce the health bar (as max health increases too)
     }
 
     // Called when a turret is destroyed; give global XP to every player on the team who destroyed it
@@ -56,6 +67,7 @@ public class ChampionXP : MonoBehaviour {
         }
     }
 
+    // RPC call to give XP to the character
     [PunRPC]
     public void GiveXP(int amount, bool overrideDisabled) {
         if (champion.currentLevel < maxLevel) {
@@ -70,11 +82,13 @@ public class ChampionXP : MonoBehaviour {
                     champion.currentLevel = Mathf.Min(champion.currentLevel + 1, maxLevel);
                     nextLevelXP += levelIncrement;
 
+                    // Have we reached the upgrade limit?
                     if (totalUnclaimed < maxLevel) {
                         unclaimedUpgrades++;
                         totalUnclaimed++;
                     }
 
+                    // Upgrade champion stats
                     if (onChampionLevelUp != null && photonView.isMine) {
                         champion.OnLevelUp();
                         onChampionLevelUp(champion, photonView.owner, champion.currentLevel, unclaimedUpgrades);

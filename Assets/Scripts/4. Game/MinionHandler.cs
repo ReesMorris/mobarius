@@ -2,21 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This script handles functions for spawning minion waves
+*/
+/// <summary>
+/// This script handles functions for spawning minion waves.
+/// </summary>
 public class MinionHandler : MonoBehaviour {
 
+    // Public variables
     public GameObject minionPrefab;
 
+    // Private variables
     MapProperties mapProperties;
 
+    // Listen for delegates when the game begins.
     void Start() {
         GameUIHandler.onGameTimeUpdate += OnGameTimeUpdate;
         GameHandler.onGameStart += OnGameStart;
     }
 
+    // When the match begins, pull the latest properties of the current map.
     void OnGameStart() {
         mapProperties = MapManager.Instance.GetMapProperties();
     }
 
+    // Every time the game timer is updated, check to see if we should spawn a new minion wave
     void OnGameTimeUpdate(int newTime) {
         if (newTime == (mapProperties.minionSpawnTime - 30))
             GameUIHandler.Instance.MessageWithSound("Announcer/Minions30", "Thirty seconds until minions spawn");
@@ -29,6 +40,7 @@ public class MinionHandler : MonoBehaviour {
         }
     }
 
+    // Master client to spawn minion waves for each team
     void MinionWave() {
         if (PhotonNetwork.isMasterClient) {
             StartCoroutine(SpawnMinions(PunTeams.Team.blue));
@@ -36,6 +48,7 @@ public class MinionHandler : MonoBehaviour {
         }
     }
 
+    // Spawn minions spaced apart from one another by 1.2 seconds
     IEnumerator SpawnMinions(PunTeams.Team team) {
         if (PhotonNetwork.isMasterClient) {
             for(int i = 0; i < 6; i++) {
@@ -45,6 +58,7 @@ public class MinionHandler : MonoBehaviour {
         }
     }
 
+    // Spawn minions on the network and initialise them
     [PunRPC]
     void SpawnMinion(int packIndex, PunTeams.Team team) {
         if (PhotonNetwork.isMasterClient) {

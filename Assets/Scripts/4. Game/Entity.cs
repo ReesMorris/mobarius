@@ -4,11 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
+/*
+    The script used to control an entity
+*/
+/// <summary>
+/// The script used to control an entity.
+/// </summary>
 public class Entity : MonoBehaviour {
 
+    // Delegates
     public delegate void OnEntityDeath(int attackerId);
     public static OnEntityDeath onEntityDeath;
 
+    // Public variables
     public bool useEntityBehaviour;
     public Image healthBarFill;
 
@@ -20,9 +28,11 @@ public class Entity : MonoBehaviour {
     [HideInInspector] public PunTeams.Team team;
     [HideInInspector] bool IsDead;
 
+    // Private variables
     float health;
     float maxHealth;
 
+    // Set the health bar colour depending on the local player's team, once the entity is spawned.
     void Start() {
         if (useEntityBehaviour) {
             photonView = GetComponent<PhotonView>();
@@ -35,6 +45,12 @@ public class Entity : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Checks to see whether this entity is dead.
+    /// </summary>
+    /// <returns>
+    /// True if the entity is dead; false if not.
+    /// </returns>
     public bool GetIsDead() {
         PlayerChampion playerChampion = GetComponent<PlayerChampion>();
         if (playerChampion)
@@ -42,11 +58,16 @@ public class Entity : MonoBehaviour {
         return IsDead;
     }
 
+    /// <summary>
+    /// Initiates the entity on the network.
+    /// </summary>
+    /// <param name="maxHealth">The entitys maximum health value</param>
     public void Init(float maxHealth) {
         photonView = GetComponent<PhotonView>();
         photonView.RPC("EntityInit", PhotonTargets.AllBuffered, maxHealth);
     }
 
+    // Syncs the entity's maximum health value across the network
     [PunRPC]
     void EntityInit(float _maxHealth) {
         health = maxHealth = _maxHealth;
@@ -56,6 +77,7 @@ public class Entity : MonoBehaviour {
     [PunRPC]
     void EntityDamage(float amount, int attackerId) {
 
+        // Update the health bar UI and kill the entity if necessary
         if (useEntityBehaviour) {
             health = Mathf.Max(health - amount, 0f);
             if (healthBarFill != null)
@@ -88,6 +110,12 @@ public class Entity : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Calculates the entity's movement speed.
+    /// </summary>
+    /// <returns>
+    /// The movement speed of the entity; 0 as a fallback.
+    /// </returns>
     public float GetMovementSpeed() {
         PlayerChampion champion = GetComponent<PlayerChampion>();
         Minion minion = GetComponent<Minion>();
@@ -98,7 +126,7 @@ public class Entity : MonoBehaviour {
         return 0;
     }
 
-    // Called to reduce speed of an entity
+    // Called to reduce speed of an entity across the network
     [PunRPC]
     public void SetMovementSpeed(float speed) {
         PlayerChampion champion = GetComponent<PlayerChampion>();

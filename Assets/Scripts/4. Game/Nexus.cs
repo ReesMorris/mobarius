@@ -3,8 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    This script contains the logic for the nexus building
+*/
+/// <summary>
+/// This script contains the logic for the nexus building.
+/// </summary>
 public class Nexus : MonoBehaviour {
 
+    // Public variables
     public float baseHealth;
     public float healthRegen;
     public PunTeams.Team team;
@@ -12,6 +19,7 @@ public class Nexus : MonoBehaviour {
     public GameObject healthbarUI;
     public Image healthImage;
 
+    // Private variables
     float currentHealth;
     bool destroyed;
     bool canReheal = true;
@@ -19,6 +27,7 @@ public class Nexus : MonoBehaviour {
     bool ready;
     MapProperties mapProperties;
 
+    // Updates the UI for the local player and assigns private variables when the game starts.
     void Start() {
         GetComponent<Entity>().team = team;
         healthbarUI.SetActive(false);
@@ -28,11 +37,13 @@ public class Nexus : MonoBehaviour {
         currentHealth = baseHealth;
     }
 
+    // Waits every frame for the building to be ready
     void Update() {
         if (healthImage != null && !ready)
             OnGameStart();
     }
 
+    // Called by the master client when the game begins
     void OnGameStart() {
         Inhibitor.onInhibitorDestroyed += OnInhibitorDestroyed;
 
@@ -72,6 +83,7 @@ public class Nexus : MonoBehaviour {
         }
     }
 
+    // Called when the building is destroyed
     void OnDestroy() {
         Inhibitor.onInhibitorDestroyed -= OnInhibitorDestroyed;
         StopAllCoroutines();
@@ -98,10 +110,17 @@ public class Nexus : MonoBehaviour {
         healthbarUI.SetActive(true);
     }
 
+    /// <summary>
+    /// Applies damage to the building.
+    /// </summary>
+    /// <param name="amount">The amount of damage to take</param>
+    /// <param name="shooterId">The viewID of the attacker</param>
     [PunRPC]
     public void Damage(float amount, int shooterId) {
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
+
+        // Are we destroyed?
         if (currentHealth == 0f && !destroyed) {
             canReheal = false;
             destroyed = true;
@@ -111,6 +130,10 @@ public class Nexus : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Applies health to the building.
+    /// </summary>
+    /// <param name="amount">The amount of health to regenerate</param>
     [PunRPC]
     public void Heal(float amount) {
         currentHealth = Mathf.Min(currentHealth + amount, baseHealth);

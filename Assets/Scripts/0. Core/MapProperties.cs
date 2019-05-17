@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    A class containing the properties a Map has
+*/
+/// <summary>
+/// A class containing the properties a Map has.
+/// </summary>
 [System.Serializable]
 public class MapProperties {
 

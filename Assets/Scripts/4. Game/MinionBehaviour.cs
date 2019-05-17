@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/*
+    This script contains functions relevant to minion behaviour
+*/
+/// <summary>
+/// This script contains functions relevant to minion behaviour.
+/// </summary>
 public class MinionBehaviour : MonoBehaviour {
 
     public GameObject radiusTrigger;

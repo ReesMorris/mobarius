@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    This script contains the logic for the inhibitor building
+*/
+/// <summary>
+/// This script contains the logic for the inhibitor building.
+/// </summary>
 public class Inhibitor : MonoBehaviour {
+
+    // Delegates
+    public delegate void OnInhibitorDestroyed(Inhibitor inhibitor);
+    public static OnInhibitorDestroyed onInhibitorDestroyed;
     
+    // Public variables
     public float baseHealth;
     public float healthRegen;
     public PunTeams.Team team;
@@ -12,13 +23,12 @@ public class Inhibitor : MonoBehaviour {
     public GameObject healthbarUI;
     public Image healthImage;
 
-    public delegate void OnInhibitorDestroyed(Inhibitor inhibitor);
-    public static OnInhibitorDestroyed onInhibitorDestroyed;
+    // Private variables
     bool ready;
-
     float currentHealth;
     PhotonView photonView;
 
+    // Updates the UI for the local player and assigns private variables when the game starts.
     void Start() {
         GetComponent<Entity>().team = team;
         healthbarUI.SetActive(false);
@@ -28,11 +38,13 @@ public class Inhibitor : MonoBehaviour {
         currentHealth = baseHealth;
     }
 
+    // Waits every frame for the building to be ready
     void Update() {
         if (healthImage != null && !ready)
             OnGameStart();
     }
 
+    // Called by the master client when the game begins
     void OnGameStart() {
         Turret.onTurretDestroyed += OnTurretDestroyed;
 
@@ -47,6 +59,7 @@ public class Inhibitor : MonoBehaviour {
         ready = true;
     }
 
+    // Called when the building is destroyed
     void OnDestroy() {
         Turret.onTurretDestroyed -= OnTurretDestroyed;
         StopAllCoroutines();
@@ -83,10 +96,19 @@ public class Inhibitor : MonoBehaviour {
         healthbarUI.SetActive(true);
     }
 
+    /// <summary>
+    /// Applies damage to the building.
+    /// </summary>
+    /// <param name="amount">The amount of damage to take</param>
+    /// <param name="shooterId">The viewID of the attacker</param>
     [PunRPC]
     public void Damage(float amount, int shooterId) {
+
+        // Update the UI
         currentHealth = Mathf.Max(0f, currentHealth - amount);
         healthImage.fillAmount = (currentHealth / baseHealth);
+
+        // Are we dead?
         if (currentHealth == 0f) {
             if (PhotonNetwork.player.GetTeam() == team)
                 GameUIHandler.Instance.MessageWithSound("Announcer/AllyInhibitorDestroyed", "Ally inhibitor destroyed!");
@@ -100,6 +122,10 @@ public class Inhibitor : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Applies health to the building.
+    /// </summary>
+    /// <param name="amount">The amount of health to regenerate</param>
     [PunRPC]
     public void Heal(float amount) {
         currentHealth = Mathf.Min(currentHealth + amount, baseHealth);

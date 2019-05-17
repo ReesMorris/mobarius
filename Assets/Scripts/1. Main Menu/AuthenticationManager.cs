@@ -5,8 +5,15 @@ using SimpleJSON;
 using TMPro;
 using UnityEngine.Networking;
 
+/*
+    Handles user login and registration
+*/
+/// <summary>
+/// Handles user login and registration.
+/// </summary>
 public class AuthenticationManager : MonoBehaviour {
 
+    // Public variables
     [Header("Server")]
     public string loginUrl;
     public string registerUrl;
@@ -31,12 +38,14 @@ public class AuthenticationManager : MonoBehaviour {
     public GameObject registerButtonLoading;
     public Button loginLabel;
 
+    // Private variables
     private bool authenticating;
     private UIHandler UIHandler;
     private VersionManager VersionManager;
     private MainMenuManager mainMenuManager;
     public bool LoggedIn { get; private set; }
 
+    // Called when the game starts; add listeners and get references to other scripts
     private void Start() {
         // References
         UIHandler = GetComponent<UIHandler>();
@@ -52,6 +61,7 @@ public class AuthenticationManager : MonoBehaviour {
         loginButton.onClick.AddListener(OnLoginButtonClick);
     }
 
+    // Called every frame; toggles the auth button on/off depending on the contents of the input fields
     void Update() {
         // Login mechanics | will enable/disable inputs depending on what the user is doing
         loginButton.interactable = (!authenticating && loginUsername.text != "" && loginPassword.text != "" && !VersionManager.outdated);
@@ -67,17 +77,27 @@ public class AuthenticationManager : MonoBehaviour {
         registerButtonLoading.SetActive(authenticating);
     }
 
+    // Called when the user clicks on the "Don't have an account?" button
     void OnRegisterLabelClick() {
         loginModal.SetActive(false);
         registerModal.SetActive(true);
         registerUsername.Select();
     }
+
+    // Called when the user clicks on the "Already have an account?" button
     void OnLoginLabelClick() {
         loginModal.SetActive(true);
         registerModal.SetActive(false);
         loginUsername.Select();
     }
 
+    /// <summary>
+    /// Displays an error modal in the center of the screen.
+    /// </summary>
+    /// <param name="message">The error message to display on the modal</param>
+    /// <remarks>
+    /// Does not localise the message passed in.
+    /// </remarks>
     public void ShowError(string message) {
         authenticating = false;
         UIHandler.ShowError(message);
@@ -96,6 +116,7 @@ public class AuthenticationManager : MonoBehaviour {
         }
     }
 
+    // Called when the user presses on the register button
     public void OnRegisterButtonClick() {
         if(registerButton.interactable) {
             // Set the user to authenticating, and prevent further clicks from being made
@@ -113,13 +134,17 @@ public class AuthenticationManager : MonoBehaviour {
         form.AddField("username", username);
         form.AddField("password", password);
 
+        // Send the web request
         UnityWebRequest www = UnityWebRequest.Post(loginUrl, form);
         yield return www.SendWebRequest();
 
+        // Display the error if the request could not complete successfully
         if (www.isNetworkError || www.isHttpError) {
             ShowError(www.error);
             StopCoroutine("LoggingInTimer");
         }
+
+        // Pass validation on to verify the request
         else {
             ValidateAuthentication(www.downloadHandler.text);
         }
@@ -133,12 +158,16 @@ public class AuthenticationManager : MonoBehaviour {
         form.AddField("password", password);
         form.AddField("password2", password2);
 
+        // Send the web request
         UnityWebRequest www = UnityWebRequest.Post(registerUrl, form);
         yield return www.SendWebRequest();
 
+        // Display the error if the request could not complete successfully
         if (www.isNetworkError || www.isHttpError) {
             ShowError(www.error);
         }
+        
+        // Pass validation on to verify the request
         else {
             ValidateAuthentication(www.downloadHandler.text);
         }
@@ -147,6 +176,8 @@ public class AuthenticationManager : MonoBehaviour {
     // Validates whether a user is logged in or not
     void ValidateAuthentication(string response) {
         JSONNode data = JSON.Parse(response);
+
+        // If the response was not successful
         if (!bool.Parse(data["success"])) {
 
             // Some errors are returned with additional information to be parsed:  error_code|3,4,5
@@ -158,14 +189,18 @@ public class AuthenticationManager : MonoBehaviour {
                 parameters = error[1].Split(',');
             }
 
+            // Show the error to the user
             ShowError(LocalisationManager.instance.GetValue(message, parameters));
             StopCoroutine("LoggingInTimer");
-
-        } else {
+        }
+        
+        // The response was successful; we can expect a 'user' array
+        else {
             LoginUser(data["user"]);
         }
     }
 
+    // Logs the user in by storing their details in an Account class
     void LoginUser(JSONNode user) {
         StopCoroutine("LoggingInTimer");
         UserManager.Instance.account = new Account(user["_id"], user["username"], user["email"], user["created_at"], int.Parse(user["xp"]), user["lastGameID"], user["sessionToken"]);
@@ -173,6 +208,7 @@ public class AuthenticationManager : MonoBehaviour {
         mainMenuManager.Prepare();
     }
 
+    // A fallback to time the user out if a web request is not completed after 7 seconds
     IEnumerator LoggingInTimer() {
         yield return new WaitForSeconds(7f);
         ShowError(LocalisationManager.instance.GetValue("login_error_timeout"));

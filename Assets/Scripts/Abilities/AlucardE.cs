@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    This script handles Alucard's E effect
+*/
+/// <summary>
+/// This script handles Alucard's E effect.
+/// </summary>
 public class AlucardE : MonoBehaviour {
 
+    // Public variables
     public GameObject prefab;
 
+    // Private variables
     AbilityHandler.Abilities abilityKey = AbilityHandler.Abilities.E;
     PhotonView photonView;
     PlayerChampion playerChampion;
@@ -16,6 +24,7 @@ public class AlucardE : MonoBehaviour {
     Ability ability;
     bool sequenceActive;
 
+    // Set up references and event listeners when the game begins.
     void Start() {
         photonView = GetComponent<PhotonView>();
         playerChampion = GetComponent<PlayerChampion>();
@@ -26,10 +35,15 @@ public class AlucardE : MonoBehaviour {
         GameUIHandler.Instance.abilityE.GetComponent<Button>().onClick.AddListener(delegate { AttemptAbility(true); });
     }
 
+    // Every frame, check to see if the user is trying to perform an ability.
     void Update() {
         AttemptAbility(false);
     }
 
+    /// <summary>
+    /// Attempts to cast the ability sequence.
+    /// </summary>
+    /// <param name="buttonPressed">True if the UI icon is clicked to activate the ability</param>
     public void AttemptAbility(bool buttonPressed) {
         if (photonView.isMine) {
             if (!playerChampion.IsDead) {
@@ -44,6 +58,7 @@ public class AlucardE : MonoBehaviour {
         }
     }
 
+    // The sequence of this ability
     IEnumerator AbilitySequence() {
         sequenceActive = true;
 
@@ -66,6 +81,7 @@ public class AlucardE : MonoBehaviour {
             yield return new WaitForSeconds(1f);
         }
 
+        // Destroy the particle effect from the network
         PhotonNetwork.Destroy(effect.gameObject);
         sequenceActive = false;
     }
