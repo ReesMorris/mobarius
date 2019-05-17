@@ -31,7 +31,6 @@ public class PlayerCamera : MonoBehaviour {
         photonView = target.GetComponent<PhotonView>();
 
         // Map Properties
-        Debug.Log("PlayerCamera start");
         mapProperties = MapManager.Instance.GetMapProperties();
         if (mapProperties.display == CameraDisplays.ThirdPerson) {
             transform.parent = target;
