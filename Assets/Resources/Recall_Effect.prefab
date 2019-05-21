@@ -4718,7 +4718,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7975200532124475483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fcc396161fa0574dbcc152e33fca7ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1017b293bbdb24f831ce83551dfe6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialRot: {x: -90, y: 0, z: 0}
+  initialRot: {x: 0, y: 0, z: 0}

@@ -19681,6 +19681,10 @@ PrefabInstance:
       propertyPath: instantiationId
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 1561, guid: 2cd02cdd61e960a4e91f9a172b8d0839, type: 3}
+      propertyPath: cooldownTime
+      value: 0.7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cd02cdd61e960a4e91f9a172b8d0839, type: 3}
 --- !u!1 &1193986329
@@ -29097,7 +29101,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730177470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba317e4d227d486468c26d7a6ac6bf41, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d27436e7ec812d4d817c9513f51660a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   recallEffectPrefab: {fileID: 7836996739506170470, guid: a8e5fbfca8dbe444b88a3f407f86b613,
@@ -29111,7 +29115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1730177470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36987b14f4e961041bdd48e434b10277, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bf6318bd19745b4db1a8296fc3f9345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoHideInterval: 4

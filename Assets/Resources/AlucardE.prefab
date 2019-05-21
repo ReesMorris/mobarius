@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5096377684383827907}
   - component: {fileID: 5096377684383827908}
   - component: {fileID: 4325992875535475790}
-  - component: {fileID: 4315599303071895294}
+  - component: {fileID: 880815142789146712}
   m_Layer: 0
   m_Name: AlucardE
   m_TagString: Untagged
@@ -78,7 +78,7 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
---- !u!114 &4315599303071895294
+--- !u!114 &880815142789146712
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5096377684383827909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b393b3fd9bc3044484961d9e3e0ee37, type: 3}
+  m_Script: {fileID: 11500000, guid: 06d01737a8f6e41438af73d3649bb621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5096377684398121709
